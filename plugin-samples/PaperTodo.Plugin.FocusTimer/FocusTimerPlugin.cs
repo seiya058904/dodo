@@ -155,7 +155,7 @@ public sealed class FocusTimerPlugin : IPaperBodyPlugin
                 Height = 30,
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 DisplayMemberPath = nameof(TodoOption.Label),
-                ToolTip = "选择本轮专注对应的 PaperTodo 待办"
+                ToolTip = "选择本轮专注对应的 Dodo 待办"
             };
             _todoBox.SelectionChanged += OnTodoSelectionChanged;
             _todoStatusText = new TextBlock
