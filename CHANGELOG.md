@@ -12,6 +12,8 @@
 
 Based on PaperTodo 4.0.0-beta1. Papers, edge docking, editing, search, plugin and MCP capabilities are inherited; preview features retain their preview status.
 
+**Validation limits:** Real Windows checks cover notes, undo, to-do completion, light/dark readability and restart retention. Desktop automation could not target settings, capsules or native file dialogs; those interactions, real IME composition, mixed DPI and HDR remain unverified. Storage/restore, export, counts and search data have separate automated coverage. See [the verification record](https://github.com/seiya058904/dodo/blob/main/doc/DODO-VERIFICATION.md).
+
 ---
 
 ### Upstream PaperTodo history (preserved)

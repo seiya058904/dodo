@@ -7,6 +7,10 @@
 Dodo 是基于 [PaperTodo](https://github.com/snownico0722/PaperTodo) 的非商业衍生桌面工具。
 保留原生纸片、待办、Markdown、贴边胶囊、搜索、多语言、插件与 MCP，并加上一只安静呆萌的渡渡鸟。
 
+<table><tr><td><img src="assets/dodo-desktop-todo.png" alt="真实 Dodo 待办窗口"></td><td><img src="assets/dodo-desktop-note.png" alt="真实 Dodo 笔记窗口"></td></tr></table>
+
+以上为真实 Windows 窗口截图，仅裁切并遮去周围桌面。实机覆盖范围和工具限制见[验收记录](doc/DODO-VERIFICATION.md)。
+
 ## 首版改进
 
 - 待办胶囊显示未完成数量，例如“工作 · 3”。完成、删除和撤销即时更新；数量为零时隐藏，也可在设置关闭。

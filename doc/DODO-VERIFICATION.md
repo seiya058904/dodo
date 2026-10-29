@@ -1,8 +1,9 @@
 # Dodo 0.1.0 verification
 
 This is a concise release record, not a claim that every upstream preview feature
-or every Windows configuration is stable. It will be finalized after desktop
-acceptance and the published-download check.
+or every Windows configuration is stable. The initial release explicitly retains
+the desktop coverage limits below. The published-download result is recorded in
+the [v0.1.0 Release notes](https://github.com/seiya058904/dodo/releases/tag/v0.1.0).
 
 ## Provenance
 
@@ -47,14 +48,28 @@ other Windows errors and unknown codes use safe managed messages. The original
 error code is retained. Boundary and system-error checks pass. The vendored
 source remains unchanged, so the compiler warning itself remains visible.
 
-## Release acceptance still pending
+## Desktop acceptance and explicit limits
 
-- Final real-desktop input, focus, drag/dock/hover, settings-dialog backup/restore,
-  theme and window-size checks. The user requested that foreground work wait for
-  explicit permission; these checks have not been represented as passed.
-- Final commit's GitHub CI and native LMDB source rebuild.
-- Download the actual published ZIP from GitHub, verify SHA256 and launch that
-  downloaded package in a new directory, then verify state after restart.
+An isolated portable copy was run on Windows 11 at the local 175% display scale.
+Visible checks covered image-note display, Chinese and English text entry, undo,
+to-do creation/completion, light/dark readability and normal exit/restart retention.
+The paper menu displayed one unfinished item for a two-item list with one completed
+item. Actual note/to-do screenshots are included in the README; only surrounding
+desktop pixels were cropped/masked, with no generated UI content.
+
+The Markdown save dialog opened, but both official desktop tools failed to bind
+its owned modal window. Settings and capsule surfaces were not exposed as
+targetable windows. Consequently, settings/count-toggle interaction, search UI,
+capsule drag/dock/hover, and completion of export/backup/restore through their
+native dialogs remain **unverified by desktop automation**. They are not recorded
+as passed. Their underlying counts, search data, export and storage behavior is
+covered by the separate checks above. All test instances exited normally.
+
+The complete CI checks and native source rebuild passed for the implementation;
+the formal Release workflow repeats those gates for its exact source commit.
+Published ZIPs are downloaded to new directories, checked against SHA256SUMS and
+tested as actual processes before the final delivery report. This is separate
+from local development-output validation.
 
 Mixed-DPI/multi-monitor transitions and HDR require appropriate hardware and
 remain unverified unless explicitly recorded after testing. Offscreen scale

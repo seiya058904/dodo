@@ -13,7 +13,8 @@
 
 ## Your desktop, with room to think
 
-<table><tr><td width="48%"><img src="assets/dodo-light.png" alt="Dodo to-do paper, light theme"></td><td><img src="assets/dodo-light-note.png" alt="Dodo Markdown note, light theme"></td></tr></table>
+<table><tr><td width="48%"><img src="assets/dodo-desktop-todo.png" alt="Actual Dodo to-do window, light theme"></td><td><img src="assets/dodo-desktop-note.png" alt="Actual Dodo note window, light theme"></td></tr></table>
+<sub>Actual Windows screenshots, cropped and masked only to exclude the surrounding desktop.</sub>
 <p align="center"><img src="assets/dodo-capsule.png" alt="Work capsule with three unfinished to-dos" width="190"></p>
 
 | Make a little list | Leave a little note | Tuck it away |
@@ -24,7 +25,7 @@
 <table><tr><td width="48%"><img src="assets/dodo-dark-todo.png" alt="Dodo tasks in dark theme"></td><td><img src="assets/dodo-dark.png" alt="Dodo Markdown note in dark theme"></td></tr></table>
 </details>
 
-<sub>These previews are rendered from the actual WPF controls with the included offscreen visual-review tool. They do not represent native desktop/DWM capture. Desktop acceptance is tracked in the verification record.</sub>
+<sub>The capsule and dark-theme previews are rendered from actual WPF controls with the included offscreen visual-review tool; they are not desktop/DWM captures. See the <a href="doc/DODO-VERIFICATION.md">verification record</a> for desktop coverage and limits.</sub>
 
 ## What's different in Dodo?
 
@@ -153,6 +154,10 @@ open-source project; organizational deployment has separate restrictions in the 
 
 Dodo 是基于 [PaperTodo](https://github.com/snownico0722/PaperTodo) 的非商业衍生桌面工具。
 保留原生纸片、待办、Markdown、贴边胶囊、搜索、多语言、插件与 MCP，并加上一只安静呆萌的渡渡鸟。
+
+<table><tr><td><img src="assets/dodo-desktop-todo.png" alt="真实 Dodo 待办窗口"></td><td><img src="assets/dodo-desktop-note.png" alt="真实 Dodo 笔记窗口"></td></tr></table>
+
+以上为真实 Windows 窗口截图，仅裁切并遮去周围桌面。实机覆盖范围和工具限制见[验收记录](doc/DODO-VERIFICATION.md)。
 
 ## 首版改进
 
