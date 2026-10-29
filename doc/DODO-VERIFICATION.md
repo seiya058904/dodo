@@ -28,7 +28,8 @@ No pre-existing PaperTodo user data was used.
 | Coexistence | Isolated Dodo and PaperTodo run together, use separate mutexes/pipes/profiles, save and exit independently. |
 | No desktop interference | In the background smoke sample: zero on-screen test windows and zero foreground activations. Three raw visible-flag windows were verified to be existing off-screen prewarm surfaces. |
 | Visual review | English/Chinese light/dark screenshots rendered from real WPF controls. No `Show`, `Activate`, native HWND, input or clipboard use. These are explicitly offscreen renders, not DWM desktop captures. |
-| Release notes | Seven existing bilingual release-note tests passed. |
+| Release notes | Eight bilingual release-note tests passed. |
+| Package candidates | Both ZIP variants were extracted to new directories and passed the actual-process MCP/restart checks. The self-contained candidate ran with local .NET environment overrides removed. These are local candidates, not published-download acceptance. |
 
 Commands are documented in the root README and `tools/Dodo.VisualReview/README.md`.
 Temporary fixtures/logs stay outside version control. The smoke script refuses to

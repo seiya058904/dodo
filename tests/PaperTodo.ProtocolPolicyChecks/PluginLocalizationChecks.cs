@@ -8,7 +8,7 @@ internal static class PluginLocalizationChecks
     [ModuleInitializer]
     internal static void Run()
     {
-        var host = Assembly.Load("PaperTodo");
+        var host = typeof(PaperTodo.AppState).Assembly;
         CheckLocalizedOverlay(host);
         CheckBaseFallback(host);
         CheckLocalizedCategoryGroups(host);

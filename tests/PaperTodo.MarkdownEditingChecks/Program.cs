@@ -16,6 +16,11 @@ internal static partial class Program
 
         new Application { ShutdownMode = ShutdownMode.OnExplicitShutdown };
         var failures = 0;
+        if (args is ["--paper-background"])
+        {
+            Check("Paper background image loading and layout", CheckPaperBackgroundToggle);
+            return failures == 0 ? 0 : 1;
+        }
         MarkdownExportChecks.Run(Check);
         ClipboardImageChecks.Run(Check);
         Check("Paper background image loading and layout", CheckPaperBackgroundToggle);

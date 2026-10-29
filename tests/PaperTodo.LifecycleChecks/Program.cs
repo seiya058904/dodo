@@ -78,7 +78,7 @@ internal static class Program
             Require(child.ExitCode == 0, name + " failed");
             if (name.StartsWith("real-exit") || name == "early-exit")
             {
-                using var saved = JsonDocument.Parse(File.ReadAllText(Path.Combine(fixture, "data.json")));
+                using var saved = JsonDocument.Parse(File.ReadAllText(Path.Combine(fixture, "dodo-data", "data.json")));
                 var paper = saved.RootElement.GetProperty("papers")[0];
                 Require(paper.GetProperty("content").GetString() == (name == "early-exit" ? "short note 0" : "pending editor text at exit"), "last editor change was lost");
                 Require(paper.GetProperty("isVisible").GetBoolean(), "hiding for exit persisted as a user hide");

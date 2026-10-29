@@ -12,7 +12,7 @@ internal static partial class Program
     {
         try
         {
-            var host = Assembly.Load("PaperTodo");
+            var host = typeof(PaperTodo.AppState).Assembly;
             var abstractions = Assembly.Load("PaperTodo.Plugin.Abstractions");
             CheckShortcutReservations(host);
             CheckShortcutValidation(host);

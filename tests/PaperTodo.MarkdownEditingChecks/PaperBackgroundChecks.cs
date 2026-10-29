@@ -9,9 +9,10 @@ internal static partial class Program
 {
     private static void CheckPaperBackgroundToggle()
     {
-        var paths = new[] { "papertodo.png", "papertodo.jpg", "papertodo.jpeg" }
-            .Select(name => Path.Combine(AppContext.BaseDirectory, name)).ToArray();
+        var paths = new[] { "dodo.png", "dodo.jpg", "dodo.jpeg" }
+            .Select(name => Path.Combine(AppPaths.DataDirectory, name)).ToArray();
         Require(paths.All(path => !File.Exists(path)), "background check must not replace an existing image");
+        Directory.CreateDirectory(AppPaths.DataDirectory);
         var path = paths[0];
         try
         {

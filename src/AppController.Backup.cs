@@ -54,7 +54,7 @@ public sealed partial class AppController
     {
         var dialog = new SaveFileDialog
         {
-            Filter = "Dodo backup (*.zip)|*.zip", DefaultExt = ".zip", AddExtension = true,
+            Filter = BackupFileFilter(), DefaultExt = ".zip", AddExtension = true,
             FileName = "Dodo-" + DateTime.Now.ToString("yyyyMMdd-HHmmss") + ".zip"
         };
         if (dialog.ShowDialog(_settingsWindow) != true) return;
@@ -70,7 +70,7 @@ public sealed partial class AppController
 
     private void RestoreFullBackup()
     {
-        var dialog = new OpenFileDialog { Filter = "Dodo backup (*.zip)|*.zip", CheckFileExists = true };
+        var dialog = new OpenFileDialog { Filter = BackupFileFilter(), CheckFileExists = true };
         if (dialog.ShowDialog(_settingsWindow) != true) return;
         var stopped = false;
         try
@@ -113,6 +113,8 @@ public sealed partial class AppController
         }
         finally { if (stopped) Application.Current.Shutdown(); }
     }
+
+    private string BackupFileFilter() => BackupText("Dodo 备份", "Dodo backup", "Dodo バックアップ", "Dodo 백업") + " (*.zip)|*.zip";
 
     private void ShowBackupFailure(Exception ex) => MessageBox.Show(_settingsWindow,
         BackupText("操作未完成，当前数据未替换。", "The operation did not complete. Current data was not replaced.", "操作は完了していません。現在のデータは置換されていません。", "작업이 완료되지 않았습니다. 현재 데이터는 교체되지 않았습니다.") + "\n\n" + ex.Message,

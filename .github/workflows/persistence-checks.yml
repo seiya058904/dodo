@@ -6,10 +6,6 @@ on:
 permissions:
   contents: read
 
-concurrency:
-  group: persistence-checks-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
   persistence:
     name: Persistence fault injection

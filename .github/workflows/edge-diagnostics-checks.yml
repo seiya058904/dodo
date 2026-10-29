@@ -9,9 +9,6 @@ permissions:
 jobs:
   diagnostics:
     name: Debug diagnostics and edge checks
-    concurrency:
-      group: edge-diagnostics-checks-${{ github.ref }}
-      cancel-in-progress: true
     runs-on: windows-latest
     timeout-minutes: 15
     defaults:

@@ -10,6 +10,12 @@ on:
 permissions:
   contents: read
 
+# Cancel an older automatic push as one complete run. Explicit/manual and Release
+# callers retain their own run identity; reusable jobs never cancel each other.
+concurrency:
+  group: dodo-ci-${{ github.event_name == 'push' && github.ref || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'push' }}
+
 jobs:
   regression:
     name: Build and regression checks
