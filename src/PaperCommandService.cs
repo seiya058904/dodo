@@ -127,7 +127,7 @@ internal sealed partial class PaperCommandService
         using (_controller.SuppressPaperPluginEventScans())
         {
             paper = _controller.CreatePaper(type, show: false)
-                ?? throw Error("paper_limit", "PaperTodo cannot create another paper.");
+                ?? throw Error("paper_limit", "Dodo cannot create another paper.");
             paper.IsVisible = request.Show;
             if (title != null)
             {
@@ -357,7 +357,7 @@ internal sealed partial class PaperCommandService
         {
             throw Error(
                 "reminders_disabled",
-                "Todo reminders are disabled in PaperTodo Labs.");
+                "Todo reminders are disabled in Dodo Labs.");
         }
 
         var paper = RequirePaper(
@@ -567,7 +567,7 @@ internal sealed partial class PaperCommandService
                     _controller.ResetPaperPluginEventBaseline();
                     throw Error(
                         "paper_limit",
-                        "PaperTodo could not create the required replacement paper.");
+                        "Dodo could not create the required replacement paper.");
                 }
                 replacement.IsVisible = true;
             }
@@ -718,7 +718,7 @@ internal sealed partial class PaperCommandService
         {
             throw Error(
                 "paper_links_disabled",
-                "Todo-paper links are disabled in PaperTodo Settings.");
+                "Todo-paper links are disabled in Dodo Settings.");
         }
         var id = RequiredId(value, "linkedPaperId");
         if (!string.IsNullOrWhiteSpace(sourcePaperId) &&
@@ -746,7 +746,7 @@ internal sealed partial class PaperCommandService
         {
             throw Error(
                 "reminders_disabled",
-                "Todo reminders are disabled in PaperTodo Labs.");
+                "Todo reminders are disabled in Dodo Labs.");
         }
         if (reminderAt.Value <= DateTimeOffset.Now)
         {
@@ -848,7 +848,7 @@ internal sealed partial class PaperCommandService
         {
             throw Error(
                 "paper_limit",
-                "PaperTodo supports at most 200 papers.");
+                "Dodo supports at most 200 papers.");
         }
     }
 
@@ -856,7 +856,7 @@ internal sealed partial class PaperCommandService
     {
         if (!_controller.IsRunning)
         {
-            throw Error("app_exiting", "PaperTodo is exiting.");
+            throw Error("app_exiting", "Dodo is exiting.");
         }
     }
 
@@ -908,7 +908,7 @@ internal sealed partial class PaperCommandService
     private static PaperCommandException SaveFailed() =>
         Error(
             "save_failed",
-            "PaperTodo could not save the change. The in-memory change was rolled back.");
+            "Dodo could not save the change. The in-memory change was rolled back.");
 
     private static PaperCommandException Error(string code, string message) =>
         new(code, message);

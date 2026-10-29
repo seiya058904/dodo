@@ -11,6 +11,13 @@ if (args is ["--write-integration-fixture", var fixtureDirectory])
     return 0;
 }
 
+if (args is ["--write-restored-integration-fixture", var restoredFixtureDirectory])
+{
+    BackupChecks.WriteRestoredIntegrationFixture(restoredFixtureDirectory);
+    Console.WriteLine(Path.GetFullPath(restoredFixtureDirectory));
+    return 0;
+}
+
 var checks = new (string Name, Action Run)[]
 {
     ("full-backup-roundtrips-images-settings-and-plugin-state", BackupChecks.RoundTrip),

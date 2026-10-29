@@ -62,7 +62,7 @@ jobs:
           BUILD_LABEL: ${{ inputs.build_label }}
         run: |
           $flavor = if ($env:INCLUDE_DOTNET -eq 'true') { 'SelfContained' } else { 'NoRuntime' }
-          ./tools/Release.ps1 -Configuration $env:CONFIGURATION -RuntimeFlavor $flavor -SingleFile:($env:SINGLE_FILE -eq 'true') -BuildLabel $env:BUILD_LABEL -OutputDirectory (Join-Path $env:GITHUB_WORKSPACE 'package')
+          ./tools/Release.ps1 -Configuration $env:CONFIGURATION -RuntimeFlavor $flavor -SingleFile:($env:SINGLE_FILE -eq 'true') -BuildLabel $env:BUILD_LABEL -RebuildLmdb -OutputDirectory (Join-Path $env:GITHUB_WORKSPACE 'package')
       - uses: actions/upload-artifact@v7
         with:
           name: Dodo-${{ inputs.configuration }}-win-x64-${{ github.run_id }}

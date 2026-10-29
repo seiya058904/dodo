@@ -38,7 +38,7 @@ internal static class WebPluginWorkspaceRequests
         "papers.delete" => host.DeletePaper(RequiredString(parameters, "paperId")),
         _ => throw new PaperTodoPluginException(
             "method_not_found",
-            $"Unknown PaperTodo workspace method: {method}")
+            $"Unknown Dodo workspace method: {method}")
     };
 
     private static IPaperWorkspacePresentationApi WorkspacePresentation(IPaperTodoHostApi host) =>

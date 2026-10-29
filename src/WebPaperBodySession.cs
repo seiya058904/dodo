@@ -375,7 +375,7 @@ internal sealed partial class WebPaperBodySession : IPaperBodySession
                     pending.delete(message.requestId);
                     if (message.ok) waiter.resolve(message.result);
                     else {
-                      const error = new Error(message.error?.message ?? 'PaperTodo host request failed.');
+                      const error = new Error(message.error?.message ?? 'Dodo host request failed.');
                       error.code = message.error?.code ?? 'host_error';
                       waiter.reject(error);
                     }
@@ -748,7 +748,7 @@ internal sealed partial class WebPaperBodySession : IPaperBodySession
                 error = new
                 {
                     code = "host_error",
-                    message = "PaperTodo could not complete the plugin request."
+                    message = "Dodo could not complete the plugin request."
                 }
             });
         }
@@ -822,7 +822,7 @@ internal sealed partial class WebPaperBodySession : IPaperBodySession
         "topbar.global.set" => SetGlobalTopBarActionsFromWeb(parameters),
             _ => throw new PaperTodoPluginException(
                 "method_not_found",
-                $"Unknown PaperTodo plugin host method: {method}")
+                $"Unknown Dodo plugin host method: {method}")
         };
     }
 

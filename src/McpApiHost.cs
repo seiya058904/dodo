@@ -230,7 +230,7 @@ internal sealed class McpApiHost : IDisposable
             return ErrorResponse(
                 requestId,
                 "internal_error",
-                "PaperTodo could not complete the request.");
+                "Dodo could not complete the request.");
         }
     }
 

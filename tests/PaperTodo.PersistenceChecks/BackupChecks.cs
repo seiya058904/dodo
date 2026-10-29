@@ -40,6 +40,64 @@ internal static class BackupChecks
         plugins.WithBackupSnapshot(() => { });
     }
 
+    internal static void WriteRestoredIntegrationFixture(string root)
+    {
+        root = Path.GetFullPath(root);
+        var evidencePath = root + ".restore-chain.json";
+        if (Directory.Exists(root) || File.Exists(root) || File.Exists(evidencePath))
+            throw new InvalidOperationException("Restored fixture destination and evidence must not exist.");
+        using var temporary = new TempDirectory();
+        var source = Path.Combine(temporary.Path, "source");
+        var archive = Path.Combine(temporary.Path, "fixture.zip");
+        WriteIntegrationFixture(source);
+        var sourceStore = new StateStore(source, DurableAtomicFileWriter.Shared);
+        using (var sourceImages = new NoteImageStore(Path.Combine(source, "note-assets.lmdb")))
+        using (var sourcePlugins = new PaperBodyPluginDataStore(Path.Combine(source, "plugins")))
+        {
+            sourceImages.Load();
+            new BackupService(source).Create(archive, sourceStore, sourceImages, sourcePlugins);
+        }
+        var service = new BackupService(root);
+        using var prepared = service.Prepare(archive);
+        Check(prepared.PaperCount == 3 && prepared.ImageCount == 1, "restored fixture archive summary changed");
+        Check(prepared.Manifest.RequiredProviders.Order().SequenceEqual(
+            new[] { "sample.clock.native", "sample.focus-timer.native" }), "native plugin requirements missing");
+        var originals = service.Restore(prepared);
+        foreach (var file in prepared.Manifest.Files)
+        {
+            var sourceHash = Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(Path.Combine(source, file.Path))));
+            var restoredHash = Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(Path.Combine(root, file.Path))));
+            Check(sourceHash == file.Sha256 && restoredHash == file.Sha256, "restored fixture hash mismatch: " + file.Path);
+        }
+        var restored = new StateStore(root, DurableAtomicFileWriter.Shared).Load();
+        Check(restored.Theme == "light" && restored.McpEnabled && restored.McpAllowFullWrites &&
+            !restored.UseCapsuleMode && !restored.EnableAnimations, "restored application settings changed");
+        Check(restored.Papers.Count == 3 && restored.Papers.All(paper => !paper.IsVisible), "restored fixture must remain hidden");
+        Check(NoteImageStore.ValidateBackupSnapshot(Path.Combine(root, "note-assets.lmdb"), [restored]) == 1,
+            "restored image bytes or references invalid");
+        using var plugins = new PaperBodyPluginDataStore(Path.Combine(root, "plugins"));
+        var clock = plugins.ReadPaperState("sample.clock.native", "fixture-clock");
+        var focus = plugins.ReadPaperState("sample.focus-timer.native", "fixture-focus");
+        Check(clock.Version == 1 && clock.Json == "{}", "restored clock state changed");
+        using var focusState = JsonDocument.Parse(focus.Json);
+        Check(focus.Version == 3 && focusState.RootElement.GetProperty("completedFocusSessions").GetInt32() == 7 &&
+            focusState.RootElement.GetProperty("focusMinutes").GetInt32() == 17, "restored focus state changed");
+        File.WriteAllText(evidencePath, JsonSerializer.Serialize(new
+        {
+            status = "passed",
+            chain = new[] { "WriteIntegrationFixture", "BackupService.Create", "BackupService.Prepare", "BackupService.Restore", "ReopenAndVerify" },
+            restoredProfile = root,
+            originalData = originals,
+            archiveSha256 = Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(archive))),
+            sourceAndArchive = "Private temporary siblings; removed after verification",
+            papers = prepared.PaperCount,
+            images = prepared.ImageCount,
+            requiredProviders = prepared.Manifest.RequiredProviders,
+            checks = new[] { "all restored files match source and manifest SHA256", "core settings and hidden state", "LMDB index, encoded image hashes and references", "native clock and focus per-paper state" },
+            files = prepared.Manifest.Files
+        }, new JsonSerializerOptions { WriteIndented = true, PropertyNamingPolicy = JsonNamingPolicy.CamelCase }));
+    }
+
     internal static void RoundTrip()
     {
         using var directory = new TempDirectory();

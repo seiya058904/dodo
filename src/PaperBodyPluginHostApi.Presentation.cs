@@ -62,7 +62,7 @@ internal sealed partial class PaperBodyPluginHostApi
         {
             throw Error(
                 "host_unavailable",
-                "PaperTodo is shutting down.");
+                "Dodo is shutting down.");
         }
 
         _ = dispatcher.BeginInvoke(

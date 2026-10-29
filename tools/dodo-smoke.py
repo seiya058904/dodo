@@ -1,7 +1,7 @@
 """Isolated Windows process/MCP smoke test. Never launches a visible paper or edits a real profile.
 
 Generate the image/plugin fixture first:
-  dotnet run --project tests/PaperTodo.PersistenceChecks -c Release -- --write-integration-fixture .local/integration-fixture
+  dotnet run --project tests/PaperTodo.PersistenceChecks -c Release -- --write-restored-integration-fixture .local/integration-fixture
 Run against a build or extracted release (the executable is copied into a fresh sandbox):
   python tools/dodo-smoke.py --app-dir <directory> --fixture .local/integration-fixture --dotnet-root .local/dotnet --baseline .local/baseline
 """
@@ -79,6 +79,14 @@ def write_json(path, value):
 def prepare_profile(fixture, target, baseline=False):
     shutil.copytree(fixture, target)
     state = read_json(target / "data.json")
+    if not baseline:
+        # Preserve the restored profile byte-for-byte. Refuse unsafe fixtures instead of
+        # rewriting flags and weakening the backup -> restore -> actual-process test chain.
+        check(all(state.get(key) is True for key in ("mcpEnabled", "mcpAllowBlankWrites", "mcpAllowFullWrites")),
+              "Dodo fixture must explicitly enable the isolated MCP write checks")
+        check(state.get("useCapsuleMode") is False and state.get("useDeepCapsuleMode") is False and
+              all(paper.get("isVisible") is False for paper in state["papers"]), "Dodo fixture must be hidden")
+        return
     state.update(mcpEnabled=True, mcpAllowBlankWrites=True, mcpAllowFullWrites=True,
                  mcpAllowDeletes=True, telemetryEnabled=False, useCapsuleMode=False,
                  useDeepCapsuleMode=False, enableAnimations=False, uiLanguage="zh-CN")
@@ -306,7 +314,10 @@ def main():
     if args.dotnet_root:
         env["DOTNET_ROOT"] = str(args.dotnet_root.resolve())
         env["PATH"] = env["DOTNET_ROOT"] + os.pathsep + env["PATH"]
-    report = {"directory": str(run), "application_source": str(source), "checks": [], "status": "running"}
+    chain_evidence = Path(str(fixture) + ".restore-chain.json")
+    report = {"directory": str(run), "application_source": str(source), "fixture_source": str(fixture),
+              "fixture_restore_chain_evidence": str(chain_evidence) if chain_evidence.is_file() else None,
+              "checks": [], "status": "running"}
     bridges = []
     processes = []
     streams = []

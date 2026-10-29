@@ -95,7 +95,7 @@ internal sealed partial class WebPluginRuntime : IDisposable
         if (!WebPluginRuntimeInfrastructure.AttachBackground(_webView))
         {
             throw new InvalidOperationException(
-                "PaperTodo could not attach the Web plugin Runtime to its background host.");
+                "Dodo could not attach the Web plugin Runtime to its background host.");
         }
 
         _settingsSubscription = _settings.Subscribe(OnSettingsChanged);
@@ -112,13 +112,13 @@ internal sealed partial class WebPluginRuntime : IDisposable
         _workspace as IPaperPluginRuntimeTodoActions
         ?? throw new PaperTodoPluginException(
             "todo_actions_unavailable",
-            "This PaperTodo host does not expose Runtime Todo actions.");
+            "This Dodo host does not expose Runtime Todo actions.");
 
     private IPaperPluginRuntimeTopBarLabels TopBarLabels =>
         _workspace as IPaperPluginRuntimeTopBarLabels
         ?? throw new PaperTodoPluginException(
             "topbar_labels_unavailable",
-            "This PaperTodo host does not expose Runtime top-bar labels.");
+            "This Dodo host does not expose Runtime top-bar labels.");
 
     public async Task StartAsync()
     {
@@ -331,7 +331,7 @@ internal sealed partial class WebPluginRuntime : IDisposable
                     pending.delete(message.requestId);
                     if (message.ok) waiter.resolve(message.result);
                     else {
-                      const error = new Error(message.error?.message ?? 'PaperTodo host request failed.');
+                      const error = new Error(message.error?.message ?? 'Dodo host request failed.');
                       error.code = message.error?.code ?? 'host_error';
                       waiter.reject(error);
                     }
@@ -607,7 +607,7 @@ internal sealed partial class WebPluginRuntime : IDisposable
                 error = new
                 {
                     code = "host_error",
-                    message = "PaperTodo could not complete the plugin Runtime request."
+                    message = "Dodo could not complete the plugin Runtime request."
                 }
             });
         }
@@ -644,7 +644,7 @@ internal sealed partial class WebPluginRuntime : IDisposable
                 _workspace, _descriptor.Manifest!, method, parameters, Send),
             _ => throw new PaperTodoPluginException(
                 "method_not_found",
-                $"Unknown PaperTodo Runtime method: {method}")
+                $"Unknown Dodo Runtime method: {method}")
         };
     }
 

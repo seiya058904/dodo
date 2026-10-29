@@ -90,7 +90,7 @@ internal sealed class PaperSettingsService
             {
                 change.Apply();
                 if (!(change.Commit ?? _commit)())
-                    throw Error("save_failed", "PaperTodo could not save the setting; the previous value was restored.");
+                    throw Error("save_failed", "Dodo could not save the setting; the previous value was restored.");
             }
             catch
             {
@@ -110,7 +110,7 @@ internal sealed class PaperSettingsService
 
     private void EnsureRunning()
     {
-        if (!_running()) throw Error("app_exiting", "PaperTodo is exiting.");
+        if (!_running()) throw Error("app_exiting", "Dodo is exiting.");
     }
 
     internal static PaperSettingsException Error(string code, string message) => new(code, message);

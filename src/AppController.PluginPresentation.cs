@@ -88,7 +88,7 @@ public sealed partial class AppController
     internal PaperPresentationResult PresentWorkspacePaper(string paperId, PaperPresentationAction action,
         bool activate, PaperOperationContext context)
     {
-        if (!IsRunning) throw new PaperCommandException("app_exiting", "PaperTodo is exiting.");
+        if (!IsRunning) throw new PaperCommandException("app_exiting", "Dodo is exiting.");
         var id = paperId?.Trim();
         if (string.IsNullOrWhiteSpace(id) || id.Length > 64 || !Enum.IsDefined(action))
             throw new PaperCommandException("invalid_params", "An exact paper ID and a valid presentation action are required.");

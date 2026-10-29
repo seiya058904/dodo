@@ -671,7 +671,7 @@ internal sealed partial class WebPaperBodySession
                         pending.delete(message.requestId);
                         if (message.ok) waiter.resolve(message.result);
                         else {
-                          const error = new Error(message.error?.message ?? 'PaperTodo host request failed.');
+                          const error = new Error(message.error?.message ?? 'Dodo host request failed.');
                           error.code = message.error?.code ?? 'host_error';
                           waiter.reject(error);
                         }
@@ -1023,7 +1023,7 @@ internal sealed partial class WebPaperBodySession
                         error = new
                         {
                             code = "host_error",
-                            message = "PaperTodo could not complete the plugin request."
+                            message = "Dodo could not complete the plugin request."
                         }
                     });
                 }

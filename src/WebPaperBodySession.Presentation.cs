@@ -35,7 +35,7 @@ internal sealed partial class WebPaperBodySession
             default:
                 throw new PaperTodo.Plugin.PaperTodoPluginException(
                     "method_not_found",
-                    $"Unknown PaperTodo paper presentation method: {method}");
+                    $"Unknown Dodo paper presentation method: {method}");
         }
 
         return null;

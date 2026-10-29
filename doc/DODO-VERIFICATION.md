@@ -25,6 +25,7 @@ No pre-existing PaperTodo user data was used.
 | Markdown export | Five groups: Unicode/Windows filenames, plain-text task escaping and completion, empty content, real LMDB image references, moved exports, repeated exports, missing images, read-only files and an NTFS deny-write directory. |
 | Persistence | 31 checks including existing fault injection and six full-backup/restore groups: images, settings, native plugin state, resources, malformed/path-traversal/incompatible archives, rollback, interrupted journals and late-write suppression. |
 | Actual processes | `tools/dodo-smoke.py` starts an isolated hidden Dodo process and a real stdio MCP bridge, discovers 20 tools, writes/reads Chinese notes and to-dos, changes settings, exits and restarts. Image bytes/references and native plugin state survive. |
+| Restore-to-process chain | `--write-restored-integration-fixture` creates a complete ZIP, validates it, restores into a new directory and compares every restored file with the source and manifest SHA256. The unchanged restored profile then passes the actual-process MCP/exit/restart checks: three papers, one LMDB image, application settings, Clock and Focus Timer state. |
 | Coexistence | Isolated Dodo and PaperTodo run together, use separate mutexes/pipes/profiles, save and exit independently. |
 | No desktop interference | In the background smoke sample: zero on-screen test windows and zero foreground activations. Three raw visible-flag windows were verified to be existing off-screen prewarm surfaces. |
 | Visual review | English/Chinese light/dark screenshots rendered from real WPF controls. No `Show`, `Activate`, native HWND, input or clipboard use. These are explicitly offscreen renders, not DWM desktop captures. |
@@ -59,6 +60,6 @@ Backup format v1 replaces a complete supported profile. It excludes plugin
 programs, plugin-owned external stores, external linked files, Windows startup
 registry entries, caches and previous restore-history. Restoring a profile does
 not silently change the machine's startup registration. Archives are bounded to
-1 GiB of uncompressed data and fewer than 10,000 entries. Originals and a durable
+1 GiB of uncompressed data and at most 10,000 archive entries. Originals and a durable
 journal remain under `dodo-data/restore-history`; interrupted replacements roll
 back before profile loading. No merge or cloud synchronization is implemented.

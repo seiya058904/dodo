@@ -554,7 +554,7 @@ internal sealed partial class PaperBodyPluginRegistry : IDisposable
         if (string.Equals(id.Trim(), PaperBodyProviderIds.Markdown, StringComparison.Ordinal) ||
             string.Equals(id.Trim(), "data", StringComparison.OrdinalIgnoreCase))
         {
-            throw new InvalidDataException("The plugin id is reserved by PaperTodo.");
+            throw new InvalidDataException("The plugin id is reserved by Dodo.");
         }
     }
 
