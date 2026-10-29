@@ -1,101 +1,165 @@
-<p align="center"><img src="assets/dodo-cover.svg" alt="Dodo — a little bird for your everyday notes and to-dos" width="100%"></p>
-
 <p align="center">
-  <a href="https://github.com/seiya058904/dodo/releases/latest"><img src="https://img.shields.io/github/v/release/seiya058904/dodo?color=587565&amp;label=Dodo" alt="Latest release"></a>
-  <img src="https://img.shields.io/badge/Windows-x64-536b63" alt="Windows x64">
-  <img src="https://img.shields.io/badge/WPF-.NET%2010-69758a" alt="WPF and .NET 10">
-  <a href="LICENSE.md"><img src="https://img.shields.io/badge/license-PolyForm%20Noncommercial-b48b54" alt="PolyForm Noncommercial"></a>
+  <a href="https://github.com/seiya058904/dodo/releases/latest">
+    <img src="assets/dodo-readme-hero.svg" alt="Dodo — little papers, a calmer desktop. Illustrated sage-green cover with a Dodo bird, a to-do paper and floating notes." width="100%" />
+  </a>
 </p>
 
-<h3 align="center">A few useful papers. A little more breathing room.</h3>
-<p align="center">Native Windows notes and to-dos that tuck into edge capsules.<br>Local files, portable backups, and a small, slightly bewildered bird.</p>
-<p align="center"><a href="https://github.com/seiya058904/dodo/releases/latest"><strong>↓ Download Dodo for Windows</strong></a> · <a href="README.zh.md">简体中文</a> · <a href="https://github.com/seiya058904/dodo/issues">Feedback</a></p>
+<h1 align="center">Dodo</h1>
+<p align="center"><strong>A few useful papers. A little more breathing room.</strong></p>
+<p align="center">
+  Notes, to-dos and tiny reminders that live on your Windows desktop.<br />
+  Open a paper, finish a thought, then tuck it into the edge of your screen.
+</p>
 
-## Your desktop, with room to think
+<p align="center">
+  <a href="https://github.com/seiya058904/dodo/releases/tag/v0.1.0"><img src="https://img.shields.io/badge/release-v0.1.0-597D65?style=flat-square" alt="Release v0.1.0" /></a>
+  <img src="https://img.shields.io/badge/Windows-x64-627F73?style=flat-square" alt="Windows x64" />
+  <img src="https://img.shields.io/badge/WPF-.NET%2010-6E8490?style=flat-square" alt="WPF and .NET 10" />
+  <a href="LICENSE.md"><img src="https://img.shields.io/badge/license-PolyForm%20Noncommercial-B08A5C?style=flat-square" alt="PolyForm Noncommercial" /></a>
+</p>
 
-<table><tr><td width="48%"><img src="assets/dodo-desktop-todo.png" alt="Actual Dodo to-do window, light theme"></td><td><img src="assets/dodo-desktop-note.png" alt="Actual Dodo note window, light theme"></td></tr></table>
-<sub>Actual Windows screenshots, cropped and masked only to exclude the surrounding desktop.</sub>
-<p align="center"><img src="assets/dodo-capsule.png" alt="Work capsule with three unfinished to-dos" width="190"></p>
+<p align="center">
+  <a href="https://github.com/seiya058904/dodo/releases/latest"><strong>📦 Download for Windows</strong></a>
+  &nbsp;·&nbsp; <a href="README.zh.md">简体中文</a>
+  &nbsp;·&nbsp; <a href="#gallery">Screenshots</a>
+  &nbsp;·&nbsp; <a href="#download">Get started</a>
+  &nbsp;·&nbsp; <a href="https://github.com/seiya058904/dodo/issues">Feedback</a>
+</p>
+<p align="center"><sub>Native WPF · Local-first · Portable profile · No account or note-cloud service</sub></p>
 
-| Make a little list | Leave a little note | Tuck it away |
-| :--- | :--- | :--- |
-| Check things off, reorder, undo, and set reminders. | Write lightweight Markdown and paste local images. | Collapse a paper into an edge capsule; see what's left at a glance. |
+<a id="gallery"></a>
 
-<details><summary>After hours · dark theme</summary>
-<table><tr><td width="48%"><img src="assets/dodo-dark-todo.png" alt="Dodo tasks in dark theme"></td><td><img src="assets/dodo-dark.png" alt="Dodo Markdown note in dark theme"></td></tr></table>
+## 🪟 A desktop with room to think
+
+<table>
+  <tr>
+    <td width="50%" valign="top"><img src="assets/dodo-desktop-todo.png" alt="Actual Dodo to-do paper on Windows, in the light theme" width="100%" /></td>
+    <td width="50%" valign="top"><img src="assets/dodo-desktop-note.png" alt="Actual Dodo Markdown note paper on Windows, in the light theme" width="100%" /></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>☑️ A little list</strong><br /><sub>Make progress, one checkmark at a time.</sub></td>
+    <td align="center"><strong>📝 A little note</strong><br /><sub>Catch an idea before it flies away.</sub></td>
+  </tr>
+</table>
+
+<sub>These are actual Windows screenshots, cropped and masked only to remove the surrounding desktop.</sub>
+
+<p align="center">
+  <img src="assets/dodo-capsule.png" alt="Dodo edge capsule showing a paper with three unfinished to-dos" width="210" /><br />
+  <sub>When a paper needs a break, dock it as an edge capsule — with an optional unfinished-task count.</sub>
+</p>
+
+<details>
+<summary><strong>🌙 After hours — see Dodo in dark mode</strong></summary>
+
+<table>
+  <tr>
+    <td width="50%"><img src="assets/dodo-dark-todo.png" alt="Dodo to-do paper in dark mode" width="100%" /></td>
+    <td width="50%"><img src="assets/dodo-dark.png" alt="Dodo Markdown paper in dark mode" width="100%" /></td>
+  </tr>
+</table>
+
+<sub>The dark-mode and capsule previews are renders of real WPF controls from the included offscreen review tool, not physical-desktop/DWM screenshots. The <a href="doc/DODO-VERIFICATION.md">verification record</a> explains the actual desktop checks and remaining gaps.</sub>
+
 </details>
 
-<sub>The capsule and dark-theme previews are rendered from actual WPF controls with the included offscreen visual-review tool; they are not desktop/DWM captures. See the <a href="doc/DODO-VERIFICATION.md">verification record</a> for desktop coverage and limits.</sub>
+<a id="features"></a>
 
-## What's different in Dodo?
+## 🌿 Small things, thoughtfully done
 
-Dodo builds on **[PaperTodo](https://github.com/snownico0722/PaperTodo)**. Its native papers,
-edge docking, Markdown editor, undo, search, multilingual UI, plugin system, and MCP
-integration come from that project. Dodo adds a focused set of everyday improvements:
+<table>
+  <tr>
+    <td width="50%" valign="top">
+      <h3>📝 Notes that feel like paper</h3>
+      <p>Lightweight Markdown, local images, undo and a simple place to put a passing thought.</p>
+    </td>
+    <td width="50%" valign="top">
+      <h3>☑️ To-dos without the fuss</h3>
+      <p>Check off tasks, reorder a list, set reminders and pick up where you left off.</p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
+      <h3>🧷 Papers that tuck away</h3>
+      <p>Dock a paper at the screen edge. Built-in to-do capsules can show a quiet <code>Work · 3</code> reminder.</p>
+    </td>
+    <td width="50%" valign="top">
+      <h3>📦 Yours to keep</h3>
+      <p>Local files, portable ZIP backups and Markdown exports. No Dodo account or hosted notes service.</p>
+    </td>
+  </tr>
+</table>
 
-- **A count that stays out of the way.** Built-in to-do capsules show unfinished items, such as `Work · 3`. Zero disappears; the count can be disabled in Settings.
-- **A complete way out — and back in.** A versioned ZIP includes papers, the LMDB image store, settings, host-managed plugin state, and supported custom resources. Restore validates the archive, keeps your previous data, and replaces the profile safely.
-- **Markdown you can keep.** Export a note or checklist to a chosen `.md` file. Checkboxes retain completion; images use relative paths in an accompanying folder.
-- **A quieter identity.** Dodo has its own executable, data directory, startup registration, single-instance signals, and MCP pipe. The upstream telemetry sender and reporting tasks have been removed.
-- **A gentler finish.** A small Dodo mascot, sage accents, more readable secondary text, and coordinated light/dark styling keep the paper feeling intact.
+Dodo is built on **[PaperTodo](https://github.com/snownico0722/PaperTodo)**. The original project provides the native paper windows, edge docking, Markdown editing, undo, search, multilingual UI, plugin system and MCP integration. **Dodo's additions** are deliberately focused:
 
-English, Simplified Chinese, Japanese, and Korean are available. Edge hover previews,
-third-party plugins, and MCP retain their upstream **preview** status.
+- **A gentler to-do capsule.** See unfinished counts update after edits, completion, deletion and undo. Counts disappear at zero and can be turned off.
+- **A way out, and a safe way back.** Create a versioned ZIP backup of your profile, or validate and restore one with a preserved rollback copy.
+- **Markdown you can take with you.** Export notes and checklists to `.md`, with relative image assets and preserved checkbox states.
+- **A home of its own.** Independent executable, local data directory, startup registration, single-instance signals and MCP pipe; the upstream telemetry sender and reporting tasks are removed.
+- **A softer finish.** Dodo's little bird, sage accents, improved secondary-text contrast and coordinated light/dark styling.
 
-## Download & start
+<sub>Available interface languages: English · 简体中文 · 日本語 · 한국어. Edge hover previews, third-party plugins and MCP retain their upstream <strong>preview</strong> status.</sub>
 
-1. Download **`Dodo-v0.1.0-win-x64-portable.zip`** from [Releases](https://github.com/seiya058904/dodo/releases/latest).
-2. Extract the **whole ZIP** to a writable folder and run **`Dodo.exe`**. The recommended package includes the .NET runtime.
-3. Your profile lives beside the executable in **`dodo-data/`**. Keep that folder when updating the application files.
+<a id="download"></a>
 
-Windows x64 is required. The Windows API target is Windows 10 version 1809;
-runtime OS support follows Microsoft's [.NET 10 support matrix](https://github.com/dotnet/core/blob/main/release-notes/10.0/supported-os.md).
-Local validation uses Windows 11; Windows 10 has not been separately tested.
-Unsigned builds may show a Windows reputation prompt. A `no-runtime` package,
-when provided, requires **.NET 10 Desktop Runtime x64**.
+## 📦 Come on in
 
-The portable package includes the native **Focus Timer** and **Sample Clock** plugins.
-Other plugin samples in the source repository are not automatically bundled. Web
-plugins additionally require Microsoft's **WebView2 Evergreen Runtime**. Native
-notes, to-dos, and the bundled native plugins do not require WebView2.
+Choose the **v0.1.0** Windows x64 ZIP that fits your setup:
 
-| Everyday action | How |
-| :--- | :--- |
-| Collapse a paper | Top-right button or `Ctrl+W` |
-| Undo / redo | `Ctrl+Z` / `Ctrl+Y` |
-| Find a paper or text | Search from the tray menu |
-| Recover papers covered by other windows | Double-click the tray icon |
-| Export Markdown | Paper menu **⋯ → Export Markdown…** |
-| Back up or restore | **Settings → General → Backup and restore** |
+| Download | For whom |
+| --- | --- |
+| **[Portable ZIP · .NET included](https://github.com/seiya058904/dodo/releases/download/v0.1.0/Dodo-v0.1.0-win-x64-portable.zip)** · ~78 MiB | **Recommended.** Extract and run, without installing a separate .NET runtime. |
+| [Smaller ZIP · no runtime](https://github.com/seiya058904/dodo/releases/download/v0.1.0/Dodo-v0.1.0-win-x64-no-runtime.zip) · ~10.3 MiB | For PCs that already have **.NET 10 Desktop Runtime x64**. |
+| [SHA256SUMS.txt](https://github.com/seiya058904/dodo/releases/download/v0.1.0/SHA256SUMS.txt) | Verify the published archives. |
 
-## Your data, in your hands
+1. **Download** one of the packages above, or visit the [latest releases](https://github.com/seiya058904/dodo/releases/latest).
+2. **Extract the entire ZIP** to a writable folder and open **`Dodo.exe`**.
+3. **Keep `dodo-data/`** beside the executable when updating. That's where your portable profile lives.
 
-**Backups are replacements, not merges.** Export a ZIP outside `dodo-data/`. Before
-restoring, Dodo checks the format, version, file hashes, safe paths, image references,
-and plugin-state files, then displays a summary for confirmation. It saves the old
-profile under `dodo-data/restore-history/`, applies the replacement, and exits.
-Reopen Dodo to use the restored profile. An interrupted restore is rolled back on
-the next startup before the profile is loaded.
+**Compatibility:** Windows x64. The Windows API target is Windows 10 version 1809, while actual runtime support follows the [Microsoft .NET 10 OS matrix](https://github.com/dotnet/core/blob/main/release-notes/10.0/supported-os.md). The documented local tests used Windows 11; **Windows 10 has not been separately verified**. Packages are unsigned, so Windows may show a reputation warning.
 
-Backups include `data.json`, its recovery snapshot, `note-assets.lmdb`, host-managed
-`plugins/data/*.json`, background preferences, and supported `dodo.*` image/font/sound/icon
-resources. They **do not** include plugin programs, plugin-owned external databases,
-linked files outside the profile, caches, or older restore-history folders. The
-confirmation lists required plugins; reinstall missing plugin programs before using
-their restored state. Treat backups as private: they contain your notes and plugin settings.
+The portable package bundles the native **Focus Timer** and **Sample Clock** plugins. Other sample plugins are not automatically included. Web-based plugins additionally need **WebView2 Evergreen Runtime**; normal notes, to-dos and bundled native plugins do not.
 
-**Markdown export is one-way.** Keep the `.md` and its `dodo-assets-…` folder together
-when moving an export. Exporting the same filename again asks before replacing the
-document and uses a fresh asset folder, preserving previous exports' images. Dodo
-does not watch exported files or import edits back into the application.
+<details>
+<summary><strong>⌨️ Handy gestures and shortcuts</strong></summary>
 
-Dodo never imports an existing PaperTodo profile automatically. It can coexist with
-PaperTodo, and GitHub synchronization concerns source code only — there is no note
-cloud sync, account, or hosted service in this release.
+| You want to… | Do this |
+| --- | --- |
+| Fold a paper into an edge capsule | Top-right paper button or `Ctrl+W` |
+| Undo / redo a change | `Ctrl+Z` / `Ctrl+Y` |
+| Search papers or their text | Tray menu → Search |
+| Bring hidden papers forward | Double-click the tray icon |
+| Save a paper as Markdown | Paper menu **⋯ → Export Markdown…** |
+| Back up or restore your profile | **Settings → General → Backup and restore** |
 
-## Build from source
+</details>
 
-Use Windows, PowerShell 7, Git, and the **.NET 10 SDK**:
+<a id="data"></a>
+
+## 🔒 Your papers stay yours
+
+Dodo stores notes locally. **There is no account, automatic cloud sync or hosted notes service.** It does not automatically import an existing PaperTodo profile; the two apps can coexist.
+
+**Backups restore by replacement, not by merging.** Before restoring, Dodo validates the ZIP and shows a summary for confirmation. It preserves your previous profile under `dodo-data/restore-history/`, applies the replacement and exits. Reopen Dodo to load the restored data. A restore interrupted mid-way is rolled back at the next startup.
+
+**Markdown export is one-way.** Keep the exported `.md` file and its accompanying `dodo-assets-…` image folder together. Edits made to exported files do not flow back into Dodo.
+
+<details>
+<summary><strong>What goes into a backup? What stays out?</strong></summary>
+
+The versioned archive includes `data.json`, its recovery snapshot, `note-assets.lmdb`, host-managed `plugins/data/*.json`, background preferences, and supported `dodo.*` custom image, font, sound and icon resources.
+
+It does **not** bundle plugin executables, plugin-owned external databases, linked files outside the profile, caches or older restore-history folders. A restore lists required plugins; reinstall any missing plugin programs before using their restored state. Archives can contain private notes and plugin settings — review them before sharing.
+
+Dodo checks archive format and version, hashes, paths, image references and plugin-state files before replacing a profile. Re-exporting Markdown to the same filename asks before overwrite and uses a fresh assets directory rather than deleting earlier exported images.
+
+</details>
+
+<a id="development"></a>
+
+## 🛠️ Build a little bird
+
+**Windows · PowerShell 7 · Git · .NET 10 SDK**
 
 ```powershell
 git clone --recurse-submodules https://github.com/seiya058904/dodo.git
@@ -103,42 +167,42 @@ cd dodo
 dotnet build PaperTodo.csproj -c Release
 ```
 
-The project filename and `PaperTodo` namespaces remain intentional compatibility
-boundaries; the output is `Dodo.exe`. Preserve Git history and the pinned submodule.
-If needed, run `git submodule update --init --recursive`. GitHub's automatic source
-ZIPs omit submodule contents and are not complete standalone build packages.
+`PaperTodo.csproj` and some internal namespaces intentionally retain upstream-compatible names; the desktop application is **`Dodo.exe`**. If the checkout is missing dependencies, run `git submodule update --init --recursive`. GitHub-generated source ZIPs do **not** contain the submodule, so they are not standalone build packages.
+
+<details>
+<summary><strong>Checks, packaging and engineering notes</strong></summary>
 
 ```powershell
-# Relevant behavior checks; some groups create native test windows.
 ./tools/testing/Run-Checks.ps1 -Group persistence
 dotnet run --project tests/PaperTodo.EdgeTitleChecks -c Release -- --todo-count-only
 dotnet run --project tests/PaperTodo.MarkdownEditingChecks -c Release -- --export
-
-# Full portable package; see the script's parameters for optional variants.
 ./tools/Release.ps1
 ```
 
-Release CI rebuilds native LMDB from the included source, requiring CMake and the
-Visual C++ toolchain. Ordinary local builds use the pinned native library. Release
-publication is a manual workflow after checks and desktop acceptance; pushing a
-tag alone does not publish a release. Packages include `SHA256SUMS.txt` on the Release page.
+Some test groups open real Windows test windows. The release workflow rebuilds native LMDB from the repository's included source and requires **CMake** and the **Visual C++ toolchain**. Publication is a manually dispatched workflow following tests and desktop acceptance — pushing a Git tag alone does not publish a release.
 
-See [verification notes](doc/DODO-VERIFICATION.md), [architecture](doc/ARCHITECTURE.md),
-[plugin documentation](plugin-samples/README.md), and the [changelog](CHANGELOG.md).
+</details>
 
-## Acknowledgements & license
+**Further reading:** [Verification & limitations](doc/DODO-VERIFICATION.md) · [Architecture](doc/ARCHITECTURE.md) · [Plugin documentation](plugin-samples/README.md) · [Changelog](CHANGELOG.md).
 
-Dodo is a **noncommercial, source-available derivative of PaperTodo**, based on
-upstream commit `411078b094f9a22c15ffb2722f0b1cc7d0af0537` (`4.0.0-beta1`), with
-its original history and authorship retained. Dodo's `0.1.0` is an independent
-version sequence, not a claim that every upstream preview feature is production-stable.
+<a id="credits"></a>
 
-Thank you to **snownico0722** and the PaperTodo contributors for the paper-first
-design and native foundation. Read the complete unchanged [license](LICENSE.md),
-[Required Notice](REQUIRED-NOTICE.md), and [third-party notices](THIRD-PARTY-NOTICES.md).
-The terms are **PolyForm Noncommercial 1.0.0** plus **PaperTodo Individual Professional
-Use Additional Permission 1.0**. This is not an MIT-licensed or OSI-approved
-open-source project; organizational deployment has separate restrictions in the full terms.
+## 🐤 A note of thanks
+
+Dodo is a **noncommercial, source-available derivative** of [PaperTodo](https://github.com/snownico0722/PaperTodo), based on upstream commit `411078b094f9a22c15ffb2722f0b1cc7d0af0537` (`4.0.0-beta1`). It preserves the original history and authorship. Dodo `0.1.0` has its own version sequence; it does **not** mean every inherited preview feature is production-stable.
+
+Thanks to **snownico0722** and the PaperTodo contributors for the paper-first idea and native desktop foundation.
+
+**License:** [PolyForm Noncommercial 1.0.0 and PaperTodo Individual Professional Use Additional Permission 1.0](LICENSE.md). This is **not** MIT-licensed or OSI-approved open source; organizational use has additional restrictions. Please read the full [LICENSE.md](LICENSE.md), [Required Notice](REQUIRED-NOTICE.md) and [third-party notices](THIRD-PARTY-NOTICES.md) before using or redistributing it.
+
+---
+
+<p align="center">
+  <img src="assets/dodo.svg" width="42" height="42" alt="Dodo bird mascot" /><br />
+  <em>One small paper at a time.</em><br />
+  <a href="https://github.com/seiya058904/dodo/releases/latest"><strong>Find your Dodo ↗</strong></a>
+  &nbsp;·&nbsp; <a href="#dodo">Back to top ↑</a>
+</p>
 
 ---
 

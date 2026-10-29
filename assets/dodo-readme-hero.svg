@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="420" viewBox="0 0 1200 420" role="img" aria-labelledby="title desc">
+  <title id="title">Dodo — little papers, a calmer desktop</title>
+  <desc id="desc">A soft sage and ivory illustrated banner with the Dodo bird beside floating paper notes and a tiny to-do list. This is brand artwork, not a screenshot.</desc>
+  <defs>
+    <linearGradient id="paper" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FCFBF5"/>
+      <stop offset="0.62" stop-color="#F2F5EC"/>
+      <stop offset="1" stop-color="#E2EEE3"/>
+    </linearGradient>
+    <linearGradient id="mint" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#DCE9D8"/>
+      <stop offset="1" stop-color="#BDD6C8"/>
+    </linearGradient>
+    <filter id="shadow" x="-25%" y="-25%" width="160%" height="170%">
+      <feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#4A6358" flood-opacity=".12"/>
+    </filter>
+    <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="1.5" cy="1.5" r="1" fill="#729281" opacity=".17"/>
+    </pattern>
+    <clipPath id="frame"><rect x="1" y="1" width="1198" height="418" rx="24"/></clipPath>
+  </defs>
+  <g clip-path="url(#frame)">
+    <rect width="1200" height="420" fill="url(#paper)"/>
+    <path d="M585 0H1200V420H640C590 358 584 306 612 244S597 96 585 0Z" fill="#E5F0E5" opacity=".66"/>
+    <path d="M730 0H1200V420H754C786 348 768 270 732 219S711 76 730 0Z" fill="#D7E8DB" opacity=".38"/>
+    <rect x="681" y="25" width="472" height="365" rx="24" fill="url(#dots)"/>
+    <circle cx="1148" cy="53" r="96" fill="#F5F1DD" opacity=".65"/>
+    <path d="M0 368C170 341 274 397 433 376S651 341 755 385S1054 402 1200 363V420H0Z" fill="#DFEADA"/>
+    <path d="M0 396C187 363 302 406 430 399S688 378 830 403S1054 412 1200 393" fill="none" stroke="#C2D7C5" stroke-width="2"/>
+    <g font-family="Segoe UI, Inter, Arial, sans-serif">
+      <text x="69" y="74" font-size="14" font-weight="650" fill="#6A8172" letter-spacing="3.2">A QUIETER CORNER OF YOUR DESKTOP</text>
+      <text x="64" y="208" font-size="118" font-weight="750" fill="#293E36" letter-spacing="-5">Dodo<tspan fill="#D7A058">.</tspan></text>
+      <text x="70" y="265" font-size="30" font-weight="550" fill="#456957">Little papers. More room to breathe.</text>
+      <text x="70" y="307" font-size="18" fill="#687B6E">Notes, to-dos and tiny reminders, close when you need them.</text>
+      <g transform="translate(70 340)" font-size="12" font-weight="650" letter-spacing=".6">
+        <rect width="117" height="31" rx="15.5" fill="#D8E8D9"/>
+        <text x="58.5" y="20.5" text-anchor="middle" fill="#436D55">WINDOWS</text>
+        <rect x="128" width="118" height="31" rx="15.5" fill="#D8E8D9"/>
+        <text x="187" y="20.5" text-anchor="middle" fill="#436D55">LOCAL FIRST</text>
+        <rect x="257" width="142" height="31" rx="15.5" fill="#F3E6CD"/>
+        <text x="328" y="20.5" text-anchor="middle" fill="#876B3E">PAPER + PIXELS</text>
+      </g>
+    </g>
+    <!-- Paper windows behind the bird -->
+    <g filter="url(#shadow)" transform="translate(794 53) rotate(-6 158 148)">
+      <rect x="0" y="0" width="297" height="302" rx="20" fill="#FFFDF6" stroke="#D5DDD0" stroke-width="2"/>
+      <rect x="0" y="0" width="297" height="43" rx="20" fill="#EAF1E7"/>
+      <path d="M0 23H297V43H0" fill="#EAF1E7"/>
+      <circle cx="26" cy="21" r="5" fill="#B0C5B7"/><circle cx="44" cy="21" r="5" fill="#D3C4A2"/><circle cx="62" cy="21" r="5" fill="#D4DFD2"/>
+      <text x="28" y="78" font-family="Segoe UI, Arial, sans-serif" font-size="19" font-weight="650" fill="#425C4D">Today, gently</text>
+      <g stroke="#8AA897" stroke-width="2.3" stroke-linecap="round" fill="none">
+        <rect x="29" y="100" width="19" height="19" rx="5"/><path d="M34 109l5 5 9-11"/>
+        <rect x="29" y="144" width="19" height="19" rx="5"/>
+        <rect x="29" y="188" width="19" height="19" rx="5"/>
+      </g>
+      <g fill="#C7D6CA"><rect x="62" y="103" width="149" height="8" rx="4"/><rect x="62" y="147" width="179" height="8" rx="4"/><rect x="62" y="191" width="123" height="8" rx="4"/></g>
+      <g fill="#D9E2D7"><rect x="62" y="116" width="90" height="5" rx="2.5"/><rect x="62" y="160" width="121" height="5" rx="2.5"/><rect x="62" y="204" width="78" height="5" rx="2.5"/></g>
+    </g>
+    <g transform="translate(1010 57) rotate(8 69 62)" filter="url(#shadow)">
+      <rect width="130" height="121" rx="13" fill="#F7E8C7"/>
+      <rect x="13" y="-5" width="41" height="13" rx="4" fill="#E5D5AA" opacity=".82"/>
+      <path d="M21 43H103M21 60H91M21 77H102" stroke="#BEAD85" stroke-width="5" stroke-linecap="round" opacity=".68"/>
+      <path d="m85 97 9 7 15-20" stroke="#779D83" stroke-width="5" stroke-linecap="round" fill="none"/>
+    </g>
+    <!-- Dodo mascot, intentionally following the project's original bird silhouette -->
+    <g transform="translate(783 170) scale(1.02)" filter="url(#shadow)">
+      <rect x="8" y="5" width="228" height="215" rx="55" fill="url(#mint)" opacity=".9"/>
+      <path d="M74 42h84l26 26v119q0 14-14 14H74q-14 0-14-14V56q0-14 14-14" fill="#FFF8E7"/>
+      <path d="M158 42v26h26" fill="#D8E4D3"/>
+      <g stroke="#293E38" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M110 173v19H97m44-19v19h13" fill="none" stroke-width="7"/>
+        <ellipse cx="121" cy="128" rx="51" ry="48" fill="#86AA99" stroke-width="6"/>
+        <ellipse cx="147" cy="87" rx="36" ry="37" fill="#FFF8E7" stroke-width="6"/>
+        <rect x="164" y="85" width="50" height="27" rx="13" fill="#E8AE64" stroke-width="6"/>
+        <path d="m111 57-6-12 12 4" fill="none" stroke-width="5"/>
+      </g>
+      <ellipse cx="155" cy="78" rx="4.5" ry="6" fill="#263A34"/>
+      <ellipse cx="119" cy="129" rx="24" ry="23" fill="#AFC8B8"/>
+      <ellipse cx="145" cy="72" rx="8" ry="5" fill="#FFFDF3" opacity=".58"/>
+    </g>
+    <g transform="translate(1076 287) rotate(-9)" filter="url(#shadow)">
+      <rect width="71" height="65" rx="12" fill="#FFF9EB"/>
+      <path d="M19 22H52M19 33H45M19 44H52" stroke="#C1CDBB" stroke-width="4" stroke-linecap="round"/>
+      <circle cx="57" cy="53" r="11" fill="#E4C491"/>
+    </g>
+  </g>
+  <rect x="1" y="1" width="1198" height="418" rx="24" fill="none" stroke="#D7E3D8" stroke-width="2"/>
+</svg>
