@@ -47,9 +47,11 @@ third-party plugins, and MCP retain their upstream **preview** status.
 2. Extract the **whole ZIP** to a writable folder and run **`Dodo.exe`**. The recommended package includes the .NET runtime.
 3. Your profile lives beside the executable in **`dodo-data/`**. Keep that folder when updating the application files.
 
-Windows x64 is required. The project targets Windows 10 version 1809 or later;
-current Windows 10/11 is recommended. Unsigned builds may show a Windows reputation
-prompt. A `no-runtime` package, when provided, requires **.NET 10 Desktop Runtime x64**.
+Windows x64 is required. The Windows API target is Windows 10 version 1809;
+runtime OS support follows Microsoft's [.NET 10 support matrix](https://github.com/dotnet/core/blob/main/release-notes/10.0/supported-os.md).
+Local validation uses Windows 11; Windows 10 has not been separately tested.
+Unsigned builds may show a Windows reputation prompt. A `no-runtime` package,
+when provided, requires **.NET 10 Desktop Runtime x64**.
 
 The portable package includes the native **Focus Timer** and **Sample Clock** plugins.
 Other plugin samples in the source repository are not automatically bundled. Web
@@ -165,7 +167,7 @@ Dodo 是基于 [PaperTodo](https://github.com/snownico0722/PaperTodo) 的非商�
 
 下载 `Dodo-v0.1.0-win-x64-portable.zip`，完整解压到可写目录，运行 `Dodo.exe`。
 推荐包自带 .NET；可选的 `no-runtime` 包需要 .NET 10 Desktop Runtime x64。
-数据存放在程序旁的 `dodo-data/`，升级时保留它。Windows 10 1809 及以上 x64 可构建运行，推荐当前 Windows 10/11。
+数据存放在程序旁的 `dodo-data/`，升级时保留它。需要 Windows x64；Windows API 目标为 Windows 10 1809，实际运行时系统支持范围以微软的 [.NET 10 支持矩阵](https://github.com/dotnet/core/blob/main/release-notes/10.0/supported-os.md)为准。本次本地验证使用 Windows 11，尚未单独验收 Windows 10。
 
 便携包包含原生 Focus Timer 和 Sample Clock 插件。仓库中其他插件不会自动随包提供。
 Web 插件额外依赖 WebView2 Evergreen Runtime。插件、MCP 与边缘悬停预览保留上游预览功能属性。
