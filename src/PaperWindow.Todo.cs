@@ -2532,6 +2532,7 @@ public sealed partial class PaperWindow
         // Preserve the current list order. Sorting here would undo freshly inserted
         // or dragged rows because new items start with Order = 0 until we renumber them.
         TodoRules.NormalizeOrders(_paper.Items);
+        RefreshTodoCapsuleLabel();
     }
 
     private void ShowDropIndicator(Border row, DropPlacement placement)

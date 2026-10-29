@@ -2,7 +2,7 @@
 <assembly manifestVersion="1.0"
           xmlns="urn:schemas-microsoft-com:asm.v1"
           xmlns:asmv3="urn:schemas-microsoft-com:asm.v3">
-  <assemblyIdentity version="1.0.0.0" name="PaperTodo.app" />
+  <assemblyIdentity version="1.0.0.0" name="Dodo.app" />
 
   <asmv3:application>
     <asmv3:windowsSettings>

@@ -55,6 +55,8 @@ internal sealed partial class EdgeCapsuleHost
         var hasPluginContent = _pluginContentLayer?.Child != null;
         Icon.Visibility = hasPluginContent ? Visibility.Collapsed : Visibility.Visible;
         Label.Visibility = !hasPluginContent && titleVisible ? Visibility.Visible : Visibility.Collapsed;
+        TodoCount.Visibility = !hasPluginContent && titleVisible && TodoCount.Text.Length > 0
+            ? Visibility.Visible : Visibility.Collapsed;
     }
 
     private Border CreatePluginContentLayer()

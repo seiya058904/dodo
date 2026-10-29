@@ -8,7 +8,7 @@ public static class SystemSettingsHelper
     private const string RegistryRunPath = @"Software\Microsoft\Windows\CurrentVersion\Run";
     private const string StartupApprovedRunPath =
         @"Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run";
-    private const string AppKeyName = "PaperTodo";
+    private const string AppKeyName = "Dodo";
 
     public static bool IsStartupEnabled()
     {

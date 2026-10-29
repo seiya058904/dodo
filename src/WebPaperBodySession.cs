@@ -1230,7 +1230,8 @@ internal sealed partial class WebPaperBodySession : IPaperBodySession
         var userDataFolder = Path.Combine(
             pluginDirectory,
             ".runtime",
-            backgroundRuntime ? "webview2-runtime" : "webview2");
+            // Plugin program folders may be shared with PaperTodo. Browser profiles must not be.
+            backgroundRuntime ? "dodo-webview2-runtime" : "dodo-webview2");
         Directory.CreateDirectory(userDataFolder);
         var options = backgroundRuntime
             ? new CoreWebView2EnvironmentOptions(

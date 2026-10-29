@@ -52,7 +52,7 @@ public partial class App : Application
                 try
                 {
                     Console.Error.WriteLine(
-                        $"PaperTodo MCP failed: {ex.GetBaseException().Message}");
+                        $"Dodo MCP failed: {ex.GetBaseException().Message}");
                 }
                 catch
                 {
@@ -65,21 +65,20 @@ public partial class App : Application
         }
 
         var startupCommand = StartupCommand.Parse(e.Args);
-        ApplyStartupCulturePreference(UiLanguages.LoadPersistedPreference());
 
         // Register global unhandled exception handlers
         DispatcherUnhandledException += OnDispatcherUnhandledException;
         AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
 
-        _singleInstance = new SingleInstanceHelper("PaperTodo-SingleInstance-Mutex", "PaperTodo-SingleInstance-Activate");
+        _singleInstance = new SingleInstanceHelper("Dodo-SingleInstance-Mutex", "Dodo-SingleInstance-Activate");
         if (!_singleInstance.TryAcquire())
         {
             var exitCode = _singleInstance.SignalPrimaryInstance(e.Args,
                 waitForResult: startupCommand.Kind == StartupCommandKind.EnableMcpForCodex);
             if (exitCode != 0 && startupCommand.Kind == StartupCommandKind.EnableMcpForCodex)
                 Console.Error.WriteLine(exitCode == 1
-                    ? "PaperTodo did not enable MCP. Check the Codex plugin and its Allow MCP setting."
-                    : "PaperTodo did not return an MCP enable result.");
+                    ? "Dodo did not enable MCP. Check the Codex plugin and its Allow MCP setting."
+                    : "Dodo did not return an MCP enable result.");
             _singleInstance.Dispose();
             _singleInstance = null;
             Shutdown(exitCode);
@@ -93,7 +92,7 @@ public partial class App : Application
         {
             _singleInstance.Dispose();
             _singleInstance = null;
-            Console.Error.WriteLine("PaperTodo is not running; MCP was not enabled.");
+            Console.Error.WriteLine("Dodo is not running; MCP was not enabled.");
             Shutdown(2);
             Environment.Exit(2);
             return;
@@ -111,6 +110,8 @@ public partial class App : Application
 
         try
         {
+            BackupService.RecoverInterruptedRestore();
+            ApplyStartupCulturePreference(UiLanguages.LoadPersistedPreference());
             _controller = new AppController();
         }
         catch (Exception ex)
@@ -350,7 +351,8 @@ public partial class App : Application
     {
         try
         {
-            var logPath = Path.Combine(AppContext.BaseDirectory, "PaperTodo.crash.log");
+            Directory.CreateDirectory(AppPaths.DataDirectory);
+            var logPath = Path.Combine(AppPaths.DataDirectory, "Dodo.crash.log");
             TrimCrashLog(logPath);
             File.AppendAllText(
                 logPath,

@@ -19,21 +19,21 @@
     <value>3.1</value>
   </data>
   <data name="AppStartupFailureTitle" xml:space="preserve">
-    <value>PaperTodo - 起動失敗</value>
+    <value>Dodo - 起動失敗</value>
   </data>
   <data name="AppUnhandledExceptionMessage" xml:space="preserve">
-    <value>未処理のエラーが発生しました。クラッシュログを PaperTodo.crash.log に書き込みました。&#x0A;&#x0A;アプリを再起動してください。直近の変更は自動保存と data.backup.json に依存します。&#x0A;&#x0A;エラー: {0}</value>
+    <value>未処理のエラーが発生しました。クラッシュログを Dodo.crash.log に書き込みました。&#x0A;&#x0A;アプリを再起動してください。直近の変更は自動保存と data.backup.json に依存します。&#x0A;&#x0A;エラー: {0}</value>
   </data>
   <data name="AppUnhandledExceptionTitle" xml:space="preserve">
-    <value>PaperTodo - 異常終了</value>
+    <value>Dodo - 異常終了</value>
   </data>
   <data name="AppDesktopRuntimeLoadFailureTitle" xml:space="preserve">
-    <value>PaperTodo - .NET 実行環境コンポーネントの読み込み失敗</value>
+    <value>Dodo - .NET 実行環境コンポーネントの読み込み失敗</value>
   </data>
   <data name="AppDesktopRuntimeLoadFailureMessage" xml:space="preserve">
-    <value>.NET 実行環境コンポーネントを読み込めなかったため、アプリを完全に終了します。クラッシュログを PaperTodo.crash.log に書き込みました。
+    <value>.NET 実行環境コンポーネントを読み込めなかったため、アプリを完全に終了します。クラッシュログを Dodo.crash.log に書き込みました。
 
-PaperTodo を手動でもう一度開いてください。問題が繰り返される場合は、PC を再起動するか、.NET Desktop Runtime を修復 / 再インストールしてください。
+Dodo を手動でもう一度開いてください。問題が繰り返される場合は、PC を再起動するか、.NET Desktop Runtime を修復 / 再インストールしてください。
 
 エラー: {0}</value>
   </data>
@@ -329,7 +329,7 @@ PaperTodo を手動でもう一度開いてください。問題が繰り返さ�
     <value>今回は無視</value>
   </data>
   <data name="ExitSaveFailureMessage" xml:space="preserve">
-    <value>PaperTodo は保存に失敗したため終了します。未保存の変更は失われる可能性があります。</value>
+    <value>Dodo は保存に失敗したため終了します。未保存の変更は失われる可能性があります。</value>
   </data>
   <data name="SaveFailureMessage" xml:space="preserve">
     <value>データの保存に失敗しました:&#x0A;{0}&#x0A;ディスク容量または権限を確認してください。</value>
@@ -551,7 +551,7 @@ PaperTodo を手動でもう一度開いてください。問題が繰り返さ�
   <data name="TipUiFont" xml:space="preserve">
     <value>言語既定では、UI とノート本文にそれぞれ適したシステムフォントを使います。
 YaHei または DengXian を選ぶと、UI・トレイ・カプセル・ToDo・ノートをそのフォントに統一します。
-アプリフォルダーに papertodo.ttf / .otf がある場合はそれを優先します。</value>
+アプリフォルダーに dodo.ttf / .otf がある場合はそれを優先します。</value>
   </data>
   <data name="TipTextRenderingProfile" xml:space="preserve">
     <value>標準：Windows/WPF 既定経路。互換性重視。
@@ -563,7 +563,7 @@ YaHei または DengXian を選ぶと、UI・トレイ・カプセル・ToDo・�
   </data>
   <data name="TipCustomFontEnhancedBold" xml:space="preserve">
     <value>「太字」にした文字は、アプリフォルダーの太字ファイルを使います。
-papertodo と PaperTodo_Bold（.ttf/.otf）の両方を置いてください。</value>
+papertodo と Dodo_Bold（.ttf/.otf）の両方を置いてください。</value>
   </data>
   <data name="TipMarkdownRender" xml:space="preserve">
     <value>基本：Markdown 記号を残しつつ構文記号を薄くし、リストの丸印や区切り線などの軽い整形を表示します。
@@ -635,7 +635,7 @@ papertodo と PaperTodo_Bold（.ttf/.otf）の両方を置いてください。<
     <value>紙片タイトルとカプセルに表示する最大文字数。</value>
   </data>
   <data name="TipStartup" xml:space="preserve">
-    <value>Windows 起動時に PaperTodo を自動起動します。</value>
+    <value>Windows 起動時に Dodo を自動起動します。</value>
   </data>
   <data name="SettingsEnableToolTips" xml:space="preserve">
     <value>ホバー時のヒントを表示</value>
@@ -1235,7 +1235,7 @@ papertodo と PaperTodo_Bold（.ttf/.otf）の両方を置いてください。<
   </data>
   <data name="LabsMcp" xml:space="preserve"><value>ローカル MCP インターフェース</value></data>
   <data name="LabsMcpEnable" xml:space="preserve"><value>MCP を有効化（読み取りは常に許可）</value></data>
-  <data name="TipLabsMcpEnable" xml:space="preserve"><value>同じ PaperTodo.exe の --mcp モードから、ローカル AI クライアントによる紙片の読み取りを許可します。無効にすると名前付きパイプを直ちに停止します。</value></data>
+  <data name="TipLabsMcpEnable" xml:space="preserve"><value>同じ Dodo.exe の --mcp モードから、ローカル AI クライアントによる紙片の読み取りを許可します。無効にすると名前付きパイプを直ちに停止します。</value></data>
   <data name="LabsMcpBlankWrites" xml:space="preserve"><value>空欄・追加書き込みを許可</value></data>
   <data name="TipLabsMcpBlankWrites" xml:space="preserve"><value>紙片の新規作成、既存の ToDo 紙への項目追加、空欄への入力、ノートへの追記を許可します。既存の文字は上書きしません。</value></data>
   <data name="LabsMcpFullWrites" xml:space="preserve"><value>完全な書き込みを許可</value></data>
@@ -1279,10 +1279,10 @@ papertodo と PaperTodo_Bold（.ttf/.otf）の両方を置いてください。<
     <value>フォルダーを開く</value>
   </data>
   <data name="PluginsRestartTooltip" xml:space="preserve">
-    <value>PaperTodo を再起動してプラグインを再スキャン</value>
+    <value>Dodo を再起動してプラグインを再スキャン</value>
   </data>
   <data name="PluginsRestartTitle" xml:space="preserve">
-    <value>PaperTodo を再起動</value>
+    <value>Dodo を再起動</value>
   </data>
   <data name="PluginsRestartMessage" xml:space="preserve">
     <value>再起動して本文プラグインを再スキャンし、読み込みますか？</value>
@@ -1327,7 +1327,7 @@ papertodo と PaperTodo_Bold（.ttf/.otf）の両方を置いてください。<
     <value>Markdown ノート</value>
   </data>
   <data name="BodyProviderMarkdownDescription" xml:space="preserve">
-    <value>PaperTodo 内蔵の Markdown 編集・プレビュー・画像本文です。</value>
+    <value>Dodo 内蔵の Markdown 編集・プレビュー・画像本文です。</value>
   </data>
   <data name="PluginBodyDisabledTitle" xml:space="preserve">
     <value>本文プラグインは無効です</value>
@@ -1422,10 +1422,10 @@ papertodo と PaperTodo_Bold（.ttf/.otf）の両方を置いてください。<
     <value>マイカ</value>
   </data>
   <data name="TipColorSchemeMica" xml:space="preserve">
-    <value>Windows 11 22H2 以降のネイティブ DWM Mica を使用します。壁紙を読み込んだり模倣したりせず、Windows が背景を合成します。展開した紙片と設定画面が対象です。カプセル、折りたたみアニメーション、半透明状態では単色描画を維持します。透明効果がオフ、高コントラストがオン、またはネイティブ API が利用できない場合は単色になります。他のスキンから初めて切り替えた後は PaperTodo を終了して開き直してください。</value>
+    <value>Windows 11 22H2 以降のネイティブ DWM Mica を使用します。壁紙を読み込んだり模倣したりせず、Windows が背景を合成します。展開した紙片と設定画面が対象です。カプセル、折りたたみアニメーション、半透明状態では単色描画を維持します。透明効果がオフ、高コントラストがオン、またはネイティブ API が利用できない場合は単色になります。他のスキンから初めて切り替えた後は Dodo を終了して開き直してください。</value>
   </data>
   <data name="MicaRestartRequired" xml:space="preserve">
-    <value>マイカの選択を保存しました。トレイから PaperTodo を終了して開き直すと、ネイティブ Mica が有効になります。現在のウィンドウは単色のままです。スキン変更で編集画面や元に戻す履歴は作り直しません。</value>
+    <value>マイカの選択を保存しました。トレイから Dodo を終了して開き直すと、ネイティブ Mica が有効になります。現在のウィンドウは単色のままです。スキン変更で編集画面や元に戻す履歴は作り直しません。</value>
   </data>
   <data name="MicaUnsupported" xml:space="preserve">
     <value>ネイティブ Mica には Windows 11 22H2（ビルド 22621）以降が必要です。このシステムではマイカ配色の単色背景を使用します。</value>
@@ -1486,7 +1486,7 @@ papertodo と PaperTodo_Bold（.ttf/.otf）の両方を置いてください。<
     <value>レトロなクエストパネル風。小さな段状の角、一重の外枠、ピクセル整列アイコン、四角い操作部。本文は通常のフォントです。</value>
   </data>
   <data name="SkinRestartRequired" xml:space="preserve">
-    <value>ネイティブ背景を有効にするには PaperTodo を再起動してください。</value>
+    <value>ネイティブ背景を有効にするには Dodo を再起動してください。</value>
   </data>
   <data name="SkinNativeUnsupported" xml:space="preserve">
     <value>ネイティブ背景には Windows 11 22H2 以降が必要です。</value>
@@ -1542,4 +1542,14 @@ papertodo と PaperTodo_Bold（.ttf/.otf）の両方を置いてください。<
   <data name="TopBarExternalEditor" xml:space="preserve">
     <value>外部エディターで開く</value>
   </data>
+  <data name="SettingsShowCapsuleTodoCount" xml:space="preserve"><value>カプセルに未完了の件数を表示</value></data>
+  <data name="TipShowCapsuleTodoCount" xml:space="preserve"><value>ToDo カプセルのタイトルの後に未完了の件数を表示します。0 件のときは表示しません。</value></data>
+  <data name="MenuExportMarkdown" xml:space="preserve"><value>Markdown を書き出す…</value></data>
+  <data name="ExportMarkdownTitle" xml:space="preserve"><value>Markdown を書き出す</value></data>
+  <data name="ExportMarkdownFilter" xml:space="preserve"><value>Markdown ファイル (*.md)|*.md</value></data>
+  <data name="ExportMarkdownFailureTitle" xml:space="preserve"><value>書き出しに失敗しました</value></data>
+  <data name="ExportMarkdownFailureMessage" xml:space="preserve"><value>Markdown を書き出せませんでした。{0}</value></data>
+  <data name="ExportMarkdownExtensionRequired" xml:space="preserve"><value>.md 拡張子のファイルを選択してください.</value></data>
+  <data name="DodoAttribution" xml:space="preserve"><value>PaperTodo の非商用派生版 · 原作 © 2026 snownico0722</value></data>
+  <data name="ExportMarkdownImageFailure" xml:space="preserve"><value>ノートの画像を書き出せませんでした。既存の Markdown ファイルは変更されていません。</value></data>
 </root>

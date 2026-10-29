@@ -23,7 +23,7 @@ public sealed class StateStore
     private readonly IDurableAtomicFileWriter _atomicWriter;
 
     public StateStore()
-        : this(AppContext.BaseDirectory, DurableAtomicFileWriter.Shared)
+        : this(AppPaths.DataDirectory, DurableAtomicFileWriter.Shared)
     {
     }
 
@@ -230,6 +230,31 @@ public sealed class StateStore
 
     private readonly SemaphoreSlim _writeLock = new(1, 1);
     private long _latestWrittenVersion = 0;
+    private bool _writesSuppressed;
+
+    internal void SuppressFurtherWrites()
+    {
+        _writeLock.Wait();
+        try { _writesSuppressed = true; }
+        finally { _writeLock.Release(); }
+    }
+
+    internal void WithBackupSnapshot(Action capture)
+    {
+        _writeLock.Wait();
+        try { capture(); }
+        finally { _writeLock.Release(); }
+    }
+
+    internal static AppState ValidateBackupState(string path)
+    {
+        var state = JsonSerializer.Deserialize<AppState>(File.ReadAllText(path), JsonOptions)
+            ?? throw new InvalidDataException("The backup contains an empty application state.");
+        if (state.Papers == null || state.Papers.Any(p => p == null || string.IsNullOrWhiteSpace(p.Id)) ||
+            state.Papers.Select(p => p.Id).Distinct(StringComparer.Ordinal).Count() != state.Papers.Count)
+            throw new InvalidDataException("The backup contains invalid or duplicate paper identities.");
+        return state;
+    }
 
     public string SerializeState(AppState state)
     {
@@ -242,7 +267,7 @@ public sealed class StateStore
         _writeLock.Wait();
         try
         {
-            if (version < _latestWrittenVersion)
+            if (_writesSuppressed || version < _latestWrittenVersion)
             {
                 return;
             }
@@ -260,7 +285,7 @@ public sealed class StateStore
         await _writeLock.WaitAsync();
         try
         {
-            if (version < _latestWrittenVersion)
+            if (_writesSuppressed || version < _latestWrittenVersion)
             {
                 return;
             }
@@ -280,7 +305,7 @@ public sealed class StateStore
         {
             // If startup recovered from backup, keep both recovery sources untouched until a
             // successful normal save has preserved them under timestamped recovery names.
-            if (_preserveRecoveredLoadFilesOnNextSave ||
+            if (_writesSuppressed || _preserveRecoveredLoadFilesOnNextSave ||
                 !TryReadValidatedStateBytes(FilePath, out var primaryBytes))
             {
                 return false;

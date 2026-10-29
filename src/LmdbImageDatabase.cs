@@ -31,7 +31,7 @@ internal sealed class LmdbImageDatabase : IDisposable
         _environment = environment;
     }
 
-    internal static LmdbImageDatabase Open(string path)
+    internal static LmdbImageDatabase Open(string path, bool readOnly = false)
     {
         var directory = Path.GetDirectoryName(path);
         if (!string.IsNullOrWhiteSpace(directory))
@@ -55,12 +55,12 @@ internal sealed class LmdbImageDatabase : IDisposable
                     path,
                     // PaperTodo is single-instance and NoteImageStore serializes every call.
                     // NOLOCK avoids LMDB's second, persistent lock file.
-                    LmdbNative.NoSubdirectory | LmdbNative.NoLock,
+                    LmdbNative.NoSubdirectory | LmdbNative.NoLock | (readOnly ? LmdbNative.ReadOnly : 0),
                     FileMode),
                 "open environment");
 
             var database = new LmdbImageDatabase(environment);
-            database.Initialize();
+            database.Initialize(readOnly);
             return database;
         }
         catch
@@ -264,28 +264,29 @@ internal sealed class LmdbImageDatabase : IDisposable
         _environment.Dispose();
     }
 
-    private void Initialize()
+    private void Initialize(bool readOnly)
     {
-        var transaction = BeginTransaction(write: true);
+        var transaction = BeginTransaction(write: !readOnly);
         try
         {
             LmdbNative.Check(
                 LmdbNative.mdb_dbi_open(
                     transaction,
                     "meta",
-                    LmdbNative.CreateDatabase,
+                    readOnly ? 0 : LmdbNative.CreateDatabase,
                     out _metadataDatabase),
                 "open metadata database");
             LmdbNative.Check(
                 LmdbNative.mdb_dbi_open(
                     transaction,
                     "blob",
-                    LmdbNative.CreateDatabase,
+                    readOnly ? 0 : LmdbNative.CreateDatabase,
                     out _blobDatabase),
                 "open blob database");
 
             if (!TryGet(transaction, _metadataDatabase, StoreKey, out var storeBytes))
             {
+                if (readOnly) throw new InvalidDataException("The image database has no store metadata.");
                 PutStore(transaction, new ImageStoreMetadata());
             }
             else

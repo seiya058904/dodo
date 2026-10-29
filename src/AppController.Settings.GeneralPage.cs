@@ -47,6 +47,10 @@ public sealed partial class AppController
             State.CollapseExpandedDeepCapsuleOnClick,
             ToggleCollapseExpandedDeepCapsuleOnClick);
 
+        rightColumn.Children.Add(BuildSettingsLiveRegion("general.todoCount", () => WrapWithHint(
+            SettingsToggle(Strings.Get("SettingsShowCapsuleTodoCount"), State.ShowCapsuleTodoCount,
+                () => SetSettingFromUi("capsule.todo_count", !State.ShowCapsuleTodoCount)),
+            "TipShowCapsuleTodoCount")));
         rightColumn.Children.Add(WrapWithHint(_settingsCapsuleModeCheckBox, "TipCapsuleMode"));
         rightColumn.Children.Add(WrapWithHint(_settingsDeepCapsuleModeCheckBox, "TipDeepCapsuleMode"));
         rightColumn.Children.Add(WrapWithHint(
@@ -160,9 +164,7 @@ public sealed partial class AppController
                 ToggleFastAnimations),
             "TipFastAnimations"));
 
-        leftColumn.Children.Add(BuildSettingsLiveRegion(
-            "general.telemetry",
-            CreateAnonymousUsageStatisticsSettingsRow));
+        leftColumn.Children.Add(BuildBackupSettingsSection());
 
         leftColumn.Children.Add(BuildSettingsLiveRegion(
             "general.topbar", BuildTopBarShortcutSettings));
@@ -225,6 +227,7 @@ public sealed partial class AppController
         State.TodoTopBarShortcuts = null;
         State.NoteTopBarShortcuts = null;
         State.UseCapsuleMode = true;
+        State.ShowCapsuleTodoCount = true;
         State.UseDeepCapsuleMode = true;
         State.ShowDeepCapsuleWhileExpanded = true;
         State.HideEdgeCapsuleCloseButtonOnHover = false;
@@ -256,16 +259,4 @@ public sealed partial class AppController
         }
         RefreshSettingsWindowContent();
     }
-
-
-    private UIElement CreateAnonymousUsageStatisticsSettingsRow() =>
-        WrapWithHint(
-            SettingsToggle(
-                TelemetryStrings.Get("HelpImprove"),
-                State.TelemetryEnabled,
-                ToggleAnonymousUsageStatistics),
-            BuildSettingsHintTooltip(TelemetryStrings.Get("Description")));
-
-    private void ToggleAnonymousUsageStatistics() =>
-        SetSettingFromUi("privacy.anonymous_usage", !State.TelemetryEnabled);
 }

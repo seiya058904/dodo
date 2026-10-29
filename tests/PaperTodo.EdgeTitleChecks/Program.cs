@@ -11,11 +11,18 @@ internal static partial class Program
     private static int assertions;
 
     [STAThread]
-    private static int Main()
+    private static int Main(string[] args)
     {
         _ = new Application { ShutdownMode = ShutdownMode.OnExplicitShutdown };
         try
         {
+            if (args.Contains("--todo-count-only", StringComparer.Ordinal))
+            {
+                TodoCapsuleCountChecks();
+                Console.WriteLine($"Todo capsule checks: {assertions} assertions passed without showing a window.");
+                return 0;
+            }
+            TodoCapsuleCountChecks();
             DetachedPointerAdmissionChecks();
             CycleAndUnicode();
             Console.WriteLine("PASS title-cycle-and-unicode");

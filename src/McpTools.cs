@@ -17,7 +17,7 @@ internal sealed partial class McpTools
 
 
     [McpServerTool(Name = "list_settings", ReadOnly = true, Destructive = false, OpenWorld = false)]
-    [Description("List public PaperTodo application settings, stable IDs, current values, types, constraints and this caller's writability. Plugin-private settings and internal state are not included.")]
+    [Description("List public Dodo application settings, stable IDs, current values, types, constraints and this caller's writability. Plugin-private settings and internal state are not included.")]
     public Task<JsonElement> ListSettings(
         [Description("Optional category from a previous listing.")] string? category = null,
         CancellationToken cancellationToken = default)
@@ -43,7 +43,7 @@ internal sealed partial class McpTools
         ReadOnly = true,
         Destructive = false,
         OpenWorld = false)]
-    [Description("List PaperTodo papers and compact metadata. Each result exposes its identifier as both id and paper_id; pass paper_id to tools that target a paper.")]
+    [Description("List Dodo papers and compact metadata. Each result exposes its identifier as both id and paper_id; pass paper_id to tools that target a paper.")]
     public Task<JsonElement> ListPapers(
         [Description("Optional filter: 'todo' or 'note'.")] string? type = null,
         CancellationToken cancellationToken = default)
@@ -57,7 +57,7 @@ internal sealed partial class McpTools
         ReadOnly = true,
         Destructive = false,
         OpenWorld = false)]
-    [Description("Read one PaperTodo paper in full, including ordered todos or note content.")]
+    [Description("Read one Dodo paper in full, including ordered todos or note content.")]
     public Task<JsonElement> GetPaper(
         [Description("Exact paper ID returned by list_papers.")] string paper_id,
         CancellationToken cancellationToken = default)
@@ -71,9 +71,9 @@ internal sealed partial class McpTools
         ReadOnly = false,
         Destructive = false,
         OpenWorld = false)]
-    [Description("Create a new todo paper. Requires PaperTodo blank/additive writes.")]
+    [Description("Create a new todo paper. Requires Dodo blank/additive writes.")]
     public Task<JsonElement> CreateTodoPaper(
-        [Description("Optional paper title. Limited by the current PaperTodo title.max_length setting (default 6, configurable from 2 to 20 displayed characters). For normal short titles, do not query the setting first; if rejected, the error reports the active limit.")] string? title = null,
+        [Description("Optional paper title. Limited by the current Dodo title.max_length setting (default 6, configurable from 2 to 20 displayed characters). For normal short titles, do not query the setting first; if rejected, the error reports the active limit.")] string? title = null,
         [Description("Optional ordered todo steps.")] IReadOnlyList<McpTodoInput>? todos = null,
         [Description("Show the new paper immediately.")] bool show = true,
         CancellationToken cancellationToken = default)
@@ -87,9 +87,9 @@ internal sealed partial class McpTools
         ReadOnly = false,
         Destructive = false,
         OpenWorld = false)]
-    [Description("Create a new note with optional Markdown content. Requires PaperTodo blank/additive writes.")]
+    [Description("Create a new note with optional Markdown content. Requires Dodo blank/additive writes.")]
     public Task<JsonElement> CreateNote(
-        [Description("Optional paper title. Limited by the current PaperTodo title.max_length setting (default 6, configurable from 2 to 20 displayed characters). For normal short titles, do not query the setting first; if rejected, the error reports the active limit.")] string? title = null,
+        [Description("Optional paper title. Limited by the current Dodo title.max_length setting (default 6, configurable from 2 to 20 displayed characters). For normal short titles, do not query the setting first; if rejected, the error reports the active limit.")] string? title = null,
         [Description("Initial note content.")] string content = "",
         [Description("Show the new paper immediately.")] bool show = true,
         CancellationToken cancellationToken = default)
@@ -103,7 +103,7 @@ internal sealed partial class McpTools
         ReadOnly = false,
         Destructive = false,
         OpenWorld = false)]
-    [Description("Append new todo steps to an existing todo paper. Requires PaperTodo blank/additive writes.")]
+    [Description("Append new todo steps to an existing todo paper. Requires Dodo blank/additive writes.")]
     public Task<JsonElement> AddTodos(
         [Description("Exact todo paper ID.")] string paper_id,
         [Description("One or more ordered todo steps.")] IReadOnlyList<McpTodoInput> todos,
@@ -119,14 +119,14 @@ internal sealed partial class McpTools
         Destructive = true,
         Idempotent = true,
         OpenWorld = false)]
-    [Description("Fill or replace todo text, change completion state, reorder the item, and/or link another PaperTodo paper. Filling blank text needs additive writes; replacing existing text/state, reordering, or changing a paper link needs full writes.")]
+    [Description("Fill or replace todo text, change completion state, reorder the item, and/or link another Dodo paper. Filling blank text needs additive writes; replacing existing text/state, reordering, or changing a paper link needs full writes.")]
     public Task<JsonElement> UpdateTodo(
         [Description("Exact todo paper ID.")] string paper_id,
         [Description("Exact todo item ID.")] string todo_id,
         [Description("Replacement text. Omit to keep text unchanged.")] string? text = null,
         [Description("Replacement completion state. Omit to keep it unchanged.")] bool? done = null,
-        [Description("Zero-based target position within the todo paper. Values outside the current range are clamped; PaperTodo's completed-item ordering rules still apply. Omit to keep the current order. Requires full writes.")] int? order = null,
-        [Description("Paper ID to link from this todo, such as a Note containing longer details. Omit to keep the current link unchanged. Requires PaperTodo full writes.")] string? linked_paper_id = null,
+        [Description("Zero-based target position within the todo paper. Values outside the current range are clamped; Dodo's completed-item ordering rules still apply. Omit to keep the current order. Requires full writes.")] int? order = null,
+        [Description("Paper ID to link from this todo, such as a Note containing longer details. Omit to keep the current link unchanged. Requires Dodo full writes.")] string? linked_paper_id = null,
         [Description("Set true to unlink the todo's linked Paper without deleting the Note. Mutually exclusive with linked_paper_id. Requires full writes.")] bool clear_linked_paper = false,
         CancellationToken cancellationToken = default)
         => _client.InvokeAsync(
@@ -140,7 +140,7 @@ internal sealed partial class McpTools
         Destructive = true,
         Idempotent = true,
         OpenWorld = false)]
-    [Description("Set, replace, or cancel a lightweight todo reminder. Requires reminders and full writes in PaperTodo.")]
+    [Description("Set, replace, or cancel a lightweight todo reminder. Requires reminders and full writes in Dodo.")]
     public Task<JsonElement> SetTodoReminder(
         [Description("Exact todo paper ID.")] string paper_id,
         [Description("Exact todo item ID.")] string todo_id,
@@ -173,7 +173,7 @@ internal sealed partial class McpTools
         Destructive = true,
         Idempotent = true,
         OpenWorld = false)]
-    [Description("Delete a paper. Requires PaperTodo's direct-delete permission.")]
+    [Description("Delete a paper. Requires Dodo's direct-delete permission.")]
     public Task<JsonElement> DeletePaper(
         [Description("Exact paper ID.")] string paper_id,
         CancellationToken cancellationToken = default)
@@ -188,7 +188,7 @@ internal sealed partial class McpTools
         Destructive = true,
         Idempotent = true,
         OpenWorld = false)]
-    [Description("Delete a todo. Requires PaperTodo's direct-delete permission.")]
+    [Description("Delete a todo. Requires Dodo's direct-delete permission.")]
     public Task<JsonElement> DeleteTodo(
         [Description("Exact todo paper ID.")] string paper_id,
         [Description("Exact todo item ID.")] string todo_id,
@@ -238,7 +238,7 @@ internal sealed partial class McpTools
 internal sealed record McpTodoInput
 {
     [JsonPropertyName("text")]
-    [Description("Todo text. Uses the same length limit as PaperTodo's normal editor.")]
+    [Description("Todo text. Uses the same length limit as Dodo's normal editor.")]
     public required string Text { get; init; }
 
     [JsonPropertyName("done")]
@@ -250,6 +250,6 @@ internal sealed record McpTodoInput
     public string? ReminderAt { get; init; }
 
     [JsonPropertyName("linked_paper_id")]
-    [Description("Optional PaperTodo paper ID to link from the new todo, such as a Note containing longer details.")]
+    [Description("Optional Dodo paper ID to link from the new todo, such as a Note containing longer details.")]
     public string? LinkedPaperId { get; init; }
 }

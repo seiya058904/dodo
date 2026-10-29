@@ -59,7 +59,6 @@ internal static partial class Program
             ("ToggleAdvancedSettingsMode", "general.advanced_settings", false),
             ("ToggleAnimations", "appearance.animations", false),
             ("ToggleFastAnimations", "appearance.fast_animations", false),
-            ("ToggleAnonymousUsageStatistics", "privacy.anonymous_usage", false),
             ("ToggleAutoClearCompletedTodos", "todo.auto_clear_completed", false),
             ("ToggleAutoCompressLargeImages", "note.compress_large_images", false),
             ("ToggleAutoMoveCompletedTodosToBottom", "todo.move_completed_to_bottom", false),

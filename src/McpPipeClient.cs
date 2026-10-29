@@ -37,7 +37,7 @@ internal sealed class McpPipeClient
         catch (TimeoutException)
         {
             throw new McpException(
-                "PaperTodo is not running, or its MCP interface is disabled.");
+                "Dodo is not running, or its MCP interface is disabled.");
         }
 
         using var reader = new StreamReader(
@@ -77,14 +77,14 @@ internal sealed class McpPipeClient
                 when (!cancellationToken.IsCancellationRequested)
             {
                 throw new McpException(
-                    "PaperTodo did not return an MCP response in time.");
+                    "Dodo did not return an MCP response in time.");
             }
         }
 
         if (string.IsNullOrWhiteSpace(responseLine))
         {
             throw new McpException(
-                "PaperTodo closed the MCP connection without returning a response.");
+                "Dodo closed the MCP connection without returning a response.");
         }
 
         using var response = JsonDocument.Parse(responseLine);
@@ -97,8 +97,8 @@ internal sealed class McpPipeClient
                 : default;
             var code = TryReadString(error, "code") ?? "request_failed";
             var message = TryReadString(error, "message") ??
-                "PaperTodo rejected the MCP request.";
-            throw new McpException($"PaperTodo error ({code}): {message}");
+                "Dodo rejected the MCP request.";
+            throw new McpException($"Dodo error ({code}): {message}");
         }
 
         return root.TryGetProperty("result", out var result)

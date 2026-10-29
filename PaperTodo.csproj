@@ -16,18 +16,25 @@
     <!-- .NET 9+ marks Windows apphost/single-file hosts CET-compatible by default. Disable that
          opt-in for PaperTodo to avoid User Shadow Stack startup failures on affected legacy Windows builds. -->
     <CETCompat>false</CETCompat>
-    <Version>4.0.0-beta1</Version>
-    <AssemblyVersion>4.0.0.0</AssemblyVersion>
-    <FileVersion>4.0.0.0</FileVersion>
-    <InformationalVersion>4.0.0-beta1</InformationalVersion>
-    <!-- Keep tray header "PaperTodo v4.0.0-beta1" free of +commit suffixes from SourceLink. -->
+    <Version>0.1.0</Version>
+    <AssemblyName>Dodo</AssemblyName>
+    <RootNamespace>PaperTodo</RootNamespace>
+    <Product>Dodo</Product>
+    <Title>Dodo</Title>
+    <Description>A little bird for your everyday notes and to-dos. Noncommercial derivative of PaperTodo.</Description>
+    <Company>seiya058904</Company>
+    <Copyright>PaperTodo © 2026 snownico0722; Dodo modifications © 2026 seiya058904</Copyright>
+    <AssemblyVersion>0.1.0.0</AssemblyVersion>
+    <FileVersion>0.1.0.0</FileVersion>
+    <InformationalVersion>0.1.0</InformationalVersion>
+    <!-- Keep tray header "PaperTodo v0.1.0" free of +commit suffixes from SourceLink. -->
     <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
-    <ApplicationIcon>assets\PaperTodo.ico</ApplicationIcon>
+    <ApplicationIcon>assets\Dodo.ico</ApplicationIcon>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <PaperTodoLmdbLibrary>$(MSBuildProjectDirectory)\native\lmdb\bin\win-x64\papertodo_lmdb.dll</PaperTodoLmdbLibrary>
-    <OutputPath>$(MSBuildProjectDirectory)\输出\PaperTodo-v$(Version)\</OutputPath>
+    <OutputPath>$(MSBuildProjectDirectory)\输出\Dodo-v$(Version)\</OutputPath>
     <SatelliteResourceLanguages>en;ja;ko</SatelliteResourceLanguages>
-    <DefaultItemExcludes>$(DefaultItemExcludes);对比_StickyMD\**;输出\**;PaperTodo_v*\**;.codex_decompile_debug\**;PaperTodo.Plugin.Abstractions\**;plugin-samples\**;plugins\**\.runtime\**;plugins\data\**;tests\**;tools\**;vendor\**</DefaultItemExcludes>
+    <DefaultItemExcludes>.local\**;release\**;$(DefaultItemExcludes);对比_StickyMD\**;输出\**;PaperTodo_v*\**;.codex_decompile_debug\**;PaperTodo.Plugin.Abstractions\**;plugin-samples\**;plugins\**\.runtime\**;plugins\data\**;tests\**;tools\**;vendor\**</DefaultItemExcludes>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(PaperTodoDefaultEnglish)' == 'true'">
@@ -60,7 +67,7 @@
     <Compile Include="tools\PaperTodo.EdgeDiagnostics\*.cs" Link="Diagnostics\%(Filename)%(Extension)" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="assets\PaperTodo.ico" />
+    <EmbeddedResource Include="assets\Dodo.ico" />
     <!-- Repository plugin outputs are available to normal development builds, but plugins are
          distributed separately and must not be included in local or CI publish artifacts. -->
     <Content Include="plugins\**\*" Exclude="plugins\**\.runtime\**;plugins\data\**">

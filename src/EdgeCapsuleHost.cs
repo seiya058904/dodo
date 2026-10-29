@@ -98,6 +98,8 @@ internal sealed partial class EdgeCapsuleHost : IDisposable
     private Border CloseArea { get; }
     private TextBlock CloseGlyph { get; }
     private TextBlock Label { get; }
+    private Grid LabelGroup { get; }
+    private TextBlock TodoCount { get; }
 
     private EdgeCapsuleHost(
         EdgeCapsuleHostOptions options,
@@ -114,7 +116,9 @@ internal sealed partial class EdgeCapsuleHost : IDisposable
         TextBlock icon,
         Border closeArea,
         TextBlock closeGlyph,
-        TextBlock label)
+        TextBlock label,
+        Grid labelGroup,
+        TextBlock todoCount)
     {
         _options = options;
         _zOrderStateInitialized = true;
@@ -142,6 +146,8 @@ internal sealed partial class EdgeCapsuleHost : IDisposable
         CloseArea = closeArea;
         CloseGlyph = closeGlyph;
         Label = label;
+        LabelGroup = labelGroup;
+        TodoCount = todoCount;
     }
 
     public bool IsVisible => !_disposed && Window.IsVisible;
@@ -889,13 +895,28 @@ internal sealed partial class EdgeCapsuleHost : IDisposable
             FontFamily = options.UiFontFamily,
             FontSize = options.LabelFontSize,
             FontWeight = options.LabelFontWeight,
-            Margin = new Thickness(options.IconGap, 0, 0, 0),
             VerticalAlignment = VerticalAlignment.Center,
             HorizontalAlignment = HorizontalAlignment.Stretch,
             TextTrimming = TextTrimming.CharacterEllipsis
         };
-        Grid.SetColumn(label, 1);
-        contentGrid.Children.Add(label);
+        var labelGroup = new Grid { Margin = new Thickness(options.IconGap, 0, 0, 0) };
+        labelGroup.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+        labelGroup.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+        labelGroup.Children.Add(label);
+        var todoCount = new TextBlock
+        {
+            VerticalAlignment = VerticalAlignment.Center,
+            IsHitTestVisible = false,
+            Visibility = Visibility.Collapsed
+        };
+        // Follow the live title typography/theme, including custom fonts and DPI changes.
+        foreach (var property in new[] { TextBlock.ForegroundProperty, TextBlock.FontFamilyProperty,
+            TextBlock.FontSizeProperty, TextBlock.FontWeightProperty, FrameworkElement.LanguageProperty })
+            todoCount.SetBinding(property, new System.Windows.Data.Binding(property.Name) { Source = label });
+        Grid.SetColumn(todoCount, 1);
+        labelGroup.Children.Add(todoCount);
+        Grid.SetColumn(labelGroup, 1);
+        contentGrid.Children.Add(labelGroup);
         contentHost.Children.Add(contentGrid);
         contentArea.Child = contentHost;
         Grid.SetColumn(contentArea, 0);
@@ -980,7 +1001,9 @@ internal sealed partial class EdgeCapsuleHost : IDisposable
             icon,
             closeArea,
             closeGlyph,
-            label);
+            label,
+            labelGroup,
+            todoCount);
     }
 
     public void AttachInput(EdgeCapsuleHostCallbacks callbacks)
@@ -1169,12 +1192,15 @@ internal sealed partial class EdgeCapsuleHost : IDisposable
         }
     }
 
-    public void SetLabel(string label, string toolTip)
+    public void SetLabel(string label, string toolTip, string countSuffix = "")
     {
         if (!_disposed)
         {
-            Label.Text = label;
+            Label.Text = countSuffix.Length > 0 && label.EndsWith(countSuffix, StringComparison.Ordinal)
+                ? label[..^countSuffix.Length] : label;
+            TodoCount.Text = countSuffix;
             Label.ToolTip = toolTip;
+            ApplyDefaultContentVisibility(_appliedFrame.TitleVisible);
         }
     }
 
@@ -1548,8 +1574,8 @@ internal sealed partial class EdgeCapsuleHost : IDisposable
         Grid.SetColumn(Icon, leftEdge ? 1 : 0);
         Icon.HorizontalAlignment = leftEdge ? HorizontalAlignment.Right : HorizontalAlignment.Left;
         Icon.TextAlignment = leftEdge ? TextAlignment.Right : TextAlignment.Left;
-        Grid.SetColumn(Label, leftEdge ? 0 : 1);
-        Label.Margin = leftEdge
+        Grid.SetColumn(LabelGroup, leftEdge ? 0 : 1);
+        LabelGroup.Margin = leftEdge
             ? new Thickness(0, 0, options.IconGap, 0)
             : new Thickness(options.IconGap, 0, 0, 0);
         Label.TextAlignment = leftEdge ? TextAlignment.Right : TextAlignment.Left;

@@ -727,7 +727,7 @@ public sealed partial class AppController : IDisposable
             return paper.BodyCapsuleText;
         }
 
-        return PaperTitleText(paper);
+        return PaperTitleText(paper) + TodoCapsuleTitle.Suffix(paper, State.ShowCapsuleTodoCount);
     }
 
     public void UpdatePaperTitle(PaperData paper, string title)
@@ -4123,7 +4123,7 @@ public sealed partial class AppController : IDisposable
         DisposeRuntimeResources();
         _lifecycleState = AppLifecycleState.Disposed;
         // Let the owning Dispatcher finish WPF shutdown and App.OnExit (single-instance
-        // listener, telemetry and Application resources). Environment.Exit here preempts
+        // listener and Application resources). Environment.Exit here preempts
         // that queued work and was slower in the process-exit A/B; owned work is already stopped.
         Application.Current.Shutdown();
     }

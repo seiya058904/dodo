@@ -115,6 +115,27 @@ internal sealed class PaperBodyPluginDataStore : IDisposable
 
     public string DataRoot { get; }
 
+    internal void WithBackupSnapshot(Action capture)
+    {
+        // Same lock order as disposal: wait for the writer first, then freeze mutations.
+        // Unlike best-effort autosave, backup must report a failed flush to its caller.
+        lock (_writeGate)
+        lock (_gate)
+        {
+            ThrowIfDisposed();
+            foreach (var snapshot in CaptureDirtySnapshots(includeFailed: true))
+            {
+                SaveNow(snapshot.ProviderId, snapshot.Document);
+                _dirtyProviderIds.Remove(snapshot.ProviderId);
+                _saveFailureAttempts.Remove(snapshot.ProviderId);
+            }
+            UpdateSaveTimersAfterFlush();
+            capture();
+        }
+    }
+
+    internal static void ValidateBackupDocument(string path) => _ = ReadDocument(path);
+
     public PaperBodyStoredState ReadRuntimeState(string providerId) =>
         TryReadRuntimeState(providerId, out var state)
             ? state

@@ -1056,7 +1056,7 @@ public sealed partial class PaperWindow
     private string WriteExternalMarkdownFile()
     {
         CommitPendingNoteContent();
-        var directory = Path.Combine(Path.GetTempPath(), "PaperTodo");
+        var directory = Path.Combine(Path.GetTempPath(), "Dodo");
         Directory.CreateDirectory(directory);
 
         var fileStem = ExternalMarkdownFileStem();
@@ -1484,7 +1484,7 @@ public sealed partial class PaperWindow
 
     private static string ScriptCapsuleTempDirectory()
     {
-        return Path.Combine(Path.GetTempPath(), "PaperTodo", "Scripts");
+        return Path.Combine(Path.GetTempPath(), "Dodo", "Scripts");
     }
 
     private static void DeleteScriptCapsuleFile(string path)

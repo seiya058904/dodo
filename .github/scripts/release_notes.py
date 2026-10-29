@@ -43,7 +43,7 @@ def render_notes(english, chinese, repository, tag, assets):
         url = f"https://github.com/{repository}/releases/download/{quote(tag, safe='')}/{quote(name, safe='')}"
         if "win7BestEffort" in name:
             label = "Windows 7 SP1 x64, best effort, runtime included / 尽力兼容版，含 .NET 运行库"
-        elif "self-contained" in name:
+        elif "self-contained" in name or "-portable.zip" in name:
             label = "Full version, runtime included / 完整版，含 .NET 运行库"
         elif "no-runtime" in name:
             label = "Smaller download, .NET Desktop Runtime required / 精简版，需自行安装 .NET 桌面运行库"

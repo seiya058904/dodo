@@ -1796,3 +1796,25 @@ PR #319 的初版把主胶囊完整材质收展后的卡死解释为终点迟到
 - `.github/workflows/pull-request-build.yml`：仍执行材质行为检查，但不再输出桌面截图 artifact。
 - `tests/PaperTodo.MicaChecks/Program.cs` 与 `MaterialStudyChecks.cs`：保留确定性渲染与运行时检查；历史屏幕采样源文件删除。
 - `doc/experiments/pr227-drag-followup-20260922.md`：基线、故障证据与失败补绘实验。
+
+---
+
+## D-058 — Dodo explicit full-profile backup and replacement restore (2026-10-29)
+
+**Status:** Accepted
+
+### Context
+
+Dodo needs a user-directed, portable backup containing core state, images and host-managed plugin state. Copying a live LMDB file or overwriting core files while old runtime writers remain active can produce inconsistent or lost data.
+
+### Decision / Why
+
+Keep the three existing storage owners. Capture through their gates after pending built-in edits are flushed. Validate an archive in private staging; stop all runtime writers before replacement. Preserve original files and a durable transaction journal before changing any target. Startup recovers unfinished transactions after single-instance acquisition and before profile/culture loading. Restore exits rather than trying to reconcile old in-memory windows with a replaced profile.
+
+This explicit user action does not reinstate automatic plugin `.recovered` files or change D-040's normal plugin persistence policy. Plugin programs and plugin-owned external storage are excluded and reported; no merge or cloud synchronization is introduced.
+
+### Evidence
+
+- `src/BackupService.cs`, `src/AppController.Backup.cs`, `App.xaml.cs`
+- `src/StateStore.cs`, `src/NoteImageStore.cs`, `src/PaperBodyPluginDataStore.cs`
+- `tests/PaperTodo.PersistenceChecks/BackupChecks.cs`

@@ -19,11 +19,11 @@ public sealed partial class AppController
             value => State.AdvancedSettingsMode = value,
             SettingEffects.Advanced,
             title: Strings.Get("SettingsAdvancedMode"));
-        yield return DefineSetting<bool>("privacy.anonymous_usage",
-            () => State.TelemetryEnabled,
-            value => State.TelemetryEnabled = value,
-            SettingEffects.Telemetry,
-            title: TelemetryStrings.Get("HelpImprove"));
+        yield return DefineSetting<bool>("capsule.todo_count",
+            () => State.ShowCapsuleTodoCount,
+            value => State.ShowCapsuleTodoCount = value,
+            SettingEffects.Titles,
+            title: Strings.Get("SettingsShowCapsuleTodoCount"));
         yield return DefineSetting<bool>("general.tooltips",
             () => State.EnableToolTips,
             value => State.EnableToolTips = value,
@@ -331,7 +331,7 @@ public sealed partial class AppController
             () => State.EdgeCapsulePreviewPreferDownward,
             value => State.EdgeCapsulePreviewPreferDownward = value,
             SettingEffects.None,
-            title: SettingsSidebarLocalized("浏览时优先向下展开", "Prefer downward expansion while browsing", "閲覧時は下方向への展開を優先", "탐색 중 아래로 펼치기 우선"));
+            title: SettingsSidebarLocalized("浏览时优先向下展开", "Prefer expanding downward", "閲覧時は下方向への展開を優先", "탐색 중 아래로 펼치기 우선"));
         yield return DefineSetting<bool>("edge.hover_intent",
             () => State.ExperimentalEdgeCapsuleHoverIntent,
             value => State.ExperimentalEdgeCapsuleHoverIntent = value,

@@ -143,6 +143,15 @@ PaperTodo 不提供插件热重载入口。插件 manifest、DLL、Web body/mini
 
 ## 4. 状态与持久化架构
 
+### Dodo portable profile and explicit data transfer
+
+Dodo retains the PaperTodo namespace, plugin contracts, JSON fields, and the three storage owners below. `AppPaths.DataDirectory` places core data, LMDB, host-managed plugin state, background preferences and custom resources under `dodo-data/` beside `Dodo.exe`. Plugin programs remain in `plugins/`; WebView profiles use Dodo-specific runtime folder names. Single-instance signals, the MCP pipe and startup registration are distinct from PaperTodo. No automatic import of the original application's files occurs. The upstream telemetry bootstrap and sender are absent; the legacy JSON flag is ignored.
+
+`BackupService` is an explicit offline transfer coordinator, not a new state writer. The UI flushes pending built-in Markdown/settings, and the existing StateStore, plugin store and image store gates capture a consistent file snapshot. A versioned ZIP contains an integrity manifest and required plugin IDs; external plugin storage and plugin executables are outside its scope. Restore validates in staging, stops runtime writers, preserves originals and a durable journal, then replaces the managed files and exits. Startup, after acquiring the GUI mutex and before reading language or constructing the controller, rolls back any incomplete restore. It never loads a partially restored profile. Routine plugin recovery remains unchanged (D-040).
+
+`PaperMarkdownExportService` writes one-way UTF-8 Markdown snapshots using the image store's semantic reference conversion. A unique relative asset directory and same-directory atomic document replacement protect previous exports; export never becomes a second authoritative editor.
+
+
 ### 4.1 三个数据域
 
 当前长期数据按语义拆成三个主要域：

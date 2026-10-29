@@ -44,6 +44,10 @@ class ReleaseNotesTests(unittest.TestCase):
         notes = render_notes("English", "中文", "owner/repo", "v3.31", ["PaperTodo-v3.31-win7BestEffort-win-x64-self-contained.exe"])
         self.assertIn("Windows 7 SP1 x64, best effort", notes)
 
+    def test_dodo_portable_zip_includes_runtime(self):
+        notes = render_notes("English", "中文", "owner/dodo", "v0.1.0", ["Dodo-v0.1.0-win-x64-portable.zip"])
+        self.assertIn("Full version, runtime included", notes)
+
 
 if __name__ == "__main__":
     unittest.main()

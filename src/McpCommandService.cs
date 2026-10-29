@@ -5,7 +5,7 @@ using PaperTodo.Plugin;
 namespace PaperTodo;
 
 /// <summary>
-/// MCP transport adapter. JSON parsing and MCP authorization stay here; all PaperTodo reads,
+/// MCP transport adapter. JSON parsing and MCP authorization stay here; all Dodo reads,
 /// validation, persistence, rollback and UI reconciliation are delegated to PaperCommandService.
 /// </summary>
 internal sealed partial class McpCommandService
@@ -23,13 +23,13 @@ internal sealed partial class McpCommandService
     {
         if (!_controller.IsRunning)
         {
-            throw new McpApiException("app_exiting", "PaperTodo is exiting.");
+            throw new McpApiException("app_exiting", "Dodo is exiting.");
         }
         if (!_controller.State.McpEnabled)
         {
             throw new McpApiException(
                 "mcp_disabled",
-                "PaperTodo's MCP interface is disabled.");
+                "Dodo's MCP interface is disabled.");
         }
 
         var method = RequiredString(request, "method", 80);
@@ -63,7 +63,7 @@ internal sealed partial class McpCommandService
                 "delete_todo" => DeleteTodo(parameters),
                 _ => throw new McpApiException(
                     "method_not_found",
-                    $"Unknown PaperTodo method: {method}")
+                    $"Unknown Dodo method: {method}")
             };
         }
         catch (PaperSettingsException ex)
@@ -558,7 +558,7 @@ internal sealed partial class McpCommandService
         {
             throw new McpApiException(
                 "blank_writes_disabled",
-                "Blank/additive writes are disabled in PaperTodo Settings.");
+                "Blank/additive writes are disabled in Dodo Settings.");
         }
     }
 
@@ -568,7 +568,7 @@ internal sealed partial class McpCommandService
         {
             throw new McpApiException(
                 "full_writes_disabled",
-                "Full writes are disabled in PaperTodo Settings.");
+                "Full writes are disabled in Dodo Settings.");
         }
     }
 
@@ -578,7 +578,7 @@ internal sealed partial class McpCommandService
         {
             throw new McpApiException(
                 "deletes_disabled",
-                "Direct MCP deletion is disabled in PaperTodo Settings.");
+                "Direct MCP deletion is disabled in Dodo Settings.");
         }
     }
 

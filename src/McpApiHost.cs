@@ -8,7 +8,7 @@ namespace PaperTodo;
 
 internal sealed class McpApiHost : IDisposable
 {
-    public const string PipeName = "PaperTodo-Mcp-Api-v1";
+    public const string PipeName = "Dodo-Mcp-Api-v1";
     // 200 normal-size todo rows can exceed one million JSON characters after escaping.
     private const int MaxRequestCharacters = 8_000_000;
     private static readonly TimeSpan RequestReadTimeout =

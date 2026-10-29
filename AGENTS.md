@@ -1,3 +1,11 @@
+# Dodo derivative instructions
+
+Dodo is a noncommercial derivative of PaperTodo. Preserve upstream history, LICENSE.md, Required Notice and third-party attribution. The application is Dodo, while PaperTodo.csproj, namespaces, plugin contracts and persisted field names intentionally remain compatible. The fixed upstream base is 411078b094f9a22c15ffb2722f0b1cc7d0af0537; do not advance upstream/submodules during this release.
+
+Dodo-specific publishing supersedes the original package defaults below: use tools/Release.ps1 to create a complete Windows x64 portable ZIP with runtime, bundled native Focus Timer/Sample Clock and notices. Release is workflow_dispatch only, following automated checks and actual desktop acceptance; record unavailable multi-monitor/HDR conditions honestly rather than claiming they passed. The main branch CI does not depend on commit-message markers. No website deployment is needed. Dodo data belongs only in dodo-data; never migrate or write an adjacent PaperTodo profile automatically. See Architecture for backup/restore coordination.
+
+The inherited rules below remain applicable except where this Dodo policy or the user's explicit scope supersedes them.
+
 # PaperTodo Agent 备忘
 
 本文件是 **Agent 的项目入口、任务路由和执行规则**。PaperTodo 已验证有价值的详细操作规则、隐藏硬约束和容易误改的禁区应继续保留；当前架构的完整解释和历史取舍不在这里重复，除非某个结论本身是 Agent 修改时必须直接遵守的 Do / Don't。

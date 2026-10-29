@@ -1,60 +1,53 @@
-name: Pull request build
+name: Dodo CI
 
 on:
   push:
-    branches-ignore:
-      - main
+    branches: [main]
+  pull_request:
   workflow_dispatch:
+  workflow_call:
 
 permissions:
   contents: read
 
 jobs:
-  build:
-    name: Build PaperTodo
-    if: >-
-      github.event_name == 'workflow_dispatch' ||
-      contains(github.event.head_commit.message, '[ci]') ||
-      contains(github.event.head_commit.message, '[debug-ci]')
-    concurrency:
-      group: pull-request-build-${{ github.ref }}
-      cancel-in-progress: true
+  regression:
+    name: Build and regression checks
     runs-on: windows-latest
-    timeout-minutes: 15
-
+    timeout-minutes: 25
     defaults:
       run:
         shell: pwsh
-
     env:
       DOTNET_CLI_TELEMETRY_OPTOUT: "1"
       DOTNET_NOLOGO: "true"
-
     steps:
-      - name: Check out source
-        uses: actions/checkout@v7
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
           submodules: recursive
-
-      - name: Set up .NET
-        uses: actions/setup-dotnet@v6
+      - uses: actions/setup-dotnet@v6
         with:
           dotnet-version: "10.0.x"
-
-      - name: Restore
-        run: dotnet restore .\PaperTodo.csproj
-
-      - name: Build
-        run: dotnet build .\PaperTodo.csproj -c Release --no-restore
-
-      - name: Run regression checks
-        run: |
-          ./tools/testing/Run-Checks.ps1 -Group all -List
-          ./tools/testing/Run-Checks.ps1 -Group regression
-
+      - name: Build Dodo
+        run: dotnet build ./PaperTodo.csproj -c Release
+      - name: Regression checks (includes Markdown export)
+        run: ./tools/testing/Run-Checks.ps1 -Group regression
       - name: Material and skin behavior checks
-        # The no-longer-reliable DWM desktop screenshot fixture is removed (D-057).
-        # Native-state, window-lifecycle, offscreen WPF pixels and Aero parallax stay tested.
+        # Preserve native/window/offscreen checks; do not restore unreliable DWM screenshots.
         timeout-minutes: 2
         run: ./tools/testing/Run-Checks.ps1 -Group visual -Project MicaChecks
+  persistence:
+    name: Persistence
+    uses: ./.github/workflows/persistence-checks.yml
+  plugins:
+    name: Plugin contracts and samples
+    uses: ./.github/workflows/plugin-samples.yml
+  diagnostics:
+    name: Debug and Release diagnostics
+    uses: ./.github/workflows/edge-diagnostics-checks.yml
+  package:
+    name: Main branch package
+    if: github.event_name == 'push'
+    needs: [regression, persistence, plugins, diagnostics]
+    uses: ./.github/workflows/debug.yml

@@ -230,7 +230,7 @@ public sealed partial class AppController
     private static string BuildJsonMcpConfiguration()
     {
         var executable = Environment.ProcessPath ??
-            Path.Combine(AppContext.BaseDirectory, "PaperTodo.exe");
+            Path.Combine(AppContext.BaseDirectory, "Dodo.exe");
         return JsonSerializer.Serialize(
             new
             {

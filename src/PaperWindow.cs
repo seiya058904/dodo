@@ -2713,6 +2713,11 @@ public sealed partial class PaperWindow : Window
 
         AttachPluginPaperMenuActions(menu);
 
+        if (PaperMarkdownExportService.CanExport(_paper))
+        {
+            menu.Items.Add(MenuItem(Strings.Get("MenuExportMarkdown"), (_, _) => ExportMarkdown()));
+        }
+
         if (CanDisplayAsCapsule())
         {
             menu.Items.Add(_paper.IsCollapsed
@@ -3640,7 +3645,12 @@ public sealed partial class PaperWindow : Window
         var title = _controller.PaperCapsuleTitle(_paper);
         if (limitForDeepCapsule)
         {
-            title = EdgeCapsuleTitleLimit.TextForMeasure(title, _controller.State.DeepCapsuleTitleMeasureCharacterLimit);
+            var limit = _controller.State.DeepCapsuleTitleMeasureCharacterLimit;
+            var suffix = TodoCapsuleTitle.Suffix(_paper, _controller.State.ShowCapsuleTodoCount);
+            // Reserve the count independently so a configured narrow title cannot trim it away.
+            var titleOnly = suffix.Length > 0 ? title[..^suffix.Length] : title;
+            title = EdgeCapsuleTitleLimit.TextForMeasure(titleOnly, limit) +
+                (limit == EdgeCapsuleTitleLimit.Hidden ? string.Empty : suffix);
         }
 
         return MeasureCapsuleTextWidth(

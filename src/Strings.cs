@@ -12,7 +12,7 @@ public static class Strings
         new Dictionary<string, string[]>(StringComparer.Ordinal)
         {
             ["SettingsUiLanguage"] = ["界面语言", "Interface language", "表示言語", "인터페이스 언어"],
-            ["TipSettingsUiLanguage"] = ["选择界面语言；重启 PaperTodo 后生效。", "Choose the interface language; restart PaperTodo to apply.", "表示言語を選択します。PaperTodo の再起動後に反映されます。", "인터페이스 언어를 선택합니다. PaperTodo를 다시 시작하면 적용됩니다."],
+            ["TipSettingsUiLanguage"] = ["选择界面语言；重启 Dodo 后生效。", "Choose the interface language; restart Dodo to apply.", "表示言語を選択します。Dodo の再起動後に反映されます。", "인터페이스 언어를 선택합니다. Dodo를 다시 시작하면 적용됩니다."],
             ["UiLanguageSystem"] = ["跟随系统", "Follow system", "システムに従う", "시스템 설정 따름"],
             ["UiLanguageZhHans"] = ["简体中文", "简体中文", "简体中文", "简体中文"],
             ["UiLanguageEnglish"] = ["English", "English", "English", "English"],
@@ -60,9 +60,9 @@ public static class Strings
             ["SettingsAutoMoveCompletedTodosToBottom"] = ["已完成待办自动置底", "Move completed todos to bottom", "完了したToDoを下へ移動", "완료된 할 일을 아래로 이동"],
             ["TipAutoMoveCompletedTodosToBottom"] = ["完成待办时移到已完成区域末尾；取消完成时移到未完成区域末尾。开启“自动清除已完成待办”时暂时禁用，但会保留此设置。", "Move a completed todo to the end of the completed group; restoring it moves it to the end of the active group. This is temporarily disabled while auto-clear is on, without forgetting the setting.", "完了時は完了グループの末尾へ、未完了に戻すと未完了グループの末尾へ移動します。完了項目の自動削除中は無効になりますが、設定値は保持されます。", "완료하면 완료 그룹의 끝으로, 완료를 취소하면 미완료 그룹의 끝으로 이동합니다. 완료 항목 자동 삭제가 켜져 있으면 잠시 비활성화되지만 설정은 유지됩니다."],
             ["LabsTodoReminderSoundEnabled"] = ["允许提醒声音", "Play reminder sound", "リマインダー音を鳴らす", "미리 알림 소리 허용"],
-            ["TipLabsTodoReminderSoundEnabled"] = ["开启后提醒触发时播放声音。程序目录中的有效 papertodo.wav 会优先于所选 Windows 系统声音。", "Play a sound when a reminder fires. A valid papertodo.wav beside the app takes priority over the selected Windows system sound.", "有効にするとリマインダー時に音を鳴らします。アプリと同じフォルダーの有効な papertodo.wav が、選択した Windows システム音より優先されます。", "켜면 미리 알림이 울릴 때 소리를 재생합니다. 프로그램 폴더의 유효한 papertodo.wav가 선택한 Windows 시스템 소리보다 우선합니다."],
+            ["TipLabsTodoReminderSoundEnabled"] = ["开启后提醒触发时播放声音。程序目录中的有效 dodo.wav 会优先于所选 Windows 系统声音。", "Play a sound when a reminder fires. A valid dodo.wav beside the app takes priority over the selected Windows system sound.", "有効にするとリマインダー時に音を鳴らします。アプリと同じフォルダーの有効な dodo.wav が、選択した Windows システム音より優先されます。", "켜면 미리 알림이 울릴 때 소리를 재생합니다. 프로그램 폴더의 유효한 dodo.wav가 선택한 Windows 시스템 소리보다 우선합니다."],
             ["LabsTodoReminderSound"] = ["提醒声音", "Reminder sound", "リマインダー音", "미리 알림 소리"],
-            ["TipLabsTodoReminderSound"] = ["选择 Windows 系统声音。若程序目录存在可读取的 papertodo.wav，则自动优先使用；文件无效或播放失败时回退到这里的选择。", "Choose a Windows system sound. A readable papertodo.wav beside the app is used first; invalid or failed custom audio falls back to this choice.", "Windows のシステム音を選びます。アプリと同じフォルダーに読み取り可能な papertodo.wav があれば優先し、無効または再生失敗時はこの音へ戻ります。", "Windows 시스템 소리를 선택합니다. 프로그램 폴더에 읽을 수 있는 papertodo.wav가 있으면 우선 사용하며, 유효하지 않거나 재생에 실패하면 이 선택으로 돌아갑니다."],
+            ["TipLabsTodoReminderSound"] = ["选择 Windows 系统声音。若程序目录存在可读取的 dodo.wav，则自动优先使用；文件无效或播放失败时回退到这里的选择。", "Choose a Windows system sound. A readable dodo.wav beside the app is used first; invalid or failed custom audio falls back to this choice.", "Windows のシステム音を選びます。アプリと同じフォルダーに読み取り可能な dodo.wav があれば優先し、無効または再生失敗時はこの音へ戻ります。", "Windows 시스템 소리를 선택합니다. 프로그램 폴더에 읽을 수 있는 dodo.wav가 있으면 우선 사용하며, 유효하지 않거나 재생에 실패하면 이 선택으로 돌아갑니다."],
             ["TodoReminderSoundAsterisk"] = ["提示音", "Asterisk", "通知", "알림"],
             ["TodoReminderSoundBeep"] = ["蜂鸣", "Beep", "ビープ", "비프"],
             ["TodoReminderSoundExclamation"] = ["感叹", "Exclamation", "警告", "경고"],

@@ -22,15 +22,15 @@ public sealed partial class AppController
         if (!PaperNoticeDialog.ShowChoice(
                 _settingsWindow,
                 SettingsSidebarLocalized(
-                    "重启 PaperTodo",
-                    "Restart PaperTodo",
-                    "PaperTodo を再起動",
-                    "PaperTodo 다시 시작"),
+                    "重启 Dodo",
+                    "Restart Dodo",
+                    "Dodo を再起動",
+                    "Dodo 다시 시작"),
                 SettingsSidebarLocalized(
-                    "原生材质将在重启 PaperTodo 后生效。要现在立即重启吗？",
-                    "The native material will take effect after restarting PaperTodo. Restart now?",
-                    "ネイティブ素材は PaperTodo の再起動後に反映されます。今すぐ再起動しますか？",
-                    "네이티브 재질은 PaperTodo를 다시 시작한 후 적용됩니다. 지금 다시 시작할까요?"),
+                    "原生材质将在重启 Dodo 后生效。要现在立即重启吗？",
+                    "The native material will take effect after restarting Dodo. Restart now?",
+                    "ネイティブ素材は Dodo の再起動後に反映されます。今すぐ再起動しますか？",
+                    "네이티브 재질은 Dodo를 다시 시작한 후 적용됩니다. 지금 다시 시작할까요?"),
                 SettingsSidebarLocalized("稍后", "Later", "後で", "나중에"),
                 SettingsSidebarLocalized(
                     "立即重启",

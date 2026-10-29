@@ -40,16 +40,47 @@ public sealed class NoteImageStore : IDisposable
     private bool _writeDisabled;
     private bool _disposed;
 
-    public string FilePath { get; } = Path.Combine(AppContext.BaseDirectory, "note-assets.lmdb");
+    public string FilePath { get; } = Path.Combine(AppPaths.DataDirectory, "note-assets.lmdb");
 
     public NoteImageStore() { }
     internal NoteImageStore(string filePath) => FilePath = Path.GetFullPath(filePath);
+
+    internal void WithBackupSnapshot(Action capture)
+    {
+        // LMDB uses NOLOCK because this owner serializes every transaction. Holding this gate
+        // after the last committed transaction makes a file copy a consistent database image.
+        lock (_gate)
+        {
+            ObjectDisposedException.ThrowIf(_disposed, this);
+            if (_writeDisabled) throw new InvalidDataException("The image database is unavailable.");
+            capture();
+        }
+    }
+
+    internal static int ValidateBackupSnapshot(string path, IEnumerable<AppState> states)
+    {
+        using var store = new NoteImageStore(path);
+        store.Load(readOnly: true);
+        if (store._writeDisabled || store._corruptedImageIds.Count > 0)
+            throw new InvalidDataException("The backup image database is damaged or incompatible.");
+        foreach (var asset in store._images.Values)
+            if (!store.TryGetEncodedImageBytes(asset.Id, out _, out _))
+                throw new InvalidDataException($"The backup image {asset.Id} is damaged.");
+        foreach (var state in states)
+            foreach (var paper in state.Papers)
+                foreach (var id in MarkdownImageReferences.CollectImageIds(paper.Content))
+                    if (!store._images.ContainsKey(id))
+                        throw new InvalidDataException($"The backup is missing image {id}.");
+        return store._images.Count;
+    }
 
     public bool IsWriteDisabled => _writeDisabled;
 
     public bool AutoCompressLargeImages { get; set; } = true;
 
-    public void Load()
+    public void Load() => Load(readOnly: false);
+
+    private void Load(bool readOnly)
     {
         lock (_gate)
         {
@@ -74,7 +105,7 @@ public sealed class NoteImageStore : IDisposable
 
             try
             {
-                _database = LmdbImageDatabase.Open(FilePath);
+                _database = LmdbImageDatabase.Open(FilePath, readOnly);
                 var index = _database.ReadIndex();
                 if (!TryValidateIndex(index, out var images, out var corruptedImageIds, out var totalBytes))
                 {
@@ -572,7 +603,29 @@ public sealed class NoteImageStore : IDisposable
         string markdown,
         string imageDirectory,
         string allowedRootDirectory)
+        => ConvertMarkdownWithImages(noteId, markdown, imageDirectory, allowedRootDirectory,
+            recreateImageDirectory: true, out _);
+
+    internal string ConvertMarkdownForExport(
+        string noteId,
+        string markdown,
+        string imageDirectory,
+        string allowedRootDirectory,
+        out bool imageDirectoryCreated,
+        ICollection<string>? exportedImagePaths = null)
+        => ConvertMarkdownWithImages(noteId, markdown, imageDirectory, allowedRootDirectory,
+            recreateImageDirectory: false, out imageDirectoryCreated, exportedImagePaths);
+
+    private string ConvertMarkdownWithImages(
+        string noteId,
+        string markdown,
+        string imageDirectory,
+        string allowedRootDirectory,
+        bool recreateImageDirectory,
+        out bool imageDirectoryCreated,
+        ICollection<string>? exportedImagePaths = null)
     {
+        imageDirectoryCreated = false;
         if (string.IsNullOrEmpty(markdown))
         {
             return markdown;
@@ -584,11 +637,16 @@ public sealed class NoteImageStore : IDisposable
             return markdown;
         }
 
-        if (!TryPrepareImageDirectory(imageDirectory, allowedRootDirectory, out var safeImageDirectory))
+        var imageExportFailure = Strings.Get(recreateImageDirectory
+            ? "ExternalMarkdownImageExportFailed"
+            : "ExportMarkdownImageFailure");
+        if (!TryPrepareImageDirectory(imageDirectory, allowedRootDirectory,
+                recreateImageDirectory, out var safeImageDirectory))
         {
-            throw new IOException(Strings.Get("ExternalMarkdownImageExportFailed"));
+            throw new IOException(imageExportFailure);
         }
 
+        imageDirectoryCreated = true;
         var exported = new Dictionary<string, string>(StringComparer.Ordinal);
         return MarkdownImageReferences.ReplaceForExternalMarkdown(
             markdown,
@@ -605,16 +663,17 @@ public sealed class NoteImageStore : IDisposable
                     if (!_images.TryGetValue(imageId, out asset!) ||
                         !string.Equals(asset.NoteId, noteId, StringComparison.Ordinal))
                     {
-                        throw new InvalidDataException(Strings.Get("ExternalMarkdownImageExportFailed"));
+                        throw new InvalidDataException(imageExportFailure);
                     }
                 }
 
                 var extension = ExtensionFromMime(asset.Mime);
                 var fileName = $"{asset.Id}{extension}";
                 var fullPath = Path.Combine(safeImageDirectory, fileName);
+                exportedImagePaths?.Add(fullPath);
                 if (!TryWriteImageFile(asset.Id, fullPath))
                 {
-                    throw new IOException(Strings.Get("ExternalMarkdownImageExportFailed"));
+                    throw new IOException(imageExportFailure);
                 }
 
                 var relative = "./" + Path.GetFileName(safeImageDirectory) + "/" + fileName;
@@ -706,6 +765,7 @@ public sealed class NoteImageStore : IDisposable
     private static bool TryPrepareImageDirectory(
         string imageDirectory,
         string allowedRootDirectory,
+        bool recreateImageDirectory,
         out string safeImageDirectory)
     {
         safeImageDirectory = "";
@@ -713,7 +773,7 @@ public sealed class NoteImageStore : IDisposable
         {
             var root = Path.TrimEndingDirectorySeparator(Path.GetFullPath(allowedRootDirectory));
             var candidate = Path.GetFullPath(imageDirectory);
-            var rootPrefix = root + Path.DirectorySeparatorChar;
+            var rootPrefix = Path.EndsInDirectorySeparator(root) ? root : root + Path.DirectorySeparatorChar;
             if (!candidate.StartsWith(rootPrefix, StringComparison.OrdinalIgnoreCase))
             {
                 return false;
@@ -722,6 +782,9 @@ public sealed class NoteImageStore : IDisposable
             Directory.CreateDirectory(root);
             if (Directory.Exists(candidate))
             {
+                // Formal exports never own a pre-existing directory. Only the existing
+                // temporary external-editor path may reset its private image directory.
+                if (!recreateImageDirectory) return false;
                 var attributes = File.GetAttributes(candidate);
                 var recursive = (attributes & FileAttributes.ReparsePoint) == 0;
                 Directory.Delete(candidate, recursive);

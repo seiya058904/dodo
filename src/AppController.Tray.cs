@@ -28,7 +28,7 @@ public sealed partial class AppController
 
         var trayIcon = new TaskbarIcon();
         trayIcon.Visibility = Visibility.Hidden;
-        trayIcon.ToolTipText = "PaperTodo";
+        trayIcon.ToolTipText = "Dodo";
         trayIcon.IconSource = LoadTrayIconSource();
         trayIcon.ContextMenu = _trayMenu;
         trayIcon.PreviewTrayContextMenuOpen += (_, _) =>
@@ -68,7 +68,7 @@ public sealed partial class AppController
 
     private ImageSource LoadTrayIconSource()
     {
-        var iconPath = Path.Combine(AppContext.BaseDirectory, "PaperTodo.ico");
+        var iconPath = Path.Combine(AppPaths.DataDirectory, "Dodo.ico");
         try
         {
             if (File.Exists(iconPath))
@@ -91,7 +91,7 @@ public sealed partial class AppController
         {
             var resourceName = typeof(AppController).Assembly
                 .GetManifestResourceNames()
-                .FirstOrDefault(name => name.EndsWith(".PaperTodo.ico", StringComparison.OrdinalIgnoreCase));
+                .FirstOrDefault(name => name.EndsWith(".Dodo.ico", StringComparison.OrdinalIgnoreCase));
 
             if (!string.IsNullOrWhiteSpace(resourceName))
             {
@@ -1243,7 +1243,7 @@ public sealed partial class AppController
                 .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?
                 .InformationalVersion
                 .Split('+')[0];
-            return string.IsNullOrWhiteSpace(version) ? "PaperTodo" : $"PaperTodo v{version}";
+            return string.IsNullOrWhiteSpace(version) ? "Dodo" : $"Dodo v{version}";
         }
     }
 

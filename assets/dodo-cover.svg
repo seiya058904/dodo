@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="420" viewBox="0 0 1200 420" role="img" aria-label="Dodo. A little bird for your everyday notes and to-dos.">
+<rect width="1200" height="420" rx="28" fill="#f6f5ee"/>
+<path d="M0 359Q310 300 590 355t610-30v95H0" fill="#e3ebde"/>
+<g transform="translate(824 64) scale(1.1)"><rect x="8" y="8" width="240" height="240" rx="60" fill="#dfe9d8"/>
+<path d="M71 42h86l27 27v131q0 16-16 16H71q-16 0-16-16V58q0-16 16-16" fill="#fff9e8"/>
+<path d="M157 42v27h27" fill="#c1d0bc"/>
+<g stroke="#293b39" stroke-linecap="round" stroke-linejoin="round"><path d="M107 186v18H96m47-18v18h11" fill="none" stroke-width="8"/>
+<ellipse cx="119" cy="141" rx="51" ry="47" fill="#8aa99b" stroke-width="6"/>
+<ellipse cx="145" cy="98" rx="36" ry="38" fill="#fff9e8" stroke-width="6"/>
+<rect x="163" y="97" width="52" height="28" rx="13" fill="#e7ac59" stroke-width="6"/>
+<path d="m111 67-5-12 11 3" fill="none" stroke-width="5"/></g>
+<ellipse cx="153" cy="88" rx="5" ry="6" fill="#293b39"/><ellipse cx="120" cy="142" rx="25" ry="23" fill="#b7cabb"/>
+</g>
+<text x="76" y="88" fill="#5a7569" font-family="Segoe UI,Arial,sans-serif" font-size="15" letter-spacing="4">SMALL NOTES. ROOM TO BREATHE.</text>
+<text x="70" y="218" fill="#293b39" font-family="Segoe UI,Arial,sans-serif" font-size="112" font-weight="700" letter-spacing="-5">Dodo<tspan fill="#d7a257">.</tspan></text>
+<text x="76" y="272" fill="#52645d" font-family="Segoe UI,Arial,sans-serif" font-size="27">A little bird for your everyday notes and to-dos.</text>
+<text x="76" y="355" fill="#466454" font-family="Segoe UI,Arial,sans-serif" font-size="17">NATIVE WINDOWS · LOCAL FIRST · QUIETLY USEFUL</text>
+</svg>

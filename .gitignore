@@ -26,3 +26,11 @@ plugins/data/
 # Local drafts
 *.draft.md
 
+# Dodo portable profiles and local validation/dependency staging
+dodo-data/
+.local/
+release/
+Dodo.crash.log
+__pycache__/
+*.py[cod]
+

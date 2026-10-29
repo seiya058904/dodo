@@ -103,7 +103,7 @@ internal static class McpBridge
                 }
 
                 message =
-                    $"PaperTodo error (invalid_params): {parameter.Name} is required.";
+                    $"Dodo error (invalid_params): {parameter.Name} is required.";
                 return true;
             }
 
@@ -125,7 +125,7 @@ internal static class McpBridge
                 }
 
                 message =
-                    $"PaperTodo error (invalid_params): {path}: {ex.Message}";
+                    $"Dodo error (invalid_params): {path}: {ex.Message}";
                 return true;
             }
         }

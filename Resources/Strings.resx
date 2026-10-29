@@ -22,25 +22,25 @@
     <value>3.1</value>
   </data>
   <data name="AppStartupFailureTitle" xml:space="preserve">
-    <value>PaperTodo - 启动失败</value>
+    <value>Dodo - 启动失败</value>
   </data>
   <data name="AppUnhandledExceptionMessage" xml:space="preserve">
-    <value>程序发生未处理错误，已写入崩溃日志 PaperTodo.crash.log。
+    <value>程序发生未处理错误，已写入崩溃日志 Dodo.crash.log。
 
 请重启程序。近期改动依赖自动保存与 data.backup.json。
 
 错误信息：{0}</value>
   </data>
   <data name="AppUnhandledExceptionTitle" xml:space="preserve">
-    <value>PaperTodo - 异常退出</value>
+    <value>Dodo - 异常退出</value>
   </data>
   <data name="AppDesktopRuntimeLoadFailureTitle" xml:space="preserve">
-    <value>PaperTodo - .NET 运行环境组件加载失败</value>
+    <value>Dodo - .NET 运行环境组件加载失败</value>
   </data>
   <data name="AppDesktopRuntimeLoadFailureMessage" xml:space="preserve">
-    <value>.NET 运行环境组件加载失败，程序将完全退出。已写入崩溃日志 PaperTodo.crash.log。
+    <value>.NET 运行环境组件加载失败，程序将完全退出。已写入崩溃日志 Dodo.crash.log。
 
-请手动重新打开 PaperTodo。若反复出现，请重启电脑，或修复 / 重装 .NET Desktop Runtime。
+请手动重新打开 Dodo。若反复出现，请重启电脑，或修复 / 重装 .NET Desktop Runtime。
 
 错误信息：{0}</value>
   </data>
@@ -340,7 +340,7 @@
     <value>忽略本次</value>
   </data>
   <data name="ExitSaveFailureMessage" xml:space="preserve">
-    <value>PaperTodo 保存失败，即将退出。本次未保存的修改可能丢失。</value>
+    <value>Dodo 保存失败，即将退出。本次未保存的修改可能丢失。</value>
   </data>
   <data name="SaveFailureMessage" xml:space="preserve">
     <value>保存数据失败：
@@ -564,7 +564,7 @@
   <data name="TipUiFont" xml:space="preserve">
     <value>语言默认会分别为界面与笔记正文挑选系统字体。
 选雅黑或等线后，界面、托盘、胶囊、待办和笔记统一用该字体。
-程序目录有 papertodo.ttf / .otf 时优先用它。</value>
+程序目录有 dodo.ttf / .otf 时优先用它。</value>
   </data>
   <data name="TipTextRenderingProfile" xml:space="preserve">
     <value>标准：沿用 Windows/WPF 默认路径，兼容性最好。
@@ -576,7 +576,7 @@
   </data>
   <data name="TipCustomFontEnhancedBold" xml:space="preserve">
     <value>勾选了「加粗」的文字，改用程序目录中的粗体文件。
-需同时放置 papertodo 与 PaperTodo_Bold（.ttf/.otf）。</value>
+需同时放置 papertodo 与 Dodo_Bold（.ttf/.otf）。</value>
   </data>
   <data name="TipMarkdownRender" xml:space="preserve">
     <value>基础：保留 Markdown 标记，淡化语法标记，并显示列表圆点、分割线等轻量排版。
@@ -657,7 +657,7 @@
     <value>纸片标题与胶囊显示的最大字数。</value>
   </data>
   <data name="TipStartup" xml:space="preserve">
-    <value>开机时自动启动 PaperTodo。</value>
+    <value>开机时自动启动 Dodo。</value>
   </data>
   <data name="SettingsEnableToolTips" xml:space="preserve">
     <value>显示悬停提示</value>
@@ -1248,7 +1248,7 @@
   </data>
   <data name="LabsMcp" xml:space="preserve"><value>MCP 本地接口</value></data>
   <data name="LabsMcpEnable" xml:space="preserve"><value>启用 MCP（读取默认允许）</value></data>
-  <data name="TipLabsMcpEnable" xml:space="preserve"><value>允许本机 AI 客户端通过同一个 PaperTodo.exe 的 --mcp 模式读取纸片。关闭后命名管道立即停止。</value></data>
+  <data name="TipLabsMcpEnable" xml:space="preserve"><value>允许本机 AI 客户端通过同一个 Dodo.exe 的 --mcp 模式读取纸片。关闭后命名管道立即停止。</value></data>
   <data name="LabsMcpBlankWrites" xml:space="preserve"><value>允许空白与追加写入</value></data>
   <data name="TipLabsMcpBlankWrites" xml:space="preserve"><value>允许新建纸片、向已有待办纸添加新待办、填写空白内容以及追加笔记；不会覆盖已有文字。</value></data>
   <data name="LabsMcpFullWrites" xml:space="preserve"><value>允许完整写入</value></data>
@@ -1292,10 +1292,10 @@
     <value>打开目录</value>
   </data>
   <data name="PluginsRestartTooltip" xml:space="preserve">
-    <value>重启 PaperTodo 并重新扫描插件</value>
+    <value>重启 Dodo 并重新扫描插件</value>
   </data>
   <data name="PluginsRestartTitle" xml:space="preserve">
-    <value>重启 PaperTodo</value>
+    <value>重启 Dodo</value>
   </data>
   <data name="PluginsRestartMessage" xml:space="preserve">
     <value>重启后将重新扫描并加载正文插件。是否立即重启？</value>
@@ -1340,7 +1340,7 @@
     <value>Markdown 笔记</value>
   </data>
   <data name="BodyProviderMarkdownDescription" xml:space="preserve">
-    <value>PaperTodo 内置 Markdown 编辑、预览与图片正文。</value>
+    <value>Dodo 内置 Markdown 编辑、预览与图片正文。</value>
   </data>
   <data name="PluginBodyDisabledTitle" xml:space="preserve">
     <value>正文插件已关闭</value>
@@ -1471,10 +1471,10 @@
     <value>云母</value>
   </data>
   <data name="TipColorSchemeMica" xml:space="preserve">
-    <value>使用 Windows 11 22H2 及以上的原生 DWM Mica，背景由系统合成，不读取或模拟壁纸。用于展开的纸片和设置窗口；胶囊、折叠动画和半透明状态保留实色绘制。关闭系统透明效果、开启高对比度或原生接口不可用时回退实色。首次从其他皮肤切换后需退出并重新打开 PaperTodo。</value>
+    <value>使用 Windows 11 22H2 及以上的原生 DWM Mica，背景由系统合成，不读取或模拟壁纸。用于展开的纸片和设置窗口；胶囊、折叠动画和半透明状态保留实色绘制。关闭系统透明效果、开启高对比度或原生接口不可用时回退实色。首次从其他皮肤切换后需退出并重新打开 Dodo。</value>
   </data>
   <data name="MicaRestartRequired" xml:space="preserve">
-    <value>已保存云母选择。请从托盘退出并重新打开 PaperTodo，以启用原生 Mica；当前窗口先使用实色，编辑内容和撤销记录不会因换肤被重建。</value>
+    <value>已保存云母选择。请从托盘退出并重新打开 Dodo，以启用原生 Mica；当前窗口先使用实色，编辑内容和撤销记录不会因换肤被重建。</value>
   </data>
   <data name="MicaUnsupported" xml:space="preserve">
     <value>原生 Mica 需要 Windows 11 22H2（22621）及以上。当前系统使用云母配色的实色背景。</value>
@@ -1535,7 +1535,7 @@
     <value>复古任务面板：紧凑阶梯角、单层外框、像素对齐图标和方形按钮。中文正文仍使用普通字体。</value>
   </data>
   <data name="SkinRestartRequired" xml:space="preserve">
-    <value>重启 PaperTodo 后启用原生背景。</value>
+    <value>重启 Dodo 后启用原生背景。</value>
   </data>
   <data name="SkinNativeUnsupported" xml:space="preserve">
     <value>原生背景需要 Windows 11 22H2 或更新版本。</value>
@@ -1591,4 +1591,14 @@
   <data name="TopBarExternalEditor" xml:space="preserve">
     <value>外部编辑</value>
   </data>
+  <data name="SettingsShowCapsuleTodoCount" xml:space="preserve"><value>胶囊显示未完成待办数</value></data>
+  <data name="TipShowCapsuleTodoCount" xml:space="preserve"><value>在待办胶囊标题后显示未完成数量；没有未完成待办时隐藏。</value></data>
+  <data name="MenuExportMarkdown" xml:space="preserve"><value>导出 Markdown…</value></data>
+  <data name="ExportMarkdownTitle" xml:space="preserve"><value>导出 Markdown</value></data>
+  <data name="ExportMarkdownFilter" xml:space="preserve"><value>Markdown 文件 (*.md)|*.md</value></data>
+  <data name="ExportMarkdownFailureTitle" xml:space="preserve"><value>导出失败</value></data>
+  <data name="ExportMarkdownFailureMessage" xml:space="preserve"><value>无法导出 Markdown。{0}</value></data>
+  <data name="ExportMarkdownExtensionRequired" xml:space="preserve"><value>请选择扩展名为 .md 的文件。</value></data>
+  <data name="DodoAttribution" xml:space="preserve"><value>基于 PaperTodo 的非商业衍生版本 · 原作 © 2026 snownico0722</value></data>
+  <data name="ExportMarkdownImageFailure" xml:space="preserve"><value>无法导出笔记中的图片，原有 Markdown 文件保持不变。</value></data>
 </root>

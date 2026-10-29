@@ -279,11 +279,23 @@ public sealed partial class PaperWindow
         SetCollapsedState(false, animate: true, alignExpandedToDockedEdge: wasDeepCapsulePlaced);
     }
 
+    private string? _lastTodoCapsuleTitle;
+
+    private void RefreshTodoCapsuleLabel()
+    {
+        if (_paper.Type == PaperTypes.Todo &&
+            !string.Equals(_lastTodoCapsuleTitle, _controller.PaperCapsuleTitle(_paper), StringComparison.Ordinal))
+            RefreshCapsuleLabel(invalidatePreview: false);
+    }
+
     private void RefreshCapsuleLabel(bool invalidatePreview = true)
     {
+        _lastTodoCapsuleTitle = _controller.PaperCapsuleTitle(_paper);
         if (invalidatePreview) InvalidateEdgeCapsulePreviewContent();
         if (_capsuleLabelText == null)
         {
+            // A restored docked paper may not have materialized its floating shell yet.
+            RefreshDeepCapsuleSlotLabel();
             return;
         }
 
@@ -303,6 +315,7 @@ public sealed partial class PaperWindow
         UpdateCapsuleClosePlacement();
         RefreshExperimentalCapsuleFollowVisual();
         RefreshDeepCapsuleSlotLabel();
+        if (_isShellBuilt) ApplyCurrentCollapsedCapsuleWidth();
     }
 
     private void RefreshDeepCapsuleSlotLabel()
@@ -318,7 +331,8 @@ public sealed partial class PaperWindow
         UpdateDeepCapsuleSlotHostTheme();
         _edgeCapsuleHost.SetLabel(
             _controller.PaperCapsuleTitle(_paper),
-            _controller.PaperTitleText(_paper));
+            _controller.PaperTitleText(_paper),
+            TodoCapsuleTitle.Suffix(_paper, _controller.State.ShowCapsuleTodoCount));
         RefreshPluginCapsuleDockedContent();
         ScheduleDeepCapsuleSlotMeasureRefresh();
     }

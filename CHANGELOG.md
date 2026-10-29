@@ -1,3 +1,20 @@
+# Dodo changelog
+
+### v0.1.0
+
+- Add optional unfinished to-do counts to capsules, updated after edits, completion, deletion and undo.
+- Add full, versioned ZIP backups with images, settings and host-managed plugin state; validate replacements and preserve rollback copies.
+- Export notes and checklists to a chosen Markdown file with portable relative image assets.
+- Introduce Dodo branding, an independent portable profile and process/MCP/startup identities.
+- Remove upstream telemetry code and improve light/dark secondary-text contrast.
+- Protect deferred capsule prewarming when application startup fails.
+
+Based on PaperTodo 4.0.0-beta1. Papers, edge docking, editing, search, plugin and MCP capabilities are inherited; preview features retain their preview status.
+
+---
+
+### Upstream PaperTodo history (preserved)
+
 # PaperTodo Changelog
 
 [简体中文](CHANGELOG.zh.md)

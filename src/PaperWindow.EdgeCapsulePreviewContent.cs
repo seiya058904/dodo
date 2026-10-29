@@ -6,6 +6,7 @@ public sealed partial class PaperWindow
 {
     private void InvalidateEdgeCapsulePreviewContent()
     {
+        RefreshTodoCapsuleLabel();
         _edgeCapsulePreviewInvalidationSource.Invalidate();
         ScheduleMarkdownPreviewPreload();
     }

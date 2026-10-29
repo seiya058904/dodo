@@ -4,8 +4,21 @@ using System.Runtime.CompilerServices;
 using System.Text.Json;
 using PaperTodo;
 
+if (args is ["--write-integration-fixture", var fixtureDirectory])
+{
+    BackupChecks.WriteIntegrationFixture(fixtureDirectory);
+    Console.WriteLine(Path.GetFullPath(fixtureDirectory));
+    return 0;
+}
+
 var checks = new (string Name, Action Run)[]
 {
+    ("full-backup-roundtrips-images-settings-and-plugin-state", BackupChecks.RoundTrip),
+    ("full-backup-rejects-tampering-and-path-traversal", BackupChecks.RejectUnsafeArchives),
+    ("full-restore-failure-rolls-back-original-data", BackupChecks.FailedRestoreRollsBack),
+    ("full-restore-interrupted-journal-rolls-back-before-reopen", BackupChecks.InterruptedRestoreRollsBack),
+    ("full-backup-rejects-incompatible-and-incomplete-payload", BackupChecks.RejectIncompatiblePayload),
+    ("restore-suppression-blocks-late-core-writes", BackupChecks.SuppressionBlocksLateWrites),
     ("primary-save-faults-keep-a-loadable-generation", PrimarySaveFaultsKeepALoadableGeneration),
     ("backup-refresh-fault-keeps-old-backup", BackupRefreshFaultKeepsOldBackup),
     ("corrupt-primary-never-refreshes-backup", CorruptPrimaryNeverRefreshesBackup),

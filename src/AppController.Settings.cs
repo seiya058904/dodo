@@ -28,8 +28,8 @@ public sealed partial class AppController
         Labs
     }
 
-    private const string AuthorName = "Designed by trigger";
-    private const string AuthorGithubUrl = "https://github.com/snownico0722";
+    private const string AuthorName = "Dodo";
+    private const string AuthorGithubUrl = "https://github.com/seiya058904/dodo";
     private SettingsPage _settingsPage;
     private ScrollViewer? _settingsPageScrollViewer;
     private SettingsPage? _settingsPageScrollViewerPage;
@@ -902,7 +902,7 @@ public sealed partial class AppController
         var preferDownwardToggle = SettingsToggle(
             SettingsSidebarLocalized(
                 "浏览时优先向下展开",
-                "Prefer downward expansion while browsing",
+                "Prefer expanding downward",
                 "閲覧時は下方向への展開を優先",
                 "탐색 중 아래로 펼치기 우선"),
             State.EdgeCapsulePreviewPreferDownward,
@@ -1888,7 +1888,7 @@ public sealed partial class AppController
     {
         var signatureText = new TextBlock
         {
-            Text = AuthorName,
+            Text = $"{AuthorName} · v{typeof(App).Assembly.GetName().Version?.ToString(3)}",
             Foreground = TrayWeakTextBrush,
             FontSize = AppTypography.Scale(11),
             FontWeight = FontWeights.Medium,
@@ -1903,7 +1903,8 @@ public sealed partial class AppController
             Margin = new Thickness(2, 10, 0, 0),
             Padding = new Thickness(6, 2, 0, 2),
             Child = signatureText,
-            ToolTip = AuthorGithubUrl
+            ToolTip = Strings.Get("DodoAttribution") + "\n" + AuthorGithubUrl +
+                "\nhttps://github.com/snownico0722/PaperTodo/blob/main/LICENSE.md"
         };
         ToolTipService.SetInitialShowDelay(signature, 300);
         ToolTipService.SetShowDuration(signature, 12000);

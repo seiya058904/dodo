@@ -19,21 +19,21 @@
     <value>3.1</value>
   </data>
   <data name="AppStartupFailureTitle" xml:space="preserve">
-    <value>PaperTodo - Startup Failed</value>
+    <value>Dodo - Startup Failed</value>
   </data>
   <data name="AppUnhandledExceptionMessage" xml:space="preserve">
-    <value>The app hit an unhandled error. A crash log was written to PaperTodo.crash.log.&#x0A;&#x0A;Restart the app. Recent changes rely on autosave and data.backup.json.&#x0A;&#x0A;Error: {0}</value>
+    <value>The app hit an unhandled error. A crash log was written to Dodo.crash.log.&#x0A;&#x0A;Restart the app. Recent changes rely on autosave and data.backup.json.&#x0A;&#x0A;Error: {0}</value>
   </data>
   <data name="AppUnhandledExceptionTitle" xml:space="preserve">
-    <value>PaperTodo - Unexpected Exit</value>
+    <value>Dodo - Unexpected Exit</value>
   </data>
   <data name="AppDesktopRuntimeLoadFailureTitle" xml:space="preserve">
-    <value>PaperTodo - .NET Runtime Component Load Failure</value>
+    <value>Dodo - .NET Runtime Component Load Failure</value>
   </data>
   <data name="AppDesktopRuntimeLoadFailureMessage" xml:space="preserve">
-    <value>A .NET runtime component could not be loaded, so the app will exit completely. A crash log was written to PaperTodo.crash.log.
+    <value>A .NET runtime component could not be loaded, so the app will exit completely. A crash log was written to Dodo.crash.log.
 
-Open PaperTodo again manually. If this keeps happening, restart the PC or repair/reinstall the .NET Desktop Runtime.
+Open Dodo again manually. If this keeps happening, restart the PC or repair/reinstall the .NET Desktop Runtime.
 
 Error: {0}</value>
   </data>
@@ -329,7 +329,7 @@ Error: {0}</value>
     <value>Ignore this time</value>
   </data>
   <data name="ExitSaveFailureMessage" xml:space="preserve">
-    <value>PaperTodo failed to save and will now exit. Unsaved changes may be lost.</value>
+    <value>Dodo failed to save and will now exit. Unsaved changes may be lost.</value>
   </data>
   <data name="SaveFailureMessage" xml:space="preserve">
     <value>Failed to save data:&#x0A;{0}&#x0A;Please check disk space or permissions.</value>
@@ -538,7 +538,7 @@ Error: {0}</value>
   <data name="TipUiFont" xml:space="preserve">
     <value>Language default picks system fonts for UI and note body separately.
 YaHei or DengXian unifies UI, tray, capsules, todos, and notes.
-If papertodo.ttf / .otf is in the app folder, that font is preferred.</value>
+If dodo.ttf / .otf is in the app folder, that font is preferred.</value>
   </data>
   <data name="TipTextRenderingProfile" xml:space="preserve">
     <value>Standard: Windows/WPF default path; best compatibility.
@@ -550,7 +550,7 @@ Sharp: stronger pixel alignment; clearer outlines; a few fonts may change width 
   </data>
   <data name="TipCustomFontEnhancedBold" xml:space="preserve">
     <value>Bold text uses the bold font file from the app folder.
-Place both papertodo and PaperTodo_Bold (.ttf/.otf).</value>
+Place both papertodo and Dodo_Bold (.ttf/.otf).</value>
   </data>
   <data name="TipMarkdownRender" xml:space="preserve">
     <value>Basic: keeps Markdown markers, fades syntax, and shows lightweight layout such as list bullets and dividers.
@@ -622,7 +622,7 @@ About 5 full-width characters on one line, 10 on multiline.</value>
     <value>Max characters shown in paper titles and capsules.</value>
   </data>
   <data name="TipStartup" xml:space="preserve">
-    <value>Start PaperTodo when Windows signs in.</value>
+    <value>Start Dodo when Windows signs in.</value>
   </data>
   <data name="SettingsEnableToolTips" xml:space="preserve">
     <value>Show hover hints</value>
@@ -747,7 +747,7 @@ Either way, any side over 4096 px is rejected.</value>
     <value>Unpin</value>
   </data>
   <data name="SettingsShortcuts" xml:space="preserve">
-    <value>Keyboard shortcuts</value>
+    <value>Shortcuts</value>
   </data>
   <data name="SettingsBehavior" xml:space="preserve">
     <value>Behavior</value>
@@ -1235,7 +1235,7 @@ When off, open at the docked edge or remembered position.</value>
   </data>
   <data name="LabsMcp" xml:space="preserve"><value>Local MCP interface</value></data>
   <data name="LabsMcpEnable" xml:space="preserve"><value>Enable MCP (read access is always allowed)</value></data>
-  <data name="TipLabsMcpEnable" xml:space="preserve"><value>Lets local AI clients read papers through the same PaperTodo.exe in --mcp mode. Turning this off stops the named-pipe interface immediately.</value></data>
+  <data name="TipLabsMcpEnable" xml:space="preserve"><value>Lets local AI clients read papers through the same Dodo.exe in --mcp mode. Turning this off stops the named-pipe interface immediately.</value></data>
   <data name="LabsMcpBlankWrites" xml:space="preserve"><value>Allow blank and additive writes</value></data>
   <data name="TipLabsMcpBlankWrites" xml:space="preserve"><value>Allows creating papers, adding todos to an existing paper, filling blank content, and appending notes without overwriting existing text.</value></data>
   <data name="LabsMcpFullWrites" xml:space="preserve"><value>Allow full writes</value></data>
@@ -1279,13 +1279,13 @@ When off, open at the docked edge or remembered position.</value>
     <value>Open folder</value>
   </data>
   <data name="PluginsRestartTooltip" xml:space="preserve">
-    <value>Restart PaperTodo and rescan plugins</value>
+    <value>Restart Dodo and rescan plugins</value>
   </data>
   <data name="PluginsRestartTitle" xml:space="preserve">
-    <value>Restart PaperTodo</value>
+    <value>Restart Dodo</value>
   </data>
   <data name="PluginsRestartMessage" xml:space="preserve">
-    <value>Restart PaperTodo to rescan and load body plugins?</value>
+    <value>Restart Dodo to rescan and load body plugins?</value>
   </data>
   <data name="PluginsRestartNow" xml:space="preserve">
     <value>Restart now</value>
@@ -1327,7 +1327,7 @@ When off, open at the docked edge or remembered position.</value>
     <value>Markdown note</value>
   </data>
   <data name="BodyProviderMarkdownDescription" xml:space="preserve">
-    <value>PaperTodo built-in Markdown editing, preview, and image body.</value>
+    <value>Dodo built-in Markdown editing, preview, and image body.</value>
   </data>
   <data name="PluginBodyDisabledTitle" xml:space="preserve">
     <value>Body plugin is disabled</value>
@@ -1422,10 +1422,10 @@ When off, open at the docked edge or remembered position.</value>
     <value>Mica</value>
   </data>
   <data name="TipColorSchemeMica" xml:space="preserve">
-    <value>Uses native DWM Mica on Windows 11 22H2 or later, composed by Windows without reading or simulating the wallpaper. Applies to expanded papers and Settings; capsules, folding animations and translucent states keep solid rendering. Falls back to solid colors when transparency is disabled, high contrast is enabled, or native APIs are unavailable. After switching from another skin for the first time, exit and reopen PaperTodo.</value>
+    <value>Uses native DWM Mica on Windows 11 22H2 or later, composed by Windows without reading or simulating the wallpaper. Applies to expanded papers and Settings; capsules, folding animations and translucent states keep solid rendering. Falls back to solid colors when transparency is disabled, high contrast is enabled, or native APIs are unavailable. After switching from another skin for the first time, exit and reopen Dodo.</value>
   </data>
   <data name="MicaRestartRequired" xml:space="preserve">
-    <value>Mica selection saved. Exit PaperTodo from the tray and reopen it to enable native Mica. Existing windows use solid colors for now; changing skins does not recreate your editors or undo history.</value>
+    <value>Mica selection saved. Exit Dodo from the tray and reopen it to enable native Mica. Existing windows use solid colors for now; changing skins does not recreate your editors or undo history.</value>
   </data>
   <data name="MicaUnsupported" xml:space="preserve">
     <value>Native Mica requires Windows 11 22H2 (build 22621) or later. This system uses solid Mica palette colors.</value>
@@ -1486,7 +1486,7 @@ When off, open at the docked edge or remembered position.</value>
     <value>A retro quest panel with compact stepped corners, a single frame, pixel-aligned icons and square controls. Body text keeps the normal font.</value>
   </data>
   <data name="SkinRestartRequired" xml:space="preserve">
-    <value>Restart PaperTodo to enable native backdrops.</value>
+    <value>Restart Dodo to enable native backdrops.</value>
   </data>
   <data name="SkinNativeUnsupported" xml:space="preserve">
     <value>Native backdrops require Windows 11 22H2 or later.</value>
@@ -1542,4 +1542,14 @@ When off, open at the docked edge or remembered position.</value>
   <data name="TopBarExternalEditor" xml:space="preserve">
     <value>Open externally</value>
   </data>
+  <data name="SettingsShowCapsuleTodoCount" xml:space="preserve"><value>Show unfinished to-dos on capsules</value></data>
+  <data name="TipShowCapsuleTodoCount" xml:space="preserve"><value>Show the unfinished count after the to-do capsule title. Hide it when zero.</value></data>
+  <data name="MenuExportMarkdown" xml:space="preserve"><value>Export Markdown…</value></data>
+  <data name="ExportMarkdownTitle" xml:space="preserve"><value>Export Markdown</value></data>
+  <data name="ExportMarkdownFilter" xml:space="preserve"><value>Markdown files (*.md)|*.md</value></data>
+  <data name="ExportMarkdownFailureTitle" xml:space="preserve"><value>Export failed</value></data>
+  <data name="ExportMarkdownFailureMessage" xml:space="preserve"><value>Could not export Markdown. {0}</value></data>
+  <data name="ExportMarkdownExtensionRequired" xml:space="preserve"><value>Choose a file with the .md extension.</value></data>
+  <data name="DodoAttribution" xml:space="preserve"><value>Noncommercial derivative of PaperTodo · Original © 2026 snownico0722</value></data>
+  <data name="ExportMarkdownImageFailure" xml:space="preserve"><value>Could not export a note image. The existing Markdown file was left unchanged.</value></data>
 </root>

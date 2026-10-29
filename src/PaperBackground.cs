@@ -38,10 +38,9 @@ internal static class PaperBackground
     private const int MaxDecodePixelDimension = 4096;
     private const double BlendedImageOpacity = 0.30;
     private static readonly string[] CandidateNames =
-        ["papertodo.png", "papertodo.jpg", "papertodo.jpeg"];
+        ["dodo.png", "dodo.jpg", "dodo.jpeg"];
     private static readonly string PreferencesPath = Path.Combine(
-        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-        "PaperTodo",
+        AppPaths.DataDirectory,
         "paper-background.json");
 
     private static BackgroundPreferences _preferences = LoadPreferences();
@@ -407,7 +406,7 @@ internal static class PaperBackground
     {
         foreach (var name in CandidateNames)
         {
-            var path = Path.Combine(AppContext.BaseDirectory, name);
+            var path = Path.Combine(AppPaths.DataDirectory, name);
             if (File.Exists(path))
             {
                 return path;

@@ -1,10 +1,7 @@
 name: Edge diagnostics checks
 
 on:
-  push:
-    branches-ignore:
-      - main
-  workflow_dispatch:
+  workflow_call:
 
 permissions:
   contents: read
@@ -12,10 +9,6 @@ permissions:
 jobs:
   diagnostics:
     name: Debug diagnostics and edge checks
-    if: >-
-      github.event_name == 'workflow_dispatch' ||
-      contains(github.event.head_commit.message, '[ci]') ||
-      contains(github.event.head_commit.message, '[debug-ci]')
     concurrency:
       group: edge-diagnostics-checks-${{ github.ref }}
       cancel-in-progress: true

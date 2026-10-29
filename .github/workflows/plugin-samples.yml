@@ -1,62 +1,7 @@
 name: Plugin samples
 
 on:
-  pull_request:
-    paths:
-      - "PaperTodo.Plugin.Abstractions/**"
-      - "plugin-samples/**"
-      - "plugins/**"
-      - "tools/testing/**"
-      - "tests/plugin-samples/**"
-      - "tests/PaperTodo.ProtocolPolicyChecks/**"
-      - "tests/PaperTodo.PluginApiChecks/**"
-      - "tests/PaperTodo.CodexCliBridgeChecks/**"
-      - "tests/PaperTodo.SettingsApiChecks/**"
-      - "PaperTodo.csproj"
-      - "src/AppController.Plugin*.cs"
-      - "src/AppController.Shortcuts.cs"
-      - "src/GlobalHotkeys.cs"
-      - "src/PaperPluginRuntime*.cs"
-      - "src/PaperBodyPlugin*.cs"
-      - "src/PaperSettingsService.cs"
-      - "src/AppController.Settings*.cs"
-      - "src/AppController.cs"
-      - "src/Models.cs"
-      - "src/Mcp*.cs"
-      - "src/PaperWindow.Plugin*.cs"
-      - "src/Plugin*.cs"
-      - "src/WebPaperBodySession*.cs"
-      - "src/WebPlugin*.cs"
-      - ".github/workflows/plugin-samples.yml"
-  push:
-    branches:
-      - main
-    paths:
-      - "PaperTodo.Plugin.Abstractions/**"
-      - "plugin-samples/**"
-      - "plugins/**"
-      - "tools/testing/**"
-      - "tests/plugin-samples/**"
-      - "tests/PaperTodo.ProtocolPolicyChecks/**"
-      - "tests/PaperTodo.PluginApiChecks/**"
-      - "tests/PaperTodo.CodexCliBridgeChecks/**"
-      - "tests/PaperTodo.SettingsApiChecks/**"
-      - "PaperTodo.csproj"
-      - "src/AppController.Plugin*.cs"
-      - "src/AppController.Shortcuts.cs"
-      - "src/GlobalHotkeys.cs"
-      - "src/PaperPluginRuntime*.cs"
-      - "src/PaperBodyPlugin*.cs"
-      - "src/PaperSettingsService.cs"
-      - "src/AppController.Settings*.cs"
-      - "src/AppController.cs"
-      - "src/Models.cs"
-      - "src/Mcp*.cs"
-      - "src/PaperWindow.Plugin*.cs"
-      - "src/Plugin*.cs"
-      - "src/WebPaperBodySession*.cs"
-      - "src/WebPlugin*.cs"
-      - ".github/workflows/plugin-samples.yml"
+  workflow_call:
 
 permissions:
   contents: read
@@ -76,7 +21,7 @@ jobs:
         with:
           node-version: "22"
 
-      - name: Build PaperTodo plugin host
+      - name: Build Dodo plugin host
         shell: pwsh
         run: dotnet build .\PaperTodo.csproj -c Release
 

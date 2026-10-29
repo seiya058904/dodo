@@ -8,11 +8,15 @@ internal static partial class Program
     [STAThread]
     private static int Main(string[] args)
     {
+        if (args is ["--export"])
+            return MarkdownExportChecks.RunStandalone();
+
         if (ClipboardImageChecks.TryRunClipboardMode(args, out var clipboardResult))
             return clipboardResult;
 
         new Application { ShutdownMode = ShutdownMode.OnExplicitShutdown };
         var failures = 0;
+        MarkdownExportChecks.Run(Check);
         ClipboardImageChecks.Run(Check);
         Check("Paper background image loading and layout", CheckPaperBackgroundToggle);
         Check("Full mode preserves quote source and undo history", () =>

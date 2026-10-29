@@ -13,7 +13,7 @@ public sealed partial class AppController
 
     private enum SettingEffects
     {
-        None, Advanced, Telemetry, Animations, Theme, Skin, MaterialTransparency, SurfaceOutline, NativeMaterial, Typography, Markdown,
+        None, Advanced, Animations, Theme, Skin, MaterialTransparency, SurfaceOutline, NativeMaterial, Typography, Markdown,
         ImageReferences, MarkdownAnimations, ExternalExtension, Compress, TodoOrder,
         TodoLinks, TodoRows, LinkedCapsules, TopBar, SystemVisibility, Fullscreen, Resize,
         CapsuleMode, Arrange, CapsuleClose, Titles, Preview, HoverIntent, EdgeTopmost,
@@ -230,7 +230,6 @@ public sealed partial class AppController
                 _shortcutRecordingCommandId = null;
                 ClearShortcutApplyFailure();
                 break;
-            case SettingEffects.Telemetry: TelemetryService.SetEnabled(State.TelemetryEnabled); break;
             case SettingEffects.Theme: RefreshThemeSurfaces(); break;
             case SettingEffects.Skin: RefreshSkinSurfaces(); break;
             case SettingEffects.MaterialTransparency:

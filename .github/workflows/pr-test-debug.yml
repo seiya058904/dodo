@@ -1,9 +1,8 @@
-name: PR Test Debug
+name: Dodo PR Debug Package
 
 on:
   push:
-    branches-ignore:
-      - main
+    branches-ignore: [main]
   workflow_dispatch:
 
 permissions:
@@ -11,105 +10,12 @@ permissions:
 
 jobs:
   package:
-    name: Package Debug test executable
-    # Keep marker gating and concurrency at job scope: an ordinary push stays skipped and cannot
-    # cancel a tagged Debug package that is already running for this branch.
     if: >-
       github.event_name == 'workflow_dispatch' ||
       contains(github.event.head_commit.message, '[debug]') ||
       contains(github.event.head_commit.message, '[debug-ci]')
-    concurrency:
-      group: pr-test-debug-${{ github.ref }}
-      cancel-in-progress: true
-    runs-on: windows-latest
-    timeout-minutes: 15
-
-    defaults:
-      run:
-        shell: pwsh
-
-    env:
-      DOTNET_CLI_TELEMETRY_OPTOUT: "1"
-      DOTNET_NOLOGO: "true"
-      SOURCE_SHA: ${{ github.sha }}
-
-    steps:
-      - name: Check out source
-        uses: actions/checkout@v7
-        with:
-          fetch-depth: 0
-          submodules: recursive
-
-      - name: Set up .NET
-        uses: actions/setup-dotnet@v6
-        with:
-          dotnet-version: "10.0.x"
-
-      - name: Read package metadata
-        id: meta
-        run: |
-          $project = [xml](Get-Content -LiteralPath .\PaperTodo.csproj -Raw)
-          $versionNodes = $project.SelectNodes('/Project/PropertyGroup/Version')
-          if ($versionNodes.Count -ne 1) {
-            throw "PaperTodo.csproj must define exactly one <Version> element (found $($versionNodes.Count))."
-          }
-
-          $version = ([string]$versionNodes[0].InnerText).Trim()
-          if ([string]::IsNullOrWhiteSpace($version) -or $version -match '\s') {
-            throw "PaperTodo.csproj <Version> is missing or contains whitespace: '$version'."
-          }
-
-          $shortSha = $env:SOURCE_SHA.Substring(0, [Math]::Min(7, $env:SOURCE_SHA.Length))
-          $exeName = "PaperTodo-v$version-debug-test-$shortSha-win-x64-no-runtime.exe"
-          "exe_name=$exeName" >> $env:GITHUB_OUTPUT
-          "artifact_name=PaperTodo-debug-test-$shortSha" >> $env:GITHUB_OUTPUT
-
-      - name: Restore
-        run: dotnet restore .\PaperTodo.csproj -r win-x64
-
-      - name: Publish framework-dependent single-file Debug executable
-        env:
-          EXE_NAME: ${{ steps.meta.outputs.exe_name }}
-        run: |
-          $publishOut = Join-Path $env:RUNNER_TEMP "pr-test-debug-publish"
-          $artifactDir = Join-Path $env:GITHUB_WORKSPACE "test-debug"
-
-          Remove-Item -LiteralPath $publishOut, $artifactDir -Recurse -Force -ErrorAction SilentlyContinue
-          New-Item -ItemType Directory -Force -Path $publishOut, $artifactDir | Out-Null
-
-          dotnet publish .\PaperTodo.csproj `
-            -c Debug `
-            -r win-x64 `
-            --self-contained false `
-            --no-restore `
-            -o $publishOut `
-            /p:PublishSingleFile=true `
-            /p:PublishReadyToRun=false `
-            /p:IncludeNativeLibrariesForSelfExtract=true `
-            /p:EnableCompressionInSingleFile=false `
-            /p:PublishTrimmed=false `
-            /p:EmbedAllSources=false `
-            /p:EmbedUntrackedSources=false `
-            /p:DebugType=embedded `
-            /p:DebugSymbols=true
-
-          if ($LASTEXITCODE -ne 0) {
-            exit $LASTEXITCODE
-          }
-
-          $sourceExe = Join-Path $publishOut "PaperTodo.exe"
-          if (-not (Test-Path -LiteralPath $sourceExe -PathType Leaf)) {
-            throw "Published executable not found: $sourceExe"
-          }
-
-          Copy-Item -LiteralPath $sourceExe -Destination (Join-Path $artifactDir $env:EXE_NAME)
-          Get-ChildItem -LiteralPath $artifactDir -File | Format-Table Name, Length
-
-      - name: Upload Debug test executable
-        uses: actions/upload-artifact@v7
-        with:
-          name: ${{ steps.meta.outputs.artifact_name }}
-          path: test-debug/${{ steps.meta.outputs.exe_name }}
-          archive: false
-          if-no-files-found: error
-          retention-days: 1
+    uses: ./.github/workflows/debug.yml
+    with:
+      configuration: Debug
+      include_dotnet: false
+      build_label: test

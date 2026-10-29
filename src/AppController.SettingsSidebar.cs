@@ -103,6 +103,7 @@ public sealed partial class AppController
                 "capsule.master_compact" => "general.capsuleAppearance",
             "capsule.gap" or "window.resize_grip" or "note.image_reference_text" => "visual.options",
             "edge.non_topmost" => "general.edgeTopmost",
+            "capsule.todo_count" => "general.todoCount",
             "scripts.run_linked_on_click" => "general.todos",
             "note.markdown_mode" or "note.edit_animations" => "note.markdown",
             "note.compress_large_images" => "note.images",
@@ -111,7 +112,6 @@ public sealed partial class AppController
             {
                 "general" => "general.options",
                 "topbar" => "general.topbar",
-                "privacy" => "general.telemetry",
                 "appearance" => "visual.options",
                 "todo" => "general.todos",
                 "edge" => "general.edgeBrowsing",
