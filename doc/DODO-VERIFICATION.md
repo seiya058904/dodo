@@ -23,7 +23,7 @@ No pre-existing PaperTodo user data was used.
 | :--- | :--- |
 | Capsule counts | 57 assertions: actual editing/completion, preview mutation, undo/redo, delete/batch, persistence, zero/disabled count, plugin content, long/narrow titles and layout scale variants. |
 | Markdown export | Five groups: Unicode/Windows filenames, plain-text task escaping and completion, empty content, real LMDB image references, moved exports, repeated exports, missing images, read-only files and an NTFS deny-write directory. |
-| Persistence | 31 checks including existing fault injection and six full-backup/restore groups: images, settings, native plugin state, resources, malformed/path-traversal/incompatible archives, rollback, interrupted journals and late-write suppression. |
+| Persistence | 32 checks including safe native-error reporting, existing fault injection and six full-backup/restore groups: images, settings, native plugin state, resources, malformed/path-traversal/incompatible archives, rollback, interrupted journals and late-write suppression. |
 | Actual processes | `tools/dodo-smoke.py` starts an isolated hidden Dodo process and a real stdio MCP bridge, discovers 20 tools, writes/reads Chinese notes and to-dos, changes settings, exits and restarts. Image bytes/references and native plugin state survive. |
 | Restore-to-process chain | `--write-restored-integration-fixture` creates a complete ZIP, validates it, restores into a new directory and compares every restored file with the source and manifest SHA256. The unchanged restored profile then passes the actual-process MCP/exit/restart checks: three papers, one LMDB image, application settings, Clock and Focus Timer state. |
 | Coexistence | Isolated Dodo and PaperTodo run together, use separate mutexes/pipes/profiles, save and exit independently. |
@@ -39,6 +39,13 @@ run when a Dodo/PaperTodo GUI singleton is already active.
 One hidden-profile observation: ready in 1,281 ms, reopen in 656 ms, working set
 130.35 MiB, and 0 ms process CPU growth over a 3-second idle interval. This is a
 single local sample, not a performance guarantee or comparison benchmark.
+
+Cloud MSVC source builds exposed upstream LMDB warning C4172: its Windows
+`mdb_strerror` fallback returns a stack buffer. Dodo now calls that function only
+for the documented negative LMDB codes that return static strings; C errno,
+other Windows errors and unknown codes use safe managed messages. The original
+error code is retained. Boundary and system-error checks pass. The vendored
+source remains unchanged, so the compiler warning itself remains visible.
 
 ## Release acceptance still pending
 

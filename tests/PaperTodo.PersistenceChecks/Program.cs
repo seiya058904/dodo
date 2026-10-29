@@ -20,6 +20,7 @@ if (args is ["--write-restored-integration-fixture", var restoredFixtureDirector
 
 var checks = new (string Name, Action Run)[]
 {
+    ("lmdb-error-messages-avoid-expired-native-buffers", LmdbErrorChecks.SafeErrorMessages),
     ("full-backup-roundtrips-images-settings-and-plugin-state", BackupChecks.RoundTrip),
     ("full-backup-rejects-tampering-and-path-traversal", BackupChecks.RejectUnsafeArchives),
     ("full-restore-failure-rolls-back-original-data", BackupChecks.FailedRestoreRollsBack),

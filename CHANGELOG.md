@@ -8,6 +8,7 @@
 - Introduce Dodo branding, an independent portable profile and process/MCP/startup identities.
 - Remove upstream telemetry code and improve light/dark secondary-text contrast.
 - Protect deferred capsule prewarming when application startup fails.
+- Report native storage errors without reading an expired Windows error-message buffer.
 
 Based on PaperTodo 4.0.0-beta1. Papers, edge docking, editing, search, plugin and MCP capabilities are inherited; preview features retain their preview status.
 

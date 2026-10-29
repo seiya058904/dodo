@@ -1,4 +1,5 @@
 using System.IO;
+using System.ComponentModel;
 using System.Runtime.InteropServices;
 using Microsoft.Win32.SafeHandles;
 
@@ -115,7 +116,25 @@ internal static class LmdbNative
             return;
         }
 
-        var nativeMessage = Marshal.PtrToStringAnsi(mdb_strerror(result));
+        // Only LMDB's documented negative error range returns a static string table.
+        // Its Windows fallback returns a pointer to a stack buffer, which is already
+        // invalid when P/Invoke returns. Never marshal that fallback pointer.
+        var nativeMessage = result is >= -30799 and <= -30779
+            ? Marshal.PtrToStringAnsi(mdb_strerror(result))
+            : result switch
+            {
+                // Preserve the C errno meanings used by LMDB; these numbers overlap
+                // different Win32 errors and cannot all be passed to FormatMessage.
+                2 => "No such file or directory",
+                5 => "Input/output error",
+                12 => "Not enough memory",
+                13 => "Permission denied",
+                16 => "Device or resource busy",
+                22 => "Invalid argument",
+                28 => "No space left on device",
+                > 0 => new Win32Exception(result).Message,
+                _ => $"Unknown LMDB error {result}"
+            };
         throw new LmdbException(result, operation, nativeMessage);
     }
 }
