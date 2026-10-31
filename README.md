@@ -31,6 +31,9 @@
 
 ## 🪟 A desktop with room to think
 
+<p align="center"><img src="assets/dodo-preview.gif" width="720" alt="A ten-second looping preview of Dodo" /></p>
+
+
 <table>
   <tr>
     <td width="50%" valign="top"><img src="assets/dodo-desktop-todo.png" alt="Actual Dodo to-do paper on Windows, in the light theme" width="100%" /></td>
