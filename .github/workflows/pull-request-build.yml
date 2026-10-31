@@ -3,7 +3,15 @@ name: Dodo CI
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - 'README.md'
+      - 'README.zh.md'
+      - 'assets/dodo-preview.gif'
   pull_request:
+    paths-ignore:
+      - 'README.md'
+      - 'README.zh.md'
+      - 'assets/dodo-preview.gif'
   workflow_dispatch:
   workflow_call:
 
