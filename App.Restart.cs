@@ -19,6 +19,12 @@ public partial class App
         Exit += OnRestartAfterExit;
     }
 
+    internal void CancelRestartAfterExit()
+    {
+        _restartAfterExitRequested = false;
+        Exit -= OnRestartAfterExit;
+    }
+
     private void OnRestartAfterExit(object? sender, ExitEventArgs e)
     {
         Exit -= OnRestartAfterExit;

@@ -340,12 +340,14 @@
     <value>忽略本次</value>
   </data>
   <data name="ExitSaveFailureMessage" xml:space="preserve">
-    <value>Dodo 保存失败，即将退出。本次未保存的修改可能丢失。</value>
+    <value>最新修改尚未保存，退出可能丢失这些内容。你可以重试保存，或取消退出以保留当前编辑。
+
+{0}</value>
   </data>
   <data name="SaveFailureMessage" xml:space="preserve">
-    <value>保存数据失败：
-{0}
-请检查磁盘空间或权限。</value>
+    <value>保存失败，最新修改仍保留在当前窗口中。请检查磁盘空间或权限，然后重试。忽略本次后会继续自动重试，托盘中仍会显示未保存提醒。
+
+{0}</value>
   </data>
   <data name="SaveFailureTitle" xml:space="preserve">
     <value>保存失败</value>
@@ -1601,4 +1603,8 @@
   <data name="ExportMarkdownExtensionRequired" xml:space="preserve"><value>请选择扩展名为 .md 的文件。</value></data>
   <data name="DodoAttribution" xml:space="preserve"><value>基于 PaperTodo 的非商业衍生版本 · 原作 © 2026 snownico0722</value></data>
   <data name="ExportMarkdownImageFailure" xml:space="preserve"><value>无法导出笔记中的图片，原有 Markdown 文件保持不变。</value></data>
+  <data name="SaveFailureRetry" xml:space="preserve"><value>重试保存</value></data>
+  <data name="ExitSaveFailureCancel" xml:space="preserve"><value>取消退出</value></data>
+  <data name="ExitWithoutSaving" xml:space="preserve"><value>仍然退出</value></data>
+  <data name="SaveFailurePending" xml:space="preserve"><value>尚未保存 · 点击重试</value></data>
 </root>

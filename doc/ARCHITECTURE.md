@@ -92,7 +92,7 @@ PaperTodo.exe
 
 启动恢复以 Windows 当前报告的显示器拓扑为准。普通纸片如果坐标本身有效、但启动瞬间不属于任何已报告显示器，只做一次很短的一次性宽限：其他纸片先正常恢复，宽限后刷新一次显示器事实，再决定保留原坐标还是执行既有离屏救援；不恢复 150ms 轮询、5 秒等待或第二套拓扑状态机。Edge Host 和其余可见纸片按当前拓扑恢复。`AppController.StartupPrewarm` 先等待既有 Markdown 预热队列的首轮完成，再在 UI Dispatcher 的低优先级短批次补建折叠纸片的完整 Shell；提前展开仍由 `EnsureShellBuilt` 当场完成所选纸片，不另建备用路径。Shell 完成 Task 供插件 startupPaper 等待，不使用 Shell-ready 轮询；插件初始化本身仍在 idle 阶段，不同步阻挡 StartAsync 返回。DComp 与拖拽的一次性可选预热保留，但不排在启动主流程返回之前。
 
-正常退出先提交当前编辑并完成既有同步保存，再撤下可见 surface；撤下界面不改变持久化 IsVisible。WPF/插件 UI 仍由原 Dispatcher 释放，脚本进程的停止请求和限时等待在非 UI 任务中并发执行，与界面清理重叠，最终统一等待完成。退出不为即将销毁的图片缓存执行额外回收，也不重复提交已由 controller 保存的编辑内容。普通主实例退出在已停止 owned work 后调用 `Application.Shutdown` 并让 Dispatcher 完成 `App.OnExit`、单实例监听和应用资源清理，不再紧接着调用 `Environment.Exit` 截断 WPF 生命周期；崩溃边界和次实例转发退出保持独立。
+正常退出先提交当前编辑并完成既有同步保存，再撤下可见 surface；撤下界面不改变持久化 IsVisible。退出准备由 controller 防重入，但在保存成功或用户明确选择仍然退出前保留运行资源。保存失败可重试或取消退出；取消保留编辑器与撤销历史、恢复保存重试，并撤销本次附带的重启请求。系统结束会话与崩溃仍走各自独立边界，不等待普通退出提示。WPF/插件 UI 仍由原 Dispatcher 释放，脚本进程的停止请求和限时等待在非 UI 任务中并发执行，与界面清理重叠，最终统一等待完成。退出不为即将销毁的图片缓存执行额外回收，也不重复提交已由 controller 保存的编辑内容。普通主实例退出在已停止 owned work 后调用 `Application.Shutdown` 并让 Dispatcher 完成 `App.OnExit`、单实例监听和应用资源清理，不再紧接着调用 `Environment.Exit` 截断 WPF 生命周期；崩溃边界和次实例转发退出保持独立。
 
 ### 3.2 MCP
 
@@ -180,7 +180,7 @@ Edge 展开记忆保留原有窗口 DIP 字段，并用可选 `DeepCapsuleExpand
 
 `StateStore` 的方向是保守恢复与版本化写入：主文件失败后可从 backup 恢复；需要保护失败源时先保留证据再允许正常保存覆盖。保存阶段只修复序列化无效值，不重新解释业务不变量。
 
-全局 crash boundary 不执行普通“最后强行保存”。正常 durability 由常规保存、同步退出保存和 backup 提供。
+全局 crash boundary 不执行普通“最后强行保存”。正常 durability 由常规保存、同步退出保存和 backup 提供。保存错误提示与托盘未保存状态由 `AppController` 统一管理；只有当前版本及编辑内容成功落盘后才清除。忽略提示只适用于本次内容与错误，自动重试继续；新编辑或不同错误可再次提示，普通退出仍需单独处理保存失败。
 
 ### 4.3 图片资产
 

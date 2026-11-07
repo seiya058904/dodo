@@ -1,5 +1,9 @@
 # Dodo changelog
 
+### Unreleased
+
+- Retry failed saves, or cancel exit to keep unsaved edits when the final save fails. Exiting without saving requires an explicit choice. Dismissing a warning no longer silences all later save failures; automatic retries continue, and the tray menu keeps an unsaved reminder with a retry action.
+
 ### v0.1.0
 
 - Add optional unfinished to-do counts to capsules, updated after edits, completion, deletion and undo.

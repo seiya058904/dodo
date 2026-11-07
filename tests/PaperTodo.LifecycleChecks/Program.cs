@@ -11,7 +11,7 @@ internal static class Program
 {
     private const BindingFlags Private = BindingFlags.Instance | BindingFlags.Static | BindingFlags.NonPublic;
     private const string FixtureMarker = ".papertodo-lifecycle-fixture";
-    private static readonly string[] Cases = ["startup", "missing-monitor", "master-queue-transfer", "master-queue-cancel", "master-queue-drag-preparation", "master-queue-drop-handoff", "master-queue-membership", "master-queue-mutations", "master-queue-hide", "master-queue-disconnect", "master-queue-merge", "master-queue-merge-collapsed", "master-queue-material-handoff", "controller-hide-create-reentry", "controller-hide-show-reentry", "controller-zorder-create-reentry", "controller-close-delete-reentry", "todo-visibility", "real-exit", "early-expand", "edge-expand-foreground", "cancel-prewarm", "real-exit-scripts", "early-exit", "todo-context-menu", "todo-history"];
+    private static readonly string[] Cases = ["startup", "missing-monitor", "master-queue-transfer", "master-queue-cancel", "master-queue-drag-preparation", "master-queue-drop-handoff", "master-queue-membership", "master-queue-mutations", "master-queue-hide", "master-queue-disconnect", "master-queue-merge", "master-queue-merge-collapsed", "master-queue-material-handoff", "controller-hide-create-reentry", "controller-hide-show-reentry", "controller-zorder-create-reentry", "controller-close-delete-reentry", "todo-visibility", "real-exit", "early-expand", "edge-expand-foreground", "cancel-prewarm", "real-exit-scripts", "early-exit", "todo-context-menu", "todo-history", "save-failure-cancel", "save-failure-notifications", "real-exit-retry", "real-exit-discard", "save-failure-system-exit"];
 
     [STAThread]
     private static int Main(string[] args)
@@ -76,11 +76,11 @@ internal static class Program
             var text = output.GetAwaiter().GetResult();
             Console.Write(text); Console.Error.Write(error.GetAwaiter().GetResult());
             Require(child.ExitCode == 0, name + " failed");
-            if (name.StartsWith("real-exit") || name == "early-exit")
+            if (name.StartsWith("real-exit") || name is "early-exit" or "save-failure-system-exit")
             {
                 using var saved = JsonDocument.Parse(File.ReadAllText(Path.Combine(fixture, "dodo-data", "data.json")));
                 var paper = saved.RootElement.GetProperty("papers")[0];
-                Require(paper.GetProperty("content").GetString() == (name == "early-exit" ? "short note 0" : "pending editor text at exit"), "last editor change was lost");
+                Require(paper.GetProperty("content").GetString() == (name == "early-exit" ? "short note 0" : name is "real-exit-discard" or "save-failure-system-exit" ? "saved before failure" : "pending editor text at exit"), "last editor change was lost");
                 Require(paper.GetProperty("isVisible").GetBoolean(), "hiding for exit persisted as a user hide");
                 Require(text.Contains("WPF_EXIT_COMPLETED"), "normal WPF exit event was skipped");
                 foreach (var childLine in text.Split('\n').Where(value => value.StartsWith("SCRIPT_CHILD ")))
@@ -131,6 +131,12 @@ internal static class Program
 
     private static async Task RunFixture(string name)
     {
+        if (name.StartsWith("save-failure-") || name is "real-exit-retry" or "real-exit-discard")
+        {
+            await SaveFailureChecks.Run(name);
+            return;
+        }
+
         if (name == "todo-visibility")
         {
             await TodoVisibilityChecks.Run();

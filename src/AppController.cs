@@ -36,7 +36,7 @@ public sealed partial class AppController : IDisposable
 
     public static AppController Current { get; private set; } = null!;
 
-    private readonly StateStore _store = new();
+    private readonly StateStore _store;
     private readonly NoteImageStore _imageStore = new();
     private readonly Dictionary<string, PaperWindow> _windows = new();
     private readonly DispatcherTimer _saveTimer;
@@ -52,8 +52,6 @@ public sealed partial class AppController : IDisposable
     private readonly List<WeakReference<ContextMenu>> _liveTrayMenus = new();
     private AppLifecycleState _lifecycleState = AppLifecycleState.Running;
     private bool _suppressDirty;
-    private bool _hasShownSaveFailure;
-    private bool _ignoreSaveFailures;
     private int _trayRefreshSuppressionDepth;
     private bool _isRestoringStartupPapers;
     private bool _isRestoringRuntimePaperBatch;
@@ -142,8 +140,11 @@ public sealed partial class AppController : IDisposable
             : IntPtr.Zero;
     }
 
-    public AppController()
+    public AppController() : this(new StateStore()) { }
+
+    internal AppController(StateStore store)
     {
+        _store = store;
         Current = this;
         State = _store.Load();
         State.PaperSkin = PaperSkins.Resolve(State);
@@ -3299,29 +3300,31 @@ public sealed partial class AppController : IDisposable
 
     public void SaveNow(bool sync = false)
     {
+        if (IsExiting || _exitRequested) return;
         _ = TrySaveNow(sync);
     }
 
     private bool TrySaveNow(bool sync)
     {
         long? attemptedVersion = null;
+        string? json = null;
         try
         {
             _saveTimer.Stop();
             _forceSaveTimer.Stop();
             _hasPendingDirty = false;
-            CommitPendingMarkdownContentsForSave();
             var version = Interlocked.Increment(ref _saveVersion);
             NotifyPluginEventMutationStampChanged();
             attemptedVersion = version;
+            CommitPendingMarkdownContentsForSave();
             var stateRevision = Interlocked.Read(ref _stateRevision);
-            var json = _store.SerializeState(State);
+            json = _store.SerializeState(State);
             if (sync)
             {
                 _store.SaveJsonSync(json, version);
-                if (!IsExiting) TryReleaseUnreferencedImageCache();
+                if (!IsExiting && !_exitRequested) TryReleaseUnreferencedImageCache();
                 TryFlushPendingPluginPaperStateDeletes();
-                _hasShownSaveFailure = false;
+                RecordSaveSuccess(version, stateRevision);
             }
             else
             {
@@ -3332,20 +3335,21 @@ public sealed partial class AppController : IDisposable
                         await _store.SaveJsonAsync(json, version);
                         Application.Current?.Dispatcher?.BeginInvoke(new Action(() =>
                         {
-                            if (version == Interlocked.Read(ref _saveVersion) &&
+                            if (!IsExiting && !_exitRequested &&
+                                version == Interlocked.Read(ref _saveVersion) &&
                                 stateRevision == Interlocked.Read(ref _stateRevision))
                             {
                                 TryReleaseUnreferencedImageCache();
                                 TryFlushPendingPluginPaperStateDeletes();
                             }
-                            _hasShownSaveFailure = false;
+                            RecordSaveSuccess(version, stateRevision);
                         }));
                     }
                     catch (Exception ex)
                     {
                         Application.Current?.Dispatcher?.BeginInvoke(new Action(() =>
                         {
-                            HandleSaveFailure(ex, version);
+                            HandleSaveFailure(ex, version, json);
                         }));
                     }
                 });
@@ -3355,7 +3359,7 @@ public sealed partial class AppController : IDisposable
         }
         catch (Exception ex)
         {
-            HandleSaveFailure(ex, attemptedVersion);
+            HandleSaveFailure(ex, attemptedVersion, json);
             return false;
         }
     }
@@ -3446,78 +3450,6 @@ public sealed partial class AppController : IDisposable
         style.Setters.Add(new Setter(Control.TemplateProperty, template));
 
         return style;
-    }
-
-    private void HandleSaveFailure(Exception ex, long? failedVersion = null)
-    {
-        if (IsExiting)
-        {
-            return;
-        }
-
-        // If nothing newer has superseded this attempt, keep trying after the force interval
-        // so a transient write failure does not drop the dirty state permanently.
-        ArmSaveRetryIfNeeded(failedVersion);
-
-        if (!_hasShownSaveFailure && !_ignoreSaveFailures)
-        {
-            _hasShownSaveFailure = true;
-            Application.Current.Dispatcher.BeginInvoke(() =>
-            {
-                if (IsExiting)
-                {
-                    return;
-                }
-
-                var dlg = new Window
-                {
-                    Title = Strings.Get("SaveFailureTitle"),
-                    Width = 360,
-                    Height = 180,
-                    WindowStyle = WindowStyle.None,
-                    WindowStartupLocation = WindowStartupLocation.CenterScreen,
-                    AllowsTransparency = true,
-                    Background = Brushes.Transparent,
-                    Topmost = true
-                };
-                AppTypography.ApplyTextRendering(dlg);
-                var border = new Border
-                {
-                    Background = Theme.PaperBrush,
-                    BorderBrush = Theme.PaperBorderBrush,
-                    BorderThickness = new Thickness(1),
-                    CornerRadius = new CornerRadius(10),
-                    Padding = new Thickness(20)
-                };
-                var grid = new Grid();
-                grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
-                grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
-                var txt = new TextBlock
-                {
-                    Text = Strings.Format("SaveFailureMessage", ex.Message),
-                    Foreground = Theme.TextBrush,
-                    TextWrapping = TextWrapping.Wrap,
-                    FontSize = AppTypography.Scale(14)
-                };
-                grid.Children.Add(txt);
-                var btnPanel = new StackPanel { Orientation = Orientation.Horizontal, HorizontalAlignment = HorizontalAlignment.Right };
-                Grid.SetRow(btnPanel, 1);
-                var btnOk = new Button { Content = Strings.Get("CommonOk"), Width = 80, Margin = new Thickness(0, 0, 10, 0), Style = BuildDialogButtonStyle() };
-                btnOk.Click += (s, e) =>
-                {
-                    _hasShownSaveFailure = false;
-                    dlg.Close();
-                };
-                var btnIgnore = new Button { Content = Strings.Get("SaveFailureIgnore"), Width = 110, Style = BuildDialogButtonStyle() };
-                btnIgnore.Click += (s, e) => { _ignoreSaveFailures = true; dlg.Close(); };
-                btnPanel.Children.Add(btnOk);
-                btnPanel.Children.Add(btnIgnore);
-                grid.Children.Add(btnPanel);
-                border.Child = grid;
-                dlg.Content = border;
-                dlg.ShowDialog();
-            });
-        }
     }
 
     private void ArmSaveRetryIfNeeded(long? failedVersion)
@@ -4090,42 +4022,58 @@ public sealed partial class AppController : IDisposable
 
     public void Exit()
     {
-        if (IsExiting)
-        {
-            return;
-        }
+        if (IsExiting || _exitRequested) return;
 
-        CommitSettingsExternalMarkdownEditor(saveImmediately: false);
-        foreach (var window in _windows.Values.ToList())
+        // Keep runtime resources alive until saving succeeds or the user explicitly discards.
+        // The modal prompt pumps the Dispatcher: guard reentry without entering teardown.
+        _exitRequested = true;
+        try
         {
-            window.CommitPendingEditsForSave();
-        }
-
-        _lifecycleState = AppLifecycleState.Exiting;
-        _saveTimer.Stop();
-        _forceSaveTimer.Stop();
-        StopFullscreenAvoidanceRuntime(restoreTopmost: false);
-        _displayMetricsRefreshTimer.Stop();
-        StopTodoReminderTimer();
-
-        if (!TrySaveNow(sync: true))
-        {
-            TryExitCleanup(() =>
+            _saveFailureDialog?.Close();
+            while (!IsExiting)
             {
-                MessageBox.Show(
-                    Strings.Get("ExitSaveFailureMessage"),
-                    Strings.Get("SaveFailureTitle"),
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
-            });
-        }
+                if (TrySaveBeforeExit()) break;
+                if (IsExiting) return;
+                var choice = ShowSaveFailureDialog(exiting: true);
+                if (IsExiting) return; // Windows may end the session while the prompt is open.
+                if (choice == SaveFailureChoice.Retry) continue;
+                if (choice != SaveFailureChoice.ExitWithoutSaving) return;
+                break;
+            }
+            if (IsExiting) return;
 
-        DisposeRuntimeResources();
-        _lifecycleState = AppLifecycleState.Disposed;
-        // Let the owning Dispatcher finish WPF shutdown and App.OnExit (single-instance
-        // listener and Application resources). Environment.Exit here preempts
-        // that queued work and was slower in the process-exit A/B; owned work is already stopped.
-        Application.Current.Shutdown();
+            _lifecycleState = AppLifecycleState.Exiting;
+            DisposeRuntimeResources();
+            _lifecycleState = AppLifecycleState.Disposed;
+            // Preserve the normal WPF exit event and single-instance cleanup.
+            Application.Current.Shutdown();
+        }
+        finally
+        {
+            _exitRequested = false;
+            if (!IsExiting)
+            {
+                if (Application.Current is App app) app.CancelRestartAfterExit();
+                // A failed save stopped the debounce timers. Resume durability without
+                // rebuilding windows, resetting editor history or restarting other runtimes.
+                ArmSaveRetryIfNeeded(null);
+            }
+        }
+    }
+
+    private bool TrySaveBeforeExit()
+    {
+        try
+        {
+            CommitSettingsExternalMarkdownEditor(saveImmediately: false);
+            foreach (var window in _windows.Values.ToList()) window.CommitPendingEditsForSave();
+            return TrySaveNow(sync: true);
+        }
+        catch (Exception ex)
+        {
+            HandleSaveFailure(ex);
+            return false;
+        }
     }
 
     private static void TryExitCleanup(Action cleanup)
@@ -4191,6 +4139,7 @@ public sealed partial class AppController : IDisposable
 
     private void DisposeRuntimeResources()
     {
+        TryExitCleanup(() => _saveFailureDialog?.Close());
         TryExitCleanup(CancelMasterCapsuleQueueTransfers);
         _pluginStartupPaperGeneration++;
         StopStateBackupPolicy();

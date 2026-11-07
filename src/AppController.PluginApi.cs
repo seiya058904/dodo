@@ -119,19 +119,20 @@ public sealed partial class AppController
         MarkDirty();
         var committedStateRevision = Interlocked.Read(ref _stateRevision);
         long? attemptedVersion = null;
+        string? json = null;
         try
         {
             var version = Interlocked.Increment(ref _saveVersion);
             NotifyPluginEventMutationStampChanged();
             attemptedVersion = version;
-            var json = _store.SerializeState(State);
+            json = _store.SerializeState(State);
             _store.SaveJsonSync(json, version);
-            if (!hasPendingMarkdown && !IsExiting)
+            if (!hasPendingMarkdown && !IsExiting && !_exitRequested)
             {
                 TryReleaseUnreferencedImageCache();
             }
             TryFlushPendingPluginPaperStateDeletes();
-            _hasShownSaveFailure = false;
+            RecordSaveSuccess(version, committedStateRevision, hasPendingMarkdown);
 
             // Post-save cleanup can synchronously invoke Runtime Paper callbacks. If one of those
             // callbacks mutates application state, its new dirty state belongs to a later save and
@@ -147,7 +148,7 @@ public sealed partial class AppController
         }
         catch (Exception ex)
         {
-            HandleSaveFailure(ex, attemptedVersion);
+            HandleSaveFailure(ex, attemptedVersion, json);
             return false;
         }
     }
@@ -222,7 +223,7 @@ public sealed partial class AppController
 
     internal void TryFlushPendingPluginPaperStateDeletes()
     {
-        if (IsExiting)
+        if (IsExiting || _exitRequested)
         {
             return;
         }

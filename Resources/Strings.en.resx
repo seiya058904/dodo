@@ -329,10 +329,14 @@ Error: {0}</value>
     <value>Ignore this time</value>
   </data>
   <data name="ExitSaveFailureMessage" xml:space="preserve">
-    <value>Dodo failed to save and will now exit. Unsaved changes may be lost.</value>
+    <value>Your latest changes have not been saved and may be lost if you exit. Retry saving, or cancel exit to keep editing.
+
+{0}</value>
   </data>
   <data name="SaveFailureMessage" xml:space="preserve">
-    <value>Failed to save data:&#x0A;{0}&#x0A;Please check disk space or permissions.</value>
+    <value>Saving failed. Your latest changes remain in the open windows. Check disk space or permissions, then retry. Ignoring this warning keeps automatic retries running and leaves an unsaved reminder in the tray menu.
+
+{0}</value>
   </data>
   <data name="SaveFailureTitle" xml:space="preserve">
     <value>Save Failed</value>
@@ -1552,4 +1556,8 @@ When off, open at the docked edge or remembered position.</value>
   <data name="ExportMarkdownExtensionRequired" xml:space="preserve"><value>Choose a file with the .md extension.</value></data>
   <data name="DodoAttribution" xml:space="preserve"><value>Noncommercial derivative of PaperTodo · Original © 2026 snownico0722</value></data>
   <data name="ExportMarkdownImageFailure" xml:space="preserve"><value>Could not export a note image. The existing Markdown file was left unchanged.</value></data>
+  <data name="SaveFailureRetry" xml:space="preserve"><value>Retry saving</value></data>
+  <data name="ExitSaveFailureCancel" xml:space="preserve"><value>Cancel exit</value></data>
+  <data name="ExitWithoutSaving" xml:space="preserve"><value>Exit anyway</value></data>
+  <data name="SaveFailurePending" xml:space="preserve"><value>Not saved · Click to retry</value></data>
 </root>

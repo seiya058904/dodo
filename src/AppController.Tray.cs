@@ -528,6 +528,13 @@ public sealed partial class AppController
         menu.Items.Add(TrayTitleBar(menu));
         menu.Items.Add(TraySeparator());
 
+        if (_lastSaveFailure != null)
+        {
+            menu.Items.Add(TrayItem(menu, Strings.Get("SaveFailurePending"),
+                RetryFailedSave));
+            menu.Items.Add(TraySeparator());
+        }
+
         menu.Items.Add(TrayPaperToolbar(menu));
 
         if (State.Papers.Count > 0)
