@@ -57,20 +57,27 @@ public sealed class NoteImageStore : IDisposable
         }
     }
 
-    internal static int ValidateBackupSnapshot(string path, IEnumerable<AppState> states)
+    internal static int ValidateBackupSnapshot(string path, IEnumerable<AppState> states, CancellationToken cancellationToken = default)
     {
         using var store = new NoteImageStore(path);
         store.Load(readOnly: true);
         if (store._writeDisabled || store._corruptedImageIds.Count > 0)
             throw new InvalidDataException("The backup image database is damaged or incompatible.");
         foreach (var asset in store._images.Values)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
             if (!store.TryGetEncodedImageBytes(asset.Id, out _, out _))
                 throw new InvalidDataException($"The backup image {asset.Id} is damaged.");
+        }
         foreach (var state in states)
             foreach (var paper in state.Papers)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
                 foreach (var id in MarkdownImageReferences.CollectImageIds(paper.Content))
                     if (!store._images.ContainsKey(id))
                         throw new InvalidDataException($"The backup is missing image {id}.");
+            }
+        cancellationToken.ThrowIfCancellationRequested();
         return store._images.Count;
     }
 

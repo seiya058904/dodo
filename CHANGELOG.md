@@ -2,6 +2,7 @@
 
 ### Unreleased
 
+- Full backup and restore show progress stages and remain responsive during validation and archive processing. Cancel before replacement, and open the destination folder after a backup completes.
 - Retry failed saves, or cancel exit to keep unsaved edits when the final save fails. Exiting without saving requires an explicit choice. Dismissing a warning no longer silences all later save failures; automatic retries continue, and the tray menu keeps an unsaved reminder with a retry action.
 
 ### v0.1.0

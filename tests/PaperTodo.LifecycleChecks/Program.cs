@@ -11,7 +11,7 @@ internal static class Program
 {
     private const BindingFlags Private = BindingFlags.Instance | BindingFlags.Static | BindingFlags.NonPublic;
     private const string FixtureMarker = ".papertodo-lifecycle-fixture";
-    private static readonly string[] Cases = ["startup", "missing-monitor", "master-queue-transfer", "master-queue-cancel", "master-queue-drag-preparation", "master-queue-drop-handoff", "master-queue-membership", "master-queue-mutations", "master-queue-hide", "master-queue-disconnect", "master-queue-merge", "master-queue-merge-collapsed", "master-queue-material-handoff", "controller-hide-create-reentry", "controller-hide-show-reentry", "controller-zorder-create-reentry", "controller-close-delete-reentry", "todo-visibility", "real-exit", "early-expand", "edge-expand-foreground", "cancel-prewarm", "real-exit-scripts", "early-exit", "todo-context-menu", "todo-history", "save-failure-cancel", "save-failure-notifications", "real-exit-retry", "real-exit-discard", "save-failure-system-exit"];
+    private static readonly string[] Cases = ["startup", "missing-monitor", "master-queue-transfer", "master-queue-cancel", "master-queue-drag-preparation", "master-queue-drop-handoff", "master-queue-membership", "master-queue-mutations", "master-queue-hide", "master-queue-disconnect", "master-queue-merge", "master-queue-merge-collapsed", "master-queue-material-handoff", "controller-hide-create-reentry", "controller-hide-show-reentry", "controller-zorder-create-reentry", "controller-close-delete-reentry", "todo-visibility", "real-exit", "early-expand", "edge-expand-foreground", "cancel-prewarm", "real-exit-scripts", "early-exit", "todo-context-menu", "todo-history", "backup-responsiveness", "save-failure-cancel", "save-failure-notifications", "real-exit-retry", "real-exit-discard", "save-failure-system-exit"];
 
     [STAThread]
     private static int Main(string[] args)
@@ -131,6 +131,12 @@ internal static class Program
 
     private static async Task RunFixture(string name)
     {
+        if (name == "backup-responsiveness")
+        {
+            await BackupProgressChecks.Run();
+            return;
+        }
+
         if (name.StartsWith("save-failure-") || name is "real-exit-retry" or "real-exit-discard")
         {
             await SaveFailureChecks.Run(name);

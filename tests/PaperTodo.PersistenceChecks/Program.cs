@@ -22,6 +22,8 @@ var checks = new (string Name, Action Run)[]
 {
     ("lmdb-error-messages-avoid-expired-native-buffers", LmdbErrorChecks.SafeErrorMessages),
     ("full-backup-roundtrips-images-settings-and-plugin-state", BackupChecks.RoundTrip),
+    ("backup-snapshot-is-isolated-from-later-edits", BackupChecks.SnapshotStaysConsistent),
+    ("backup-and-restore-preparation-cancel-safely", BackupChecks.CancellationKeepsOriginals),
     ("full-backup-rejects-tampering-and-path-traversal", BackupChecks.RejectUnsafeArchives),
     ("full-restore-failure-rolls-back-original-data", BackupChecks.FailedRestoreRollsBack),
     ("full-restore-interrupted-journal-rolls-back-before-reopen", BackupChecks.InterruptedRestoreRollsBack),

@@ -1,4 +1,6 @@
+using System.Diagnostics;
 using System.IO;
+using System.Windows.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Win32;
@@ -7,6 +9,8 @@ namespace PaperTodo;
 
 public sealed partial class AppController
 {
+    private CancellationTokenSource? _backupCancellation;
+
     private UIElement BuildBackupSettingsSection()
     {
         var panel = new StackPanel { Margin = new Thickness(0, 16, 0, 0) };
@@ -50,33 +54,78 @@ public sealed partial class AppController
         return TrySaveNow(sync: true);
     }
 
-    private void CreateFullBackup()
+    private async void CreateFullBackup()
     {
+        if (_backupCancellation != null || IsExiting || _exitRequested) return;
         var dialog = new SaveFileDialog
         {
             Filter = BackupFileFilter(), DefaultExt = ".zip", AddExtension = true,
             FileName = "Dodo-" + DateTime.Now.ToString("yyyyMMdd-HHmmss") + ".zip"
         };
         if (dialog.ShowDialog(_settingsWindow) != true) return;
+        using var cancellation = new CancellationTokenSource();
+        _backupCancellation = cancellation;
+        BackupProgressWindow? progress = null;
         try
         {
+            progress = CreateBackupProgress(cancellation);
+            progress.SetStage(BackupStageText(BackupStage.Snapshot));
+            progress.Show();
+            await Dispatcher.CurrentDispatcher.InvokeAsync(() => { }, DispatcherPriority.ContextIdle);
+            cancellation.Token.ThrowIfCancellationRequested();
+            if (IsExiting || _exitRequested) return;
+            var service = new BackupService(AppPaths.DataDirectory);
+            service.ValidateArchiveDestination(dialog.FileName);
             if (!FlushForFullBackup()) return;
-            new BackupService(AppPaths.DataDirectory).Create(dialog.FileName, _store, _imageStore, _paperBodyPlugins.DataStore);
-            MessageBox.Show(_settingsWindow, BackupText("备份已保存：", "Backup saved:", "保存しました：", "백업 저장 완료:") + "\n" + dialog.FileName,
-                "Dodo", MessageBoxButton.OK, MessageBoxImage.Information);
+            using var snapshot = service.Capture(_store, _imageStore, _paperBodyPlugins.DataStore);
+            cancellation.Token.ThrowIfCancellationRequested();
+            var reporter = new Progress<BackupStage>(stage => progress.SetStage(BackupStageText(stage)));
+            await Task.Run(() => service.CreateArchive(snapshot, dialog.FileName, cancellation.Token, reporter));
+            progress.Finish();
+            if (IsExiting || _exitRequested) return;
+            var open = MessageBox.Show(_settingsWindow,
+                BackupText("备份已保存。是否打开所在文件夹？", "Backup saved. Open its folder?", "保存しました。保存先フォルダーを開きますか？", "백업을 저장했습니다. 폴더를 열까요?") + "\n" + dialog.FileName,
+                "Dodo", MessageBoxButton.YesNo, MessageBoxImage.Information, MessageBoxResult.No);
+            if (open == MessageBoxResult.Yes)
+            {
+                try { Process.Start(new ProcessStartInfo(Path.GetDirectoryName(dialog.FileName)!) { UseShellExecute = true }); }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(_settingsWindow,
+                        BackupText("备份已保存，但无法打开文件夹。", "The backup was saved, but its folder could not be opened.", "保存しましたが、フォルダーを開けませんでした。", "백업은 저장했지만 폴더를 열 수 없습니다.") + "\n\n" + ex.Message,
+                        "Dodo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+            }
         }
-        catch (Exception ex) { ShowBackupFailure(ex); }
+        catch (OperationCanceledException) when (cancellation.IsCancellationRequested) { }
+        catch (Exception ex) { if (!IsExiting && !_exitRequested) ShowBackupFailure(ex); }
+        finally
+        {
+            progress?.Finish();
+            _backupCancellation = null;
+        }
     }
 
-    private void RestoreFullBackup()
+    private async void RestoreFullBackup()
     {
+        if (_backupCancellation != null || IsExiting || _exitRequested) return;
         var dialog = new OpenFileDialog { Filter = BackupFileFilter(), CheckFileExists = true };
         if (dialog.ShowDialog(_settingsWindow) != true) return;
+        using var cancellation = new CancellationTokenSource();
+        _backupCancellation = cancellation;
+        BackupProgressWindow? progress = null;
         var stopped = false;
         try
         {
+            progress = CreateBackupProgress(cancellation);
             var service = new BackupService(AppPaths.DataDirectory);
-            using var prepared = service.Prepare(dialog.FileName);
+            progress.SetStage(BackupStageText(BackupStage.Extract));
+            progress.Show();
+            var reporter = new Progress<BackupStage>(stage => progress.SetStage(BackupStageText(stage)));
+            using var prepared = await Task.Run(() => service.Prepare(dialog.FileName, cancellation.Token, reporter));
+            cancellation.Token.ThrowIfCancellationRequested();
+            progress.Finish();
+            if (IsExiting || _exitRequested) return;
             var manifest = prepared.Manifest;
             var summary = BackupText(
                 "已验证备份。恢复将替换当前纸片、图片、设置和插件状态，不会合并。应用随后退出，请重新打开 Dodo。原数据将保留在数据目录的 restore-history。",
@@ -93,7 +142,7 @@ public sealed partial class AppController
             if (MessageBox.Show(_settingsWindow, summary,
                 BackupText("确认替换并退出", "Replace data and exit?", "置換して終了しますか", "데이터를 교체하고 종료할까요?"),
                 MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No) != MessageBoxResult.Yes) return;
-            if (!FlushForFullBackup()) return;
+            if (IsExiting || _exitRequested || !FlushForFullBackup()) return;
             _paperBodyPlugins.DataStore.WithBackupSnapshot(() => { });
             _lifecycleState = AppLifecycleState.Exiting;
             stopped = true;
@@ -105,14 +154,35 @@ public sealed partial class AppController
             MessageBox.Show(BackupText("恢复完成。请重新打开 Dodo。原数据：", "Restore complete. Reopen Dodo. Original data:", "復元完了。Dodo を開き直してください。元データ：", "복원이 완료되었습니다. Dodo를 다시 여세요. 원본 데이터:") + "\n" + originalPath,
                 "Dodo", MessageBoxButton.OK, MessageBoxImage.Information);
         }
+        catch (OperationCanceledException) when (cancellation.IsCancellationRequested && !stopped) { }
         catch (Exception ex)
         {
             if (stopped)
                 MessageBox.Show(BackupText("恢复失败。原数据副本保留在 restore-history；重启时会先完成必要的回滚。", "Restore failed. Originals remain in restore-history; startup completes any required rollback.", "復元に失敗しました。元データは restore-history に残り、次回起動時に必要なロールバックを完了します。", "복원 실패. 원본은 restore-history에 보존되며 다음 시작 시 필요한 롤백을 완료합니다.") + "\n\n" + ex.Message, "Dodo", MessageBoxButton.OK, MessageBoxImage.Error);
-            else ShowBackupFailure(ex);
+            else if (!IsExiting && !_exitRequested) ShowBackupFailure(ex);
         }
-        finally { if (stopped) Application.Current.Shutdown(); }
+        finally
+        {
+            progress?.Finish();
+            _backupCancellation = null;
+            if (stopped) Application.Current.Shutdown();
+        }
     }
+
+    private BackupProgressWindow CreateBackupProgress(CancellationTokenSource cancellation) => new(
+        _settingsWindow, cancellation,
+        BackupText("备份与恢复", "Backup and restore", "バックアップと復元", "백업 및 복원"),
+        BackupText("取消", "Cancel", "キャンセル", "취소"),
+        BackupText("正在取消…", "Cancelling…", "キャンセル中…", "취소 중…"));
+
+    private string BackupStageText(BackupStage stage) => stage switch
+    {
+        BackupStage.Snapshot => BackupText("正在准备一致快照…", "Preparing snapshot…", "スナップショットを準備中…", "스냅샷 준비 중…"),
+        BackupStage.Extract => BackupText("正在解压备份…", "Extracting backup…", "バックアップを展開中…", "백업 압축 해제 중…"),
+        BackupStage.Validate => BackupText("正在校验数据…", "Verifying data…", "データを検証中…", "데이터 확인 중…"),
+        BackupStage.Archive => BackupText("正在生成备份…", "Creating backup…", "バックアップを作成中…", "백업 생성 중…"),
+        _ => "…"
+    };
 
     private string BackupFileFilter() => BackupText("Dodo 备份", "Dodo backup", "Dodo バックアップ", "Dodo 백업") + " (*.zip)|*.zip";
 

@@ -4139,6 +4139,7 @@ public sealed partial class AppController : IDisposable
 
     private void DisposeRuntimeResources()
     {
+        TryExitCleanup(() => _backupCancellation?.Cancel());
         TryExitCleanup(() => _saveFailureDialog?.Close());
         TryExitCleanup(CancelMasterCapsuleQueueTransfers);
         _pluginStartupPaperGeneration++;

@@ -6,6 +6,8 @@ using System.Text.RegularExpressions;
 
 namespace PaperTodo;
 
+internal enum BackupStage { Snapshot, Extract, Validate, Archive }
+
 /// <summary>Portable, versioned snapshots of host-owned data. Never copies plugin code or
 /// plugin-owned databases. All live capture is coordinated through the existing store owners.</summary>
 internal sealed class BackupService
@@ -68,18 +70,22 @@ internal sealed class BackupService
         public List<FileRecord> Originals { get; set; } = [];
     }
 
-    internal void Create(string archivePath, StateStore stateStore, NoteImageStore images,
-        PaperBodyPluginDataStore plugins)
+    internal sealed class CapturedBackup : IDisposable
+    {
+        internal CapturedBackup(string directory) => Directory = directory;
+        internal string Directory { get; }
+        public void Dispose() => DeleteOwnedStaging(Directory);
+    }
+
+    // Called on the UI thread after pending edits are committed. Store gates keep the
+    // copied files mutually consistent; no live store is accessed after this returns.
+    internal CapturedBackup Capture(StateStore stateStore, NoteImageStore images, PaperBodyPluginDataStore plugins)
     {
         if (!string.Equals(Path.GetDirectoryName(stateStore.FilePath), _root, StringComparison.OrdinalIgnoreCase) ||
             !string.Equals(Path.GetDirectoryName(images.FilePath), _root, StringComparison.OrdinalIgnoreCase) ||
             !string.Equals(plugins.DataRoot, Path.Combine(_root, "plugins", "data"), StringComparison.OrdinalIgnoreCase))
             throw new InvalidOperationException("Backup stores must share the Dodo data directory.");
-        archivePath = Path.GetFullPath(archivePath);
-        if (archivePath.StartsWith(_root + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase))
-            throw new InvalidOperationException("Save the ZIP outside the Dodo data directory.");
         var stage = CreateStaging();
-        var temporaryZip = archivePath + "." + Guid.NewGuid().ToString("N") + ".tmp";
         try
         {
             stateStore.WithBackupSnapshot(() => plugins.WithBackupSnapshot(() =>
@@ -91,40 +97,79 @@ internal sealed class BackupService
                     foreach (var relative in files)
                         CopyDurably(Resolve(_root, relative), Resolve(stage, relative));
                 })));
-            var (state, _) = ValidatePayload(stage);
+            return new CapturedBackup(stage);
+        }
+        catch { DeleteOwnedStaging(stage); throw; }
+    }
+
+    internal void Create(string archivePath, StateStore stateStore, NoteImageStore images,
+        PaperBodyPluginDataStore plugins)
+    {
+        ValidateArchiveDestination(archivePath);
+        using var snapshot = Capture(stateStore, images, plugins);
+        CreateArchive(snapshot, archivePath);
+    }
+
+    internal string ValidateArchiveDestination(string archivePath)
+    {
+        archivePath = Path.GetFullPath(archivePath);
+        if (archivePath.StartsWith(_root + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase))
+            throw new InvalidOperationException("Save the ZIP outside the Dodo data directory.");
+        return archivePath;
+    }
+
+    internal void CreateArchive(CapturedBackup snapshot, string archivePath,
+        CancellationToken cancellationToken = default, IProgress<BackupStage>? progress = null)
+    {
+        archivePath = ValidateArchiveDestination(archivePath);
+        var stage = snapshot.Directory;
+        var temporaryZip = archivePath + "." + Guid.NewGuid().ToString("N") + ".tmp";
+        try
+        {
+            progress?.Report(BackupStage.Validate);
+            cancellationToken.ThrowIfCancellationRequested();
+            var (state, _) = ValidatePayload(stage, cancellationToken);
             var manifest = new Manifest
             {
-                Files = EnumerateManagedFiles(stage).Select(p => Describe(stage, p)).ToList(),
+                Files = EnumerateManagedFiles(stage).Select(p => Describe(stage, p, cancellationToken)).ToList(),
                 RequiredProviders = RequiredProviders(state, stage)
             };
             var manifestBytes = JsonSerializer.SerializeToUtf8Bytes(manifest, JsonOptions);
             if (manifest.Files.Sum(f => f.Length) + manifestBytes.Length > MaximumArchiveBytes || manifestBytes.Length > 4 * 1024 * 1024)
                 throw new InvalidDataException("The backup exceeds the supported archive size.");
             File.WriteAllBytes(Path.Combine(stage, ManifestName), manifestBytes);
+            progress?.Report(BackupStage.Archive);
             using (var stream = new FileStream(temporaryZip, FileMode.CreateNew, FileAccess.ReadWrite, FileShare.None))
             {
                 using (var zip = new ZipArchive(stream, ZipArchiveMode.Create, leaveOpen: true))
                 {
                     foreach (var item in manifest.Files)
-                        zip.CreateEntryFromFile(Resolve(stage, item.Path), item.Path, CompressionLevel.Optimal);
-                    zip.CreateEntryFromFile(Path.Combine(stage, ManifestName), ManifestName);
+                    {
+                        cancellationToken.ThrowIfCancellationRequested();
+                        using var input = File.OpenRead(Resolve(stage, item.Path));
+                        using var output = zip.CreateEntry(item.Path, CompressionLevel.Optimal).Open();
+                        CopyBounded(input, output, item.Length, cancellationToken);
+                    }
+                    cancellationToken.ThrowIfCancellationRequested();
+                    using var manifestStream = zip.CreateEntry(ManifestName).Open();
+                    manifestStream.Write(manifestBytes);
                 }
                 stream.Flush(flushToDisk: true);
             }
+            cancellationToken.ThrowIfCancellationRequested();
             File.Move(temporaryZip, archivePath, overwrite: true);
         }
-        finally
-        {
-            if (File.Exists(temporaryZip)) File.Delete(temporaryZip);
-            DeleteOwnedStaging(stage);
-        }
+        finally { if (File.Exists(temporaryZip)) File.Delete(temporaryZip); }
     }
 
-    internal PreparedBackup Prepare(string archivePath)
+    internal PreparedBackup Prepare(string archivePath, CancellationToken cancellationToken = default,
+        IProgress<BackupStage>? progress = null)
     {
         var stage = CreateStaging();
         try
         {
+            progress?.Report(BackupStage.Extract);
+            cancellationToken.ThrowIfCancellationRequested();
             using var zip = ZipFile.OpenRead(archivePath);
             if (zip.Entries.Count is < 2 or > 10000)
                 throw new InvalidDataException("Invalid backup entry count.");
@@ -132,6 +177,7 @@ internal sealed class BackupService
             long total = 0;
             foreach (var entry in zip.Entries)
             {
+                cancellationToken.ThrowIfCancellationRequested();
                 if (!names.Add(entry.FullName) || (entry.FullName != ManifestName && !IsManagedPath(entry.FullName)) ||
                     ((entry.ExternalAttributes >> 16) & 0xf000) == 0xa000)
                     throw new InvalidDataException($"Unsafe or unsupported backup path: {entry.FullName}");
@@ -144,19 +190,22 @@ internal sealed class BackupService
                 Directory.CreateDirectory(Path.GetDirectoryName(target)!);
                 using var input = entry.Open();
                 using var output = new FileStream(target, FileMode.CreateNew, FileAccess.Write, FileShare.None);
-                CopyBounded(input, output, entry.Length);
+                CopyBounded(input, output, entry.Length, cancellationToken);
             }
+            progress?.Report(BackupStage.Validate);
+            cancellationToken.ThrowIfCancellationRequested();
             var manifest = JsonSerializer.Deserialize<Manifest>(
                 File.ReadAllText(Path.Combine(stage, ManifestName)), JsonOptions)
                 ?? throw new InvalidDataException("Missing backup manifest.");
             if (manifest.Format != "dodo-backup" || manifest.FormatVersion != 1 || manifest.Files == null ||
                 !Version.TryParse(manifest.ApplicationVersion, out var version) || version > new Version(0, 1, 0))
                 throw new InvalidDataException("This backup requires a newer or different application version.");
-            ValidateManifest(stage, manifest);
+            ValidateManifest(stage, manifest, cancellationToken);
             if (manifest.Files.Count + 1 != zip.Entries.Count)
                 throw new InvalidDataException("Archive contents differ from the manifest.");
-            var (state, count) = ValidatePayload(stage);
+            var (state, count) = ValidatePayload(stage, cancellationToken);
             manifest.RequiredProviders = RequiredProviders(state, stage);
+            cancellationToken.ThrowIfCancellationRequested();
             return new PreparedBackup(stage, manifest, state.Papers.Count, count);
         }
         catch { DeleteOwnedStaging(stage); throw; }
@@ -257,8 +306,9 @@ internal sealed class BackupService
     private static void WriteJournal(string path, RestoreJournal journal) =>
         DurableAtomicFileWriter.Shared.Write(path, JsonSerializer.SerializeToUtf8Bytes(journal, JsonOptions));
 
-    private static (AppState State, int Images) ValidatePayload(string directory)
+    private static (AppState State, int Images) ValidatePayload(string directory, CancellationToken cancellationToken = default)
     {
+        cancellationToken.ThrowIfCancellationRequested();
         var state = StateStore.ValidateBackupState(Resolve(directory, "data.json"));
         var states = new List<AppState> { state };
         var backup = Resolve(directory, "data.backup.json");
@@ -269,6 +319,7 @@ internal sealed class BackupService
             foreach (var file in Directory.EnumerateFiles(plugins, "*.json"))
             {
                 EnsureNoReparsePoints(file);
+                cancellationToken.ThrowIfCancellationRequested();
                 PaperBodyPluginDataStore.ValidateBackupDocument(file);
             }
         var background = Resolve(directory, "paper-background.json");
@@ -278,7 +329,7 @@ internal sealed class BackupService
             if (parsed.RootElement.ValueKind != JsonValueKind.Object)
                 throw new InvalidDataException("Invalid background preferences.");
         }
-        return (state, NoteImageStore.ValidateBackupSnapshot(Resolve(directory, "note-assets.lmdb"), states));
+        return (state, NoteImageStore.ValidateBackupSnapshot(Resolve(directory, "note-assets.lmdb"), states, cancellationToken));
     }
 
     private static string[] RequiredProviders(AppState state, string directory) =>
@@ -332,28 +383,38 @@ internal sealed class BackupService
                 throw new InvalidDataException("Backup paths cannot contain symbolic links or junctions.");
     }
 
-    private static FileRecord Describe(string root, string relative)
+    private static FileRecord Describe(string root, string relative, CancellationToken cancellationToken = default)
     {
         var path = Resolve(root, relative);
         using var stream = File.OpenRead(path);
-        return new FileRecord { Path = relative, Length = stream.Length, Sha256 = Convert.ToHexString(SHA256.HashData(stream)) };
+        using var hash = IncrementalHash.CreateHash(HashAlgorithmName.SHA256);
+        var buffer = new byte[81920];
+        int count;
+        while ((count = stream.Read(buffer)) > 0)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            hash.AppendData(buffer, 0, count);
+        }
+        cancellationToken.ThrowIfCancellationRequested();
+        return new FileRecord { Path = relative, Length = stream.Length, Sha256 = Convert.ToHexString(hash.GetHashAndReset()) };
     }
 
-    private static void Verify(string root, FileRecord expected)
+    private static void Verify(string root, FileRecord expected, CancellationToken cancellationToken = default)
     {
-        var actual = Describe(root, expected.Path);
+        var actual = Describe(root, expected.Path, cancellationToken);
         if (actual.Length != expected.Length || !string.Equals(actual.Sha256, expected.Sha256, StringComparison.OrdinalIgnoreCase))
             throw new InvalidDataException($"Backup integrity check failed: {expected.Path}");
     }
 
-    private static void ValidateManifest(string root, Manifest manifest)
+    private static void ValidateManifest(string root, Manifest manifest, CancellationToken cancellationToken = default)
     {
         var paths = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         foreach (var entry in manifest.Files)
         {
             if (entry == null || !IsManagedPath(entry.Path) || !paths.Add(entry.Path))
                 throw new InvalidDataException("Invalid or duplicate manifest path.");
-            Verify(root, entry);
+            cancellationToken.ThrowIfCancellationRequested();
+            Verify(root, entry, cancellationToken);
         }
         if (!paths.Contains("data.json")) throw new InvalidDataException("The backup has no application state.");
     }
@@ -376,17 +437,19 @@ internal sealed class BackupService
         finally { if (File.Exists(temp)) File.Delete(temp); }
     }
 
-    private static void CopyBounded(Stream input, Stream output, long expected)
+    private static void CopyBounded(Stream input, Stream output, long expected, CancellationToken cancellationToken = default)
     {
         var buffer = new byte[81920];
         long copied = 0;
         int count;
         while ((count = input.Read(buffer)) > 0)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             copied += count;
             if (copied > expected) throw new InvalidDataException("Invalid ZIP entry length.");
             output.Write(buffer, 0, count);
         }
+        cancellationToken.ThrowIfCancellationRequested();
         if (copied != expected) throw new InvalidDataException("Truncated ZIP entry.");
     }
 

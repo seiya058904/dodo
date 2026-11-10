@@ -133,6 +133,96 @@ internal static class BackupChecks
         Check(!archive.Entries.Any(e => e.FullName.Contains("restore-history")), "backup recursively included restore history");
     }
 
+    internal static void SnapshotStaysConsistent()
+    {
+        using var directory = new TempDirectory();
+        var source = Path.Combine(directory.Path, "source");
+        CreateBackup(source, Path.Combine(directory.Path, "initial.zip"));
+        var store = new StateStore(source, DurableAtomicFileWriter.Shared);
+        using var images = new NoteImageStore(Path.Combine(source, "note-assets.lmdb"));
+        images.Load();
+        using var plugins = new PaperBodyPluginDataStore(Path.Combine(source, "plugins"));
+        var service = new BackupService(source);
+        using var snapshot = service.Capture(store, images, plugins);
+        var zip = Path.Combine(directory.Path, "captured.zip");
+        var stages = new List<BackupStage>();
+        using var enteredArchive = new ManualResetEventSlim();
+        using var allowArchive = new ManualResetEventSlim();
+        var worker = Task.Run(() => service.CreateArchive(snapshot, zip, progress: new InlineProgress(stage =>
+        {
+            stages.Add(stage);
+            if (stage == BackupStage.Archive)
+            {
+                enteredArchive.Set();
+                if (!allowArchive.Wait(TimeSpan.FromSeconds(10))) throw new TimeoutException("archive gate");
+            }
+        })));
+        try
+        {
+            Check(enteredArchive.Wait(TimeSpan.FromSeconds(10)), "background archive did not start");
+            var changed = store.Load();
+            changed.Theme = "light";
+            store.SaveJsonSync(store.SerializeState(changed), 10);
+            plugins.SaveRuntimeState("example.plugin", 2, "{\"answer\":84}");
+        }
+        finally { allowArchive.Set(); }
+        worker.GetAwaiter().GetResult();
+        using var prepared = service.Prepare(zip);
+        Check(stages.SequenceEqual([BackupStage.Validate, BackupStage.Archive]), "backup stages missing or out of order");
+        Check(new StateStore(prepared.Directory, DurableAtomicFileWriter.Shared).Load().Theme == "dark", "backup captured a later edit");
+        using var capturedPlugins = new PaperBodyPluginDataStore(Path.Combine(prepared.Directory, "plugins"));
+        Check(capturedPlugins.ReadRuntimeState("example.plugin").Json.Contains("42"), "backup captured later plugin state");
+        Check(store.Load().Theme == "light", "later live edit was lost");
+        Check(plugins.ReadRuntimeState("example.plugin").Json.Contains("84"), "later live plugin edit was lost");
+    }
+
+    internal static void CancellationKeepsOriginals()
+    {
+        using var directory = new TempDirectory();
+        var source = Path.Combine(directory.Path, "source");
+        var zip = Path.Combine(directory.Path, "backup.zip");
+        CreateBackup(source, zip);
+        var before = File.ReadAllBytes(zip);
+        var store = new StateStore(source, DurableAtomicFileWriter.Shared);
+        using var images = new NoteImageStore(Path.Combine(source, "note-assets.lmdb"));
+        images.Load();
+        using var plugins = new PaperBodyPluginDataStore(Path.Combine(source, "plugins"));
+        var service = new BackupService(source);
+        using (var snapshot = service.Capture(store, images, plugins))
+        using (var cancel = new CancellationTokenSource())
+        {
+            try
+            {
+                service.CreateArchive(snapshot, zip, cancel.Token,
+                    new InlineProgress(stage => { if (stage == BackupStage.Archive) cancel.Cancel(); }));
+                throw new InvalidOperationException("cancelled backup completed");
+            }
+            catch (OperationCanceledException) { }
+            Check(before.AsSpan().SequenceEqual(File.ReadAllBytes(zip)), "cancelled backup replaced the existing archive");
+            Check(!Directory.EnumerateFiles(directory.Path, "backup.zip.*.tmp").Any(), "cancelled backup left its temporary archive");
+        }
+        foreach (var cancelStage in new[] { BackupStage.Extract, BackupStage.Validate })
+        {
+            using var cancel = new CancellationTokenSource();
+            try
+            {
+                using var prepared = service.Prepare(zip, cancel.Token,
+                    new InlineProgress(stage => { if (stage == cancelStage) cancel.Cancel(); }));
+                throw new InvalidOperationException("cancelled preparation completed");
+            }
+            catch (OperationCanceledException) { }
+            Check(before.AsSpan().SequenceEqual(File.ReadAllBytes(zip)), "cancelled preparation changed the archive");
+            Check(store.Load().Theme == "dark", "cancelled preparation changed live data");
+        }
+        using var valid = service.Prepare(zip);
+        Check(valid.PaperCount == 1 && valid.ImageCount == 1, "archive unusable after cancellation");
+    }
+
+    private sealed class InlineProgress(Action<BackupStage> action) : IProgress<BackupStage>
+    {
+        public void Report(BackupStage value) => action(value);
+    }
+
     internal static void RejectUnsafeArchives()
     {
         using var directory = new TempDirectory();
